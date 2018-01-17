@@ -1,0 +1,19 @@
+.Config {
+  overflow: auto;
+  flex: 1 1 0%;
+  .wrapper {
+    width: 430px;
+    margin: 0 auto;
+    .nt-form-row label {
+      width: 170px;
+    }
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  .nt-button-group {
+    margin: 20px 0;
+  }
+}

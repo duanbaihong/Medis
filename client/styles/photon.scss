@@ -1,0 +1,44 @@
+.tab-item-btn {
+  width: 30px;
+  flex: none;
+}
+
+.tab-group {
+  background: #b3b1b3;
+}
+
+.nav-group-item:active {
+  background-color: transparent !important;
+}
+
+.nav-group-item.sortable-ghost {
+  opacity: 0;
+}
+
+.nav-group-item.active:active {
+  background-color: #dcdfe1 !important;
+}
+
+.window {
+  background: #ececec !important;
+}
+
+.toolbar-footer {
+  button {
+    width: 30px;
+    border: none;
+    border-right: 1px solid #c2c0c2;
+    box-shadow: 1px 0px 0px 0px rgba(255, 255, 255, 0.4);
+    background: transparent;
+    font-size: 18px;
+    line-height: 19px;
+    opacity: 0.8;
+    &:active {
+      background-color: #dcdfe1;
+    }
+  }
+}
+
+button:focus {
+  outline:0;
+}
