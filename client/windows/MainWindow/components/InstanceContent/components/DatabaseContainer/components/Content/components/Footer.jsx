@@ -2,6 +2,7 @@
 
 import React from 'react'
 import humanFormat from 'human-format'
+import ExitRedis from './ExitRedis/'
 
 const timeScale = new humanFormat.Scale({
   ms: 1,
@@ -11,15 +12,6 @@ const timeScale = new humanFormat.Scale({
   d: 86400000
 })
 
-class ExitRedis extends React.Component{
-  render() {
-    return (
-      <div className="exitredis" style={{
-        color: '#49931D'
-      }} ><span className="icon icon-cancel-circled"/>退出连接</div>
-    )
-  }
-}
 
 class Footer extends React.PureComponent {
   constructor() {

@@ -1,6 +1,7 @@
 'use strict'
 
 import React from 'react'
+import ExitRedis from '../ExitRedis/'
 
 require('./index.scss')
 
@@ -44,7 +45,7 @@ class Content extends React.PureComponent {
           </div>)
         })
       }
-      <div className="exitredis" ><span className="icon icon-cancel-circled"/>退出连接</div>
+      <ExitRedis />
     </div>)
   }
 }

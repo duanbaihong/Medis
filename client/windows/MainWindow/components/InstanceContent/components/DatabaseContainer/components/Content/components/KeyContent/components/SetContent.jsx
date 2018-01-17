@@ -193,7 +193,7 @@ class SetContent extends BaseContent {
                     const data = res['Value:']
                     return this.props.redis.sismember(this.state.keyName, data).then(exists => {
                       if (exists) {
-                        const error = 'Member already exists'
+                        const error = '成员已经存在。'
                         alert(error)
                         throw new Error(error)
                       }
