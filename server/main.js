@@ -3,6 +3,7 @@
 const {app, Menu, ipcMain,globalShortcut} = require('electron')
 const windowManager = require('./windowManager')
 const menu = require('./menu')
+// require('electron-react-devtools').install()
 
 ipcMain.on('create patternManager', function (event, arg) {
   windowManager.create('patternManager', arg);

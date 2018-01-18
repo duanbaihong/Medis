@@ -43,7 +43,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     }).on('error', err => {
       sshErrorThrown = true;
       dispatch(disconnect());
-      alert(`SSH Error: ${err.message}`);
+      alert(`SSH 错误: ${err.message}`);
     })
 
     try {
@@ -64,7 +64,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       }
     } catch (err) {
       dispatch(disconnect());
-      alert(`SSH Error: ${err.message}`);
+      alert(`SSH 错误: ${err.message}`);
     }
   } else {
     handleRedis(config);
@@ -99,7 +99,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       redis.ping((err, res) => {
         if (err) {
           if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
-            err.message = 'Redis Error: Access denied. Please double-check your password.';
+            err.message = 'Redis 错误：访问被拒绝。请检查密码是否正确。';
           }
           if (err.message !== 'Connection is closed.') {
             alert(err.message);
@@ -125,7 +125,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     redis.once('end', function () {
       dispatch(disconnect());
       if (!sshErrorThrown) {
-        let msg = 'Redis Error: Connection failed. ';
+        let msg = 'Redis 错误: 连接失败Connection failed. ';
         if (redisErrorMessage) {
           msg += `(${redisErrorMessage})`;
         }

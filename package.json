@@ -10,7 +10,8 @@
   "scripts": {
     "build": "webpack --progress --colors",
     "watch": "npm run build -- --watch",
-    "electron": "electron .",
+    "electron": "electron . ",
+    "debug": "electron --debug=8000 .",
     "lint": "xo client/**/*.{js,jsx}",
     "pack": "NODE_ENV=production npm run build -- -p --config webpack.production.config.js && node bin/pack.js",
     "release": "NODE_ENV=production ./bin/release"
@@ -56,6 +57,7 @@
   },
   "dependencies": {
     "conventional-changelog": "^1.1.7",
+    "electron-debug": "^1.5.0",
     "fixed-data-table-contextmenu": "^1.6.5",
     "ioredis": "^2.4.2",
     "jquery": "^2.1.4",
@@ -108,7 +110,7 @@
     "style-loader": "^0.12.4",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.12.0",
+    "webpack-dev-server": "^1.16.5",
     "xo": "^0.18.1"
   },
   "config": {

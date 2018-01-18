@@ -1,0 +1,26 @@
+.cbutton {
+	float: right;
+    width: 71px;
+    margin-top:1px;
+    height: 19px;
+    line-height: 18px;
+    border: 1px solid #B2B3B6;
+    border-radius: 3px;
+    background-image: linear-gradient(#F1F4F4, #E7EAEA);
+    text-align: center;
+    font-weight: normal;
+    margin-right: 3px;
+    color: #818382;
+    transition: all .5s;
+	-webkit-transition: all .5s;	/* Safari 和 Chrome */
+}
+.cbutton:hover{
+    background-image: linear-gradient(#E4E7E7, #BFC0C2);
+    border: 1px solid #92929A;
+    cursor: pointer;
+}
+.cbutton:active{
+    background-image: linear-gradient(#D6D8D8, #B8B9BC);
+    border: 1px solid #92929A;
+    cursor: pointer;
+}

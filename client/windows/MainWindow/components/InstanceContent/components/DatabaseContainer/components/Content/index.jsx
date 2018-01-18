@@ -6,7 +6,7 @@ import KeyContent from './components/KeyContent'
 import Terminal from './components/Terminal'
 import Config from './components/Config'
 import Footer from './components/Footer'
-
+require('./index.scss')
 class Content extends React.PureComponent {
   constructor() {
     super()
@@ -51,6 +51,7 @@ class Content extends React.PureComponent {
     return (<div className="pane sidebar" style={{height: '100%'}}>
       <TabBar
         onSelectTab={this.handleTabChange.bind(this)}
+        disconnect={this.props.disconnect}
         />
       <KeyContent
         style={{display: this.state.tab === '内容(Content)' ? 'flex' : 'none'}}

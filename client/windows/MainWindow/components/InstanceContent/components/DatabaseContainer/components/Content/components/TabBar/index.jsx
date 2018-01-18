@@ -28,6 +28,7 @@ class Content extends React.PureComponent {
             onClick={() => {
               this.setState({activeTab: tab})
               this.props.onSelectTab(tab)
+              console.log(tab)
             }}
             >
             {
@@ -45,7 +46,7 @@ class Content extends React.PureComponent {
           </div>)
         })
       }
-      <ExitRedis />
+      <ExitRedis disconnect={this.props.disconnect} />
     </div>)
   }
 }

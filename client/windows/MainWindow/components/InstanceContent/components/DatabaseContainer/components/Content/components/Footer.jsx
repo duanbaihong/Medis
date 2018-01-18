@@ -2,7 +2,7 @@
 
 import React from 'react'
 import humanFormat from 'human-format'
-import ExitRedis from './ExitRedis/'
+import ExitRedis from './ExitRedis'
 
 const timeScale = new humanFormat.Scale({
   ms: 1,
@@ -76,7 +76,7 @@ class Footer extends React.PureComponent {
     .map(key => ({key, value: this.state[key]}))
     .filter(item => typeof item.value === 'string')
     return (<footer className="toolbar toolbar-footer">
-      <ExitRedis />
+      <ExitRedis cstyle='cbutton' />
       {
         desc.map(({key, value}) => <span
           key={key}

@@ -5,7 +5,7 @@ import {Provider, connect} from 'react-redux'
 import Favorite from './components/Favorite'
 import Config from './components/Config'
 import store from 'Redux/store'
-import {connectToRedis} from 'Redux/actions'
+import {connectToRedis,disconnect} from 'Redux/actions'
 import {removeFavorite, updateFavorite, createFavorite, reorderFavorites} from 'Redux/actions'
 
 class ConnectionSelector extends PureComponent {
@@ -38,6 +38,7 @@ class ConnectionSelector extends PureComponent {
           connectStatus={this.props.connectStatus}
           connect={this.state.connect}
           connectToRedis={this.props.connectToRedis}
+          disconnect={this.props.disconnect}
           onSave={data => {
             this.props.updateFavorite(selectedFavorite.get('key'), data)
           }}
