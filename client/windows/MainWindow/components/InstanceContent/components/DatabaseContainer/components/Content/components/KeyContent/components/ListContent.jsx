@@ -129,7 +129,7 @@ class ListContent extends BaseContent {
         ReactDOM.findDOMNode(this.refs.table).focus()
       },
       items: {
-        delete: {name: 'Delete'}
+        delete: {name: '删除'}
       }
     })
   }

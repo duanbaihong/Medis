@@ -76,7 +76,7 @@ class Footer extends React.PureComponent {
     .map(key => ({key, value: this.state[key]}))
     .filter(item => typeof item.value === 'string')
     return (<footer className="toolbar toolbar-footer">
-      <ExitRedis cstyle='cbutton' />
+      <ExitRedis cstyle='cbutton' redis={this.props.redis} />
       {
         desc.map(({key, value}) => <span
           key={key}

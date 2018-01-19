@@ -3,7 +3,7 @@
 import React, {PureComponent} from 'react'
 import ConnectionSelectorContainer from './components/ConnectionSelectorContainer'
 import DatabaseContainer from './components/DatabaseContainer'
-import Modal from '../../components/InstanceContent/components/Modal'
+import Modal from './components/Modal'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 class InstanceContent extends PureComponent {

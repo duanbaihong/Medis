@@ -40486,9 +40486,9 @@
 
 	var _componentsDatabaseContainer2 = _interopRequireDefault(_componentsDatabaseContainer);
 
-	var _componentsInstanceContentComponentsModal = __webpack_require__(553);
+	var _componentsModal = __webpack_require__(553);
 
-	var _componentsInstanceContentComponentsModal2 = _interopRequireDefault(_componentsInstanceContentComponentsModal);
+	var _componentsModal2 = _interopRequireDefault(_componentsModal);
 
 	var _reactAddonsCssTransitionGroup = __webpack_require__(559);
 
@@ -40569,7 +40569,7 @@
 	            transitionEnterTimeout: 150,
 	            transitionLeaveTimeout: 150
 	          },
-	          this.state.modal && _react2['default'].createElement(_componentsInstanceContentComponentsModal2['default'], _extends({
+	          this.state.modal && _react2['default'].createElement(_componentsModal2['default'], _extends({
 	            key: 'modal'
 	          }, this.state.modal, {
 	            onSubmit: this.modalSubmit.bind(this),
@@ -40674,7 +40674,6 @@
 	            connectStatus: this.props.connectStatus,
 	            connect: this.state.connect,
 	            connectToRedis: this.props.connectToRedis,
-	            disconnect: this.props.disconnect,
 	            onSave: function (data) {
 	              _this.props.updateFavorite(selectedFavorite.get('key'), data);
 	            },
@@ -51139,7 +51138,8 @@
 	    var sshErrorThrown = false;
 	    var redisErrorThrown = false;
 	    var redisErrorMessage = undefined;
-
+	    var server = undefined;
+	    var conn = undefined;
 	    if (config.ssh) {
 	      (function () {
 	        dispatch(updateConnectStatus('SSH 连接中...'));
@@ -51147,6 +51147,7 @@
 	        var conn = new _ssh2.Client();
 	        conn.on('ready', function () {
 	          var server = _net2['default'].createServer(function (sock) {
+	            console.log(server.address().port);
 	            conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, function (err, stream) {
 	              if (err) {
 	                sock.end();
@@ -51155,14 +51156,13 @@
 	              }
 	            });
 	          }).listen(0, function () {
-	            handleRedis(config, { host: '127.0.0.1', port: server.address().port });
+	            handleRedis(config, { host: '127.0.0.1', port: server.address().port }, conn, server);
 	          });
 	        }).on('error', function (err) {
 	          sshErrorThrown = true;
 	          dispatch(disconnect());
 	          alert('SSH 错误: ' + err.message);
 	        });
-
 	        try {
 	          var connectionConfig = {
 	            host: config.sshHost,
@@ -51188,7 +51188,7 @@
 	      handleRedis(config);
 	    }
 
-	    function handleRedis(config, override) {
+	    function handleRedis(config, override, sshconn, netserver) {
 	      dispatch(updateConnectStatus('Redis 连接中...'));
 	      if (config.ssl) {
 	        config.tls = {};
@@ -51229,7 +51229,7 @@
 	          if (version && version.length >= 5) {
 	            var versionNumber = Number(version[0] + version[2]);
 	            if (versionNumber < 28) {
-	              alert('Medis only supports Redis >= 2.8 because servers older than 2.8 don\'t support SCAN command, which means it not possible to access keys without blocking Redis.');
+	              alert('Medis 只支持 Redis 版本 >= 2.8 是因为小于 2.8 版本的，不支持 SCAN 命令, which means it not possible to access keys without blocking Redis.');
 	              dispatch(disconnect());
 	              return;
 	            }
@@ -51241,14 +51241,20 @@
 	        redisErrorMessage = error;
 	      });
 	      redis.once('end', function () {
+	        var syselft = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
 	        dispatch(disconnect());
-	        if (!sshErrorThrown) {
-	          var msg = 'Redis 错误: 连接失败Connection failed. ';
+	        sshconn.end();
+	        netserver.close();
+	        var msg = undefined;
+	        if (!sshErrorThrown && syselft) {
+	          var _msg = 'Redis 错误: 连接失败Connection failed. ';
 	          if (redisErrorMessage) {
-	            msg += '(' + redisErrorMessage + ')';
+	            _msg += '(' + redisErrorMessage + ')';
 	          }
-	          alert(msg);
+	          alert(_msg);
 	        }
+	        console.log('退出连接[' + config.host + ':' + config.port + ']成功' + (msg ? '.退出原因：' + msg : '') + '!');
 	      });
 	    }
 	  };
@@ -56842,13 +56848,13 @@
 	        case 'string':
 	          return redis.set(key, '');
 	        case 'list':
-	          return redis.lpush(key, 'New Item');
+	          return redis.lpush(key, '新成员');
 	        case 'hash':
 	          return redis.hset(key, 'New Key', 'New Value');
 	        case 'set':
-	          return redis.sadd(key, 'New Member');
+	          return redis.sadd(key, '新成员');
 	        case 'zset':
-	          return redis.zadd(key, 0, 'New Member');
+	          return redis.zadd(key, 0, '新成员');
 	      }
 	    }
 	  }, {
@@ -64445,7 +64451,7 @@
 	        { className: 'pane sidebar', style: { height: '100%' } },
 	        _react2['default'].createElement(_componentsTabBar2['default'], {
 	          onSelectTab: this.handleTabChange.bind(this),
-	          disconnect: this.props.disconnect
+	          redis: this.props.redis
 	        }),
 	        _react2['default'].createElement(_componentsKeyContent2['default'], {
 	          style: { display: this.state.tab === '内容(Content)' ? 'flex' : 'none' },
@@ -64561,7 +64567,7 @@
 	            tab
 	          );
 	        }),
-	        _react2['default'].createElement(_ExitRedis2['default'], { disconnect: this.props.disconnect })
+	        _react2['default'].createElement(_ExitRedis2['default'], { redis: this.props.redis, alert: 'true' })
 	      );
 	    }
 	  }]);
@@ -64596,9 +64602,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	// import store from 'Redux/store'
-	// import {disconnect} from 'Redux/actions'
-
 	var ExitRedis = (function (_React$Component) {
 	  _inherits(ExitRedis, _React$Component);
 
@@ -64611,9 +64614,15 @@
 	  _createClass(ExitRedis, [{
 	    key: 'disconnRedis',
 	    value: function disconnRedis() {
-	      var disconnect = this.props.disconnect;
+	      var redis = this.props.redis;
 
-	      disconnect();
+	      showModal({
+	        title: '退出REDIS连接?',
+	        button: '确定',
+	        content: '你确定要退出此Redis连接吗'
+	      }).then(function () {
+	        redis.emit('end', false);
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -84787,7 +84796,7 @@
 	          _reactDom2['default'].findDOMNode(_this4.refs.table).focus();
 	        },
 	        items: {
-	          'delete': { name: 'Delete' }
+	          'delete': { name: '删除' }
 	        }
 	      });
 	    }
@@ -87027,7 +87036,7 @@
 	      return _react2['default'].createElement(
 	        'footer',
 	        { className: 'toolbar toolbar-footer' },
-	        _react2['default'].createElement(_ExitRedis2['default'], { cstyle: 'cbutton' }),
+	        _react2['default'].createElement(_ExitRedis2['default'], { cstyle: 'cbutton', redis: this.props.redis }),
 	        desc.map(function (_ref3) {
 	          var key = _ref3.key;
 	          var value = _ref3.value;
@@ -87422,7 +87431,7 @@
 
 
 	// module
-	exports.push([module.id, "@charset \"UTF-8\";\n.cbutton {\n  float: right;\n  width: 71px;\n  margin-top: 1px;\n  height: 19px;\n  line-height: 18px;\n  border: 1px solid #B2B3B6;\n  border-radius: 3px;\n  background-image: linear-gradient(#F1F4F4, #E7EAEA);\n  text-align: center;\n  font-weight: normal;\n  margin-right: 3px;\n  color: #818382;\n  transition: all .5s;\n  -webkit-transition: all .5s;\n  /* Safari 和 Chrome */ }\n\n.cbutton:hover {\n  background-image: linear-gradient(#E4E7E7, #BFC0C2);\n  border: 1px solid #92929A;\n  cursor: pointer; }\n\n.cbutton:active {\n  background-image: linear-gradient(#D6D8D8, #B8B9BC);\n  border: 1px solid #92929A;\n  cursor: pointer; }\n", ""]);
+	exports.push([module.id, "@charset \"UTF-8\";\n.cbutton {\n  float: right;\n  width: 71px;\n  margin-top: 1px;\n  height: 19px;\n  line-height: 18px;\n  border: 1px solid #B2B3B6;\n  border-radius: 3px;\n  background-image: linear-gradient(#F1F4F4, #E7EAEA);\n  text-align: center;\n  font-weight: normal;\n  margin-right: 2px;\n  color: #818382;\n  transition: all .5s;\n  -webkit-transition: all .5s;\n  /* Safari 和 Chrome */ }\n\n.cbutton:hover {\n  background-image: linear-gradient(#E4E7E7, #BFC0C2);\n  border: 1px solid #92929A;\n  cursor: pointer; }\n\n.cbutton:active {\n  background-image: linear-gradient(#D6D8D8, #B8B9BC);\n  border: 1px solid #92929A;\n  cursor: pointer; }\n", ""]);
 
 	// exports
 

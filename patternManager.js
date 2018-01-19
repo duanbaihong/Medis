@@ -45552,7 +45552,8 @@
 	    var sshErrorThrown = false;
 	    var redisErrorThrown = false;
 	    var redisErrorMessage = undefined;
-
+	    var server = undefined;
+	    var conn = undefined;
 	    if (config.ssh) {
 	      (function () {
 	        dispatch(updateConnectStatus('SSH 连接中...'));
@@ -45560,6 +45561,7 @@
 	        var conn = new _ssh2.Client();
 	        conn.on('ready', function () {
 	          var server = _net2['default'].createServer(function (sock) {
+	            console.log(server.address().port);
 	            conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, function (err, stream) {
 	              if (err) {
 	                sock.end();
@@ -45568,14 +45570,13 @@
 	              }
 	            });
 	          }).listen(0, function () {
-	            handleRedis(config, { host: '127.0.0.1', port: server.address().port });
+	            handleRedis(config, { host: '127.0.0.1', port: server.address().port }, conn, server);
 	          });
 	        }).on('error', function (err) {
 	          sshErrorThrown = true;
 	          dispatch(disconnect());
 	          alert('SSH 错误: ' + err.message);
 	        });
-
 	        try {
 	          var connectionConfig = {
 	            host: config.sshHost,
@@ -45601,7 +45602,7 @@
 	      handleRedis(config);
 	    }
 
-	    function handleRedis(config, override) {
+	    function handleRedis(config, override, sshconn, netserver) {
 	      dispatch(updateConnectStatus('Redis 连接中...'));
 	      if (config.ssl) {
 	        config.tls = {};
@@ -45642,7 +45643,7 @@
 	          if (version && version.length >= 5) {
 	            var versionNumber = Number(version[0] + version[2]);
 	            if (versionNumber < 28) {
-	              alert('Medis only supports Redis >= 2.8 because servers older than 2.8 don\'t support SCAN command, which means it not possible to access keys without blocking Redis.');
+	              alert('Medis 只支持 Redis 版本 >= 2.8 是因为小于 2.8 版本的，不支持 SCAN 命令, which means it not possible to access keys without blocking Redis.');
 	              dispatch(disconnect());
 	              return;
 	            }
@@ -45654,14 +45655,20 @@
 	        redisErrorMessage = error;
 	      });
 	      redis.once('end', function () {
+	        var syselft = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
 	        dispatch(disconnect());
-	        if (!sshErrorThrown) {
-	          var msg = 'Redis 错误: 连接失败Connection failed. ';
+	        sshconn.end();
+	        netserver.close();
+	        var msg = undefined;
+	        if (!sshErrorThrown && syselft) {
+	          var _msg = 'Redis 错误: 连接失败Connection failed. ';
 	          if (redisErrorMessage) {
-	            msg += '(' + redisErrorMessage + ')';
+	            _msg += '(' + redisErrorMessage + ')';
 	          }
-	          alert(msg);
+	          alert(_msg);
 	        }
+	        console.log('退出连接[' + config.host + ':' + config.port + ']成功' + (msg ? '.退出原因：' + msg : '') + '!');
 	      });
 	    }
 	  };

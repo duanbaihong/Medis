@@ -1,16 +1,22 @@
 'use strict'
 
 import React from 'react'
-// import store from 'Redux/store'
-// import {disconnect} from 'Redux/actions'
+
 
 class ExitRedis extends React.Component{
   constructor(props) {
     super(props)
   }
   disconnRedis(){
-    // const {disconnect} = this.props
-    this.props.disconnect()
+    const {redis} = this.props;
+    showModal({
+      title: '退出REDIS连接?',
+      button: '确定',
+      content: '你确定要退出此Redis连接吗'
+    }).then(() => {
+      redis.emit('end',false);
+    })
+ 
   }
   render() {
     return (

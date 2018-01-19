@@ -38,7 +38,6 @@ class ConnectionSelector extends PureComponent {
           connectStatus={this.props.connectStatus}
           connect={this.state.connect}
           connectToRedis={this.props.connectToRedis}
-          disconnect={this.props.disconnect}
           onSave={data => {
             this.props.updateFavorite(selectedFavorite.get('key'), data)
           }}

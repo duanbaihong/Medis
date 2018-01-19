@@ -23,13 +23,15 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
   let sshErrorThrown = false
   let redisErrorThrown = false
   let redisErrorMessage
-
+  let server
+  let conn
   if (config.ssh) {
     dispatch(updateConnectStatus('SSH 连接中...'))
 
     const conn = new Client();
     conn.on('ready', () => {
       const server = net.createServer(function (sock) {
+        console.log(server.address().port)
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
             sock.end()
@@ -38,14 +40,13 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
           }
         })
       }).listen(0, function () {
-        handleRedis(config, { host: '127.0.0.1', port: server.address().port })
+        handleRedis(config, { host: '127.0.0.1', port: server.address().port },conn,server)
       })
     }).on('error', err => {
       sshErrorThrown = true;
       dispatch(disconnect());
       alert(`SSH 错误: ${err.message}`);
     })
-
     try {
       const connectionConfig = {
         host: config.sshHost,
@@ -69,8 +70,8 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
   } else {
     handleRedis(config);
   }
-
-  function handleRedis(config, override) {
+  
+  function handleRedis(config, override, sshconn,netserver) {
     dispatch(updateConnectStatus('Redis 连接中...'))
     if (config.ssl) {
       config.tls = {};
@@ -111,7 +112,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
         if (version && version.length >= 5) {
           const versionNumber = Number(version[0] + version[2]);
           if (versionNumber < 28) {
-            alert('Medis only supports Redis >= 2.8 because servers older than 2.8 don\'t support SCAN command, which means it not possible to access keys without blocking Redis.');
+            alert('Medis 只支持 Redis 版本 >= 2.8 是因为小于 2.8 版本的，不支持 SCAN 命令, which means it not possible to access keys without blocking Redis.');
             dispatch(disconnect());
             return;
           }
@@ -122,15 +123,19 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     redis.once('error', function (error) {
       redisErrorMessage = error;
     });
-    redis.once('end', function () {
+    redis.once('end', function (syselft=true) {
       dispatch(disconnect());
-      if (!sshErrorThrown) {
+      sshconn.end();
+      netserver.close();
+      let msg
+      if (!sshErrorThrown && syselft) {
         let msg = 'Redis 错误: 连接失败Connection failed. ';
         if (redisErrorMessage) {
           msg += `(${redisErrorMessage})`;
         }
         alert(msg);
       }
+      console.log('退出连接['+config.host+':'+config.port+']成功'+(msg?'.退出原因：'+msg:'')+'!')
     });
   }
 })

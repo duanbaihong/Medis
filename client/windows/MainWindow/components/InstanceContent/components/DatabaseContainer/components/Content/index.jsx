@@ -51,7 +51,7 @@ class Content extends React.PureComponent {
     return (<div className="pane sidebar" style={{height: '100%'}}>
       <TabBar
         onSelectTab={this.handleTabChange.bind(this)}
-        disconnect={this.props.disconnect}
+        redis={this.props.redis}
         />
       <KeyContent
         style={{display: this.state.tab === '内容(Content)' ? 'flex' : 'none'}}

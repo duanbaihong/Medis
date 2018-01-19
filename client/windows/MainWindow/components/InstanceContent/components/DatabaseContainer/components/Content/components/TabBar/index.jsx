@@ -46,7 +46,7 @@ class Content extends React.PureComponent {
           </div>)
         })
       }
-      <ExitRedis disconnect={this.props.disconnect} />
+      <ExitRedis redis={this.props.redis} alert="true" />
     </div>)
   }
 }
