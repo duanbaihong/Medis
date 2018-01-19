@@ -52,7 +52,7 @@ class InstanceContent extends PureComponent {
         >
         {
         instance.get('redis')
-          ? <DatabaseContainer instance={instance}/>
+          ? <DatabaseContainer instance={instance} />
           : <ConnectionSelectorContainer instance={instance}/>
       }
       </div>
@@ -62,8 +62,8 @@ class InstanceContent extends PureComponent {
       <div className="main">
         <ReactCSSTransitionGroup
           transitionName="modal"
-          transitionEnterTimeout={150}
-          transitionLeaveTimeout={150}
+          transitionEnterTimeout={250}
+          transitionLeaveTimeout={250}
           >
           {
           this.state.modal &&

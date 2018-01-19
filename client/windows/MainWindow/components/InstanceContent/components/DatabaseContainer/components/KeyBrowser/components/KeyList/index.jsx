@@ -378,6 +378,8 @@ class KeyList extends React.Component {
         onRowClick={(evt, index) => this.handleSelect(index)}
         onRowDoubleClick={(evt, index) => {
           this.handleSelect(index)
+          // this.setState({tab: '内容(Content)'})
+          // this.props.onSelectTab('内容(Content)')
           this.setState({editableKey: this.state.keys[index][0]})
         }}
         width={this.props.width}

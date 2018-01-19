@@ -18,8 +18,8 @@ class Database extends React.PureComponent {
       db: 0,
       version: 0,
       metaVersion: 0,
+      clientHeight: this.$window.height() - $('.tab-group').height(),
       pattern: '',
-      clientHeight: this.$window.height() - $('.tab-group').height()
     }
   }
 

@@ -10,12 +10,17 @@ class Content extends React.PureComponent {
     super()
 
     this.tabs = [
-      '内容(Content)',
-      '终端(Terminal)',
-      '系统配置(Config)'
+      ['内容(Content)','icon-book'],
+      ['终端(Terminal)','icon-window'],
+      ['系统配置(Config)','icon-cog']
     ]
-
     this.state = {activeTab: '内容(Content)'}
+
+  }
+  componentDidMount(){
+    if(this.props.connectionKey){
+      this.setState({activeTab: '内容(Content)'})
+    }
   }
 
   render() {
@@ -23,26 +28,15 @@ class Content extends React.PureComponent {
       {
         this.tabs.map(tab => {
           return (<div
-            className={'item' + (tab === this.state.activeTab ? ' is-active' : '')}
-            key={tab}
+            className={'item' + (tab[0] === this.state.activeTab ? ' is-active' : '')}
+            key={tab[0]}
             onClick={() => {
-              this.setState({activeTab: tab})
-              this.props.onSelectTab(tab)
-              console.log(tab)
+              this.setState({activeTab: tab[0]})
+              this.props.onSelectTab(tab[0])
             }}
             >
-            {
-              (() => {
-                if (tab === '内容(Content)') {
-                  return <span className="icon icon-book"/>
-                } else if (tab === '终端(Terminal)') {
-                  return <span className="icon icon-window"/>
-                } else if (tab === '系统配置(Config)') {
-                  return <span className="icon icon-cog"/>
-                }
-              })()
-            }
-            {tab}
+            <span className={'icon '+ tab[1]} />
+            {tab[0]}
           </div>)
         })
       }

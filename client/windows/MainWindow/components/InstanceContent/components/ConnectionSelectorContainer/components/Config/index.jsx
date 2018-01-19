@@ -89,7 +89,7 @@ class Config extends React.PureComponent {
         id={id}
         readOnly
         value={this.getProp(`${id}File`)}
-        placeholder={`Select ${label} File (PEM)`}
+        placeholder={`选择 ${label} 文件 (PEM)`}
         />
       <button
         className={'icon icon-dot-3 ssh-key'}
