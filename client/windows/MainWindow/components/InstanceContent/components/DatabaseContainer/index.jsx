@@ -20,7 +20,14 @@ class Database extends React.PureComponent {
       metaVersion: 0,
       clientHeight: this.$window.height() - $('.tab-group').height(),
       pattern: '',
+      tab: '内容(Content)'
     }
+  }
+
+
+  handleTabChange(tab) {
+    // this.props.onSelectTab(tab)
+    this.setState({tab})
   }
 
   componentDidMount() {
@@ -66,6 +73,8 @@ class Database extends React.PureComponent {
         db={this.state.db}
         onDatabaseChange={db => this.setState({db})}
         onKeyMetaChange={() => this.setState({metaVersion: this.state.metaVersion + 1})}
+        onSelectTab={tihs.handleTabChange.bind(this)}
+        tab={this.state.tab}
         />
       <Content
         height={this.state.clientHeight}
@@ -76,6 +85,8 @@ class Database extends React.PureComponent {
         redis={this.props.redis}
         db={this.state.db}
         onDatabaseChange={db => this.setState({db})}
+        onSelectTab={tihs.handleTabChange.bind(this)}
+        tab={this.state.tab}
         />
     </SplitPane>)
   }

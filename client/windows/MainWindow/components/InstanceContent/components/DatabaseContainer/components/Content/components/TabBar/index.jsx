@@ -17,21 +17,21 @@ class Content extends React.PureComponent {
     this.state = {activeTab: '内容(Content)'}
 
   }
-  componentDidMount(){
-    if(this.props.connectionKey){
-      this.setState({activeTab: '内容(Content)'})
-    }
-  }
+  // componentDidMount(){
+  //   if(this.props.tab){
+  //     this.setState({activeTab: '内容(Content)'})
+  //   }
+  // }
 
   render() {
     return (<div className="TabBar">
       {
         this.tabs.map(tab => {
           return (<div
-            className={'item' + (tab[0] === this.state.activeTab ? ' is-active' : '')}
+            className={'item' + (tab[0] === this.props.tab ? ' is-active' : '')}
             key={tab[0]}
             onClick={() => {
-              this.setState({activeTab: tab[0]})
+              // this.setState({activeTab: tab[0]})
               this.props.onSelectTab(tab[0])
             }}
             >

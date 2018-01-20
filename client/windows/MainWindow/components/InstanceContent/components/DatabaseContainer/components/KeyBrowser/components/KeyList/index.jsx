@@ -182,6 +182,8 @@ class KeyList extends React.Component {
       this.setState({selectedKey: null, editableKey: null})
       this.props.onSelect(null)
     }
+    // select keyTab
+    this.props.onSelectTab({tab: '内容(Content)'})
   }
 
   deleteSelectedKey() {

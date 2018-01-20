@@ -42,6 +42,7 @@ class KeyBrowser extends React.Component {
         onCreateKey={this.props.onCreateKey}
         onKeyMetaChange={this.props.onKeyMetaChange}
         onSelect={key => this.props.onSelectKey(key)}
+        onSelectTab={this.props.onSelectTab}
         />
       <Footer
         onDatabaseChange={this.props.onDatabaseChange}
