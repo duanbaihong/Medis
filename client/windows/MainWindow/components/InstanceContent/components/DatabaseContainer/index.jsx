@@ -27,7 +27,7 @@ class Database extends React.PureComponent {
 
   handleTabChange(tab) {
     // this.props.onSelectTab(tab)
-    this.setState({tab})
+    this.setState(tab)
   }
 
   componentDidMount() {
@@ -73,7 +73,7 @@ class Database extends React.PureComponent {
         db={this.state.db}
         onDatabaseChange={db => this.setState({db})}
         onKeyMetaChange={() => this.setState({metaVersion: this.state.metaVersion + 1})}
-        onSelectTab={tihs.handleTabChange.bind(this)}
+        onSelectTab={this.handleTabChange.bind(this)}
         tab={this.state.tab}
         />
       <Content
@@ -85,7 +85,7 @@ class Database extends React.PureComponent {
         redis={this.props.redis}
         db={this.state.db}
         onDatabaseChange={db => this.setState({db})}
-        onSelectTab={tihs.handleTabChange.bind(this)}
+        onSelectTab={this.handleTabChange.bind(this)}
         tab={this.state.tab}
         />
     </SplitPane>)

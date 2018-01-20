@@ -30,6 +30,7 @@ class Content extends React.PureComponent {
   }
   componentDidMount() {
     this.init(this.props.keyName)
+
   }
 
   componentWillReceiveProps(nextProps) {

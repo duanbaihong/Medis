@@ -17,10 +17,15 @@ class Content extends React.PureComponent {
     this.state = {activeTab: '内容(Content)'}
 
   }
-  // componentDidMount(){
-  //   if(this.props.tab){
-  //     this.setState({activeTab: '内容(Content)'})
-  //   }
+  componentDidMount(){
+    // console.log(this.props.tab+" "+this.props.)
+    // this.props.onSelectTab(this.props.tab)
+    // if(this.props.tab){
+    //   this.setState({activeTab: '内容(Content)'})
+    // }
+  }
+  // componentWillReceiveProps(){
+  //   this.props.onSelectTab(this.props.tab)
   // }
 
   render() {
@@ -32,7 +37,7 @@ class Content extends React.PureComponent {
             key={tab[0]}
             onClick={() => {
               // this.setState({activeTab: tab[0]})
-              this.props.onSelectTab(tab[0])
+              this.props.onSelectTab({tab: tab[0]})
             }}
             >
             <span className={'icon '+ tab[1]} />
