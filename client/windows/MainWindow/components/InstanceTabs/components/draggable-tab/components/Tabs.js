@@ -130,7 +130,7 @@ class Tabs extends React.Component {
           cancel='.rdTabCloseIcon'
           start={{ x: 0, y: 0 }}
           moveOnStartChange={true}
-          zIndex={100}
+          zIndex={1000}
           bounds='parent'
           onDrag={this.handleDrag.bind(this, tab.key)}
           onStop={this.handleDragStop.bind(this, tab.key)}>

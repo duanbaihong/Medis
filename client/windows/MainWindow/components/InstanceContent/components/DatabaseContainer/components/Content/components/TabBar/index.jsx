@@ -17,17 +17,6 @@ class Content extends React.PureComponent {
     this.state = {activeTab: '内容(Content)'}
 
   }
-  componentDidMount(){
-    // console.log(this.props.tab+" "+this.props.)
-    // this.props.onSelectTab(this.props.tab)
-    // if(this.props.tab){
-    //   this.setState({activeTab: '内容(Content)'})
-    // }
-  }
-  // componentWillReceiveProps(){
-  //   this.props.onSelectTab(this.props.tab)
-  // }
-
   render() {
     return (<div className="TabBar">
       {
