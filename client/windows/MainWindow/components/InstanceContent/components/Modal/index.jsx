@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {isArray} from 'util'
+
 require('json-editor')
 
 require('./index.scss')
@@ -106,12 +108,12 @@ export default class Modal extends React.Component {
             ref="submit"
             className={'nt-button' + (this.props.form ? '' : ' nt-button--primary')}
             onClick={this.handleCancel.bind(this)}
-            >取消</button>
+            >{isArray(this.props.button)?this.props.button[1]:"取消"}</button>
           <button
             ref="cancel"
             className={'nt-button' + (!this.props.form ? '' : ' nt-button--primary')}
             onClick={this.handleSubmit.bind(this)}
-            >{this.props.button || 'OK'}</button>
+            >{isArray(this.props.button)?this.props.button[0]:(this.props.button?this.props.button:"OK")}</button>
         </div>
       </div>
     </div>)

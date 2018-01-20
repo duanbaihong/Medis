@@ -125,8 +125,12 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     });
     redis.once('end', function (syselft=true) {
       dispatch(disconnect());
-      sshconn.end();
-      netserver.close();
+      if(sshconn){
+        sshconn.end();
+      }
+      if(netserver){
+        netserver.close();
+      }
       let msg
       if (!sshErrorThrown && syselft) {
         let msg = 'Redis 错误: 连接失败Connection failed. ';

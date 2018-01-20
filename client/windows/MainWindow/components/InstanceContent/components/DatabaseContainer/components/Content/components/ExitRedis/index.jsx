@@ -16,6 +16,8 @@ class ExitRedis extends React.Component{
         content: '你确定要退出此Redis连接吗'
       }).then(() => {
         redis.emit('end',false);
+      }).catch(()=>{
+        return ;
       })
     }else{
       redis.emit('end',false);
