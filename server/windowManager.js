@@ -34,7 +34,7 @@ class WindowManager extends EventEmitter {
       option.title = '管理过滤正则';
       option.show=false;
       option.alwaysOnTop = true;
-      option.resizable = false;
+      option.resizable = true;
       option.modal = true;
       option.fullscreen = false;
       option.minimizable = false;

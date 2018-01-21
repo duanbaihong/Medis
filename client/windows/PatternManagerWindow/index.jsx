@@ -29,7 +29,7 @@ class App extends React.Component {
               key={pattern.get('key')}
               className={'nav-group-item' + (index === this.state.index ? ' is-active' : '')}
               onClick={() => {
-                this.setState({index})
+                this.setState({index:index,name: pattern.get('name'),value: pattern.get('value')})
               }}
               >
               <span>{pattern.get('name')}</span>
@@ -88,9 +88,9 @@ class App extends React.Component {
               })
               alert('保存成功！')
               this.props.reloadPatterns()
-              console.info(this.state.name)
-              console.info(this.state.value)
-              console.info(this.state.index)
+              // console.info(this.state.name)
+              // console.info(this.state.value)
+              // console.info(this.state.index)
             }}
             >保存规则</button>
         </div>
