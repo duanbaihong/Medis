@@ -78,6 +78,7 @@ class Favorite extends React.PureComponent {
           <span className="icon icon-flash"/>
           快速连接
         </a>
+        <div className='favoriteline'></div>
         <h5 className="nav-group-title">收藏</h5>
         <div ref="sortable" key={this.sortableKey}>{
           this.props.favorites.map((favorite, index) => {
@@ -94,6 +95,7 @@ class Favorite extends React.PureComponent {
         }</div>
       </nav>
       <footer className="toolbar toolbar-footer">
+      <button><span className="icon icon-home"></span></button>
         <button
           onClick={() => {
             this.props.createFavorite()
