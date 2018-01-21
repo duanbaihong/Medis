@@ -22,7 +22,6 @@ class InstanceContent extends PureComponent {
       })
     }
   }
-
   modalSubmit(result) {
     this.promise.resolve(result)
     this.setState({modal: null})
@@ -51,9 +50,9 @@ class InstanceContent extends PureComponent {
         style={{display: instance.get('key') === activeInstanceKey ? 'block' : 'none'}}
         >
         {
-        instance.get('redis')
-          ? <DatabaseContainer instance={instance} />
-          : <ConnectionSelectorContainer instance={instance}/>
+         (instance.get('redis')
+            ? <DatabaseContainer instance={instance} />
+            : <ConnectionSelectorContainer instance={instance}/>)
       }
       </div>
     ))
