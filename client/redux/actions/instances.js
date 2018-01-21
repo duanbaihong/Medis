@@ -22,8 +22,11 @@ export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}
   if (!key) {
     key = activeInstanceKey
   }
-
   const targetIndex = instances.findIndex(instance => instance.get('key') === key);
+
+  if (instances.get(targetIndex).get('redis')){
+    instances.get(targetIndex).get('redis').emit('end',false);
+  }
 
   const ret = {activeInstanceKey, targetIndex}
 
