@@ -84,6 +84,14 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
         return false;
       }
     }));
+    redis.once('ready',()=>{
+      Notification.requestPermission(function(permission) {
+        var redisNotification=new Notification('Medis连接成功',{
+          body: '连接到['+config.host+':'+config.port+']的REDIS成功!',
+          silent: true
+        })
+      }); 
+    })
     redis.defineCommand('setKeepTTL', {
       numberOfKeys: 1,
       lua: 'local ttl = redis.call("pttl", KEYS[1]) if ttl > 0 then return redis.call("SET", KEYS[1], ARGV[1], "PX", ttl) else return redis.call("SET", KEYS[1], ARGV[1]) end'
@@ -139,6 +147,12 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
         }
         alert(msg);
       }
+      Notification.requestPermission(function(permission) {
+        var redisNotification=new Notification('Medis连接成功',{
+          body: '退出连接['+config.host+':'+config.port+']成功'+(msg?'.退出原因：'+msg:'')+'!',
+          silent: true
+        })
+      }); 
       console.log('退出连接['+config.host+':'+config.port+']成功'+(msg?'.退出原因：'+msg:'')+'!')
     });
   }

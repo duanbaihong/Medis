@@ -23,9 +23,15 @@ export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}
     key = activeInstanceKey
   }
   const targetIndex = instances.findIndex(instance => instance.get('key') === key);
-
-  if (instances.get(targetIndex).get('redis')){
-    instances.get(targetIndex).get('redis').emit('end',false);
+  const instance=instances.get(targetIndex)
+  if (instance.get('redis')){
+    instance.get('redis').emit('end',false);
+    Notification.requestPermission(function(permission) {
+        console.log(permission)
+        redisNotification=new Notification('Medis退出成功',{
+          body: '退出Redis实例'+instance.get('key')+'['+targetIndex+']成功!'
+        })
+      }); 
   }
 
   const ret = {activeInstanceKey, targetIndex}

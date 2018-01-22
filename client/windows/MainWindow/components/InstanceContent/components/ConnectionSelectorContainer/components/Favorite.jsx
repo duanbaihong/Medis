@@ -1,13 +1,18 @@
 'use strict'
 
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Sortable from 'sortablejs'
+import {remote} from 'electron'
+// import favorite from '/client/storage/Favorite'
+import fs from 'fs'
 
 class Favorite extends React.PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-      activeKey: null
+      activeKey: null,
+      exportKeyUp: false
     }
     this._updateSortableKey()
   }
@@ -33,7 +38,6 @@ class Favorite extends React.PureComponent {
       }
     })
   }
-
   componentDidMount() {
     this._bindSortable()
   }
@@ -66,6 +70,59 @@ class Favorite extends React.PureComponent {
     }
   }
 
+  exportFaviote(){
+    const win = remote.getCurrentWindow()
+    const files = remote.dialog.showSaveDialog(win, {
+      // properties: ['openFile'],
+      title: "导出收藏",
+      defaultPath: "~/Desktop/",
+      filters:[{name: 'JSON Files', extensions: ['json']}]
+    })
+    let favoriteData=JSON.stringify(this.props.favorites.toJS(),null,'\t')
+    if (files && files.length) {
+      try{
+        fs.writeFileSync(files, favoriteData)
+        Notification.requestPermission(function (permission) {
+          var redisNotification=new Notification('导出收藏成功！',{
+            body: '导出收藏成功！导出文件为:'+files,
+            silent: true
+          })
+        })
+      } catch(e){
+        console.log(e)
+        alert("导出收藏失败！")
+      }
+    }
+  }
+  importFaviote(){
+    const win = remote.getCurrentWindow()
+    const files = remote.dialog.showOpenDialog(win, {
+      properties: ['openFile'],
+      title: "导入收藏",
+      defaultPath: "~/Desktop/",
+      filters:[{name: 'JSON Files', extensions: ['json']}]
+    })
+    if (files && files.length) {
+      const file = files[0]
+      try{
+        const content = fs.readFileSync(file, 'utf8')
+        var objData=JSON.parse(content)
+        objData.map(data=>{
+          this.props.removeFavorite(data.key)
+          this.props.createFavorite(data)
+        })
+      }catch(e){
+        alert("导入数据失败，请检查文件是否准确！")
+        return false
+      }
+      Notification.requestPermission(function (permission) {
+        var redisNotification=new Notification('导入收藏成功！',{
+            body: '从文件['+file+']导入收藏成功！',
+            silent: true
+          })
+      })
+    }
+  }
   render() {
     return (<div style={{flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden'}}>
       <nav className="nav-group">
@@ -78,6 +135,7 @@ class Favorite extends React.PureComponent {
           <span className="icon icon-flash"/>
           快速连接
         </a>
+        <div className='favoriteline'></div>
         <h5 className="nav-group-title">收藏</h5>
         <div ref="sortable" key={this.sortableKey}>{
           this.props.favorites.map((favorite, index) => {
@@ -87,18 +145,18 @@ class Favorite extends React.PureComponent {
               onClick={this.onClick.bind(this, index)}
               onDoubleClick={this.onDoubleClick.bind(this, index)}
               >
-              <span className="icon icon-home"/>
-              <span>{favorite.get('name')}</span>
+              <div className='' style={{margin: '2px 5px',borderRadius: '15px'}}>
+                <span className="icon icon-database"/>
+                <span>{favorite.get('name')}</span>
+              </div>
             </a>)
           })
         }</div>
       </nav>
-      <footer className="toolbar toolbar-footer">
+      <footer className="toolbar toolbar-footer">      
         <button
           onClick={() => {
             this.props.createFavorite()
-          // TODO: auto select
-          // this.select(favorite);
           }}
           >+</button>
         <button
@@ -120,6 +178,40 @@ class Favorite extends React.PureComponent {
           }
         }
           >-</button>
+        <button className='pull-right' onMouseLeave={()=>{
+          if(this.state.exportKeyUp){
+            this.setState({exportKeyUp: false})
+          }
+        }}><div className="icon icon-menu " onClick={(e)=>{
+          this.setState({exportKeyUp: !this.state.exportKeyUp})
+          var btnMenu=$(e.target).parent()
+          // var menu=btnMenu.find('.pattern-dropup')
+          var menu=$(ReactDOM.findDOMNode(this.refs.export))
+          var instancesBar=$('#instancesId')
+          var instancesBarHeight=0
+          if(instancesBar.css('display') !== 'none'){
+              instancesBarHeight=26
+          }
+          menu.css('top',btnMenu.offset().top-menu.height()-2-instancesBarHeight)
+          menu.css('left',btnMenu.offset().left-menu.width()+btnMenu.width())
+        }}></div>
+          <div 
+          ref="export"
+          className={'js-pattern-dropdown pattern-dropup'+(this.state.exportKeyUp?" is-active":"")} >
+            <ul>
+              <li><a onClick={this.exportFaviote.bind(this)}><span className="icon icon-export"></span>&nbsp;
+              导出收藏</a></li>
+              <li><hr/></li>
+              <li><a onClick={this.importFaviote.bind(this)}><span className="icon icon-download"></span>&nbsp;
+              导入收藏</a></li>
+              <li><hr/></li>
+              <li><a onClick={()=>{
+                
+              }}><span className="icon icon-layout"></span>&nbsp;
+              参数设置</a></li>
+            </ul>
+          </div>
+        </button>
       </footer>
     </div>)
   }

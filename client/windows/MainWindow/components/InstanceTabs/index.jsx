@@ -19,7 +19,7 @@ class InstanceTabs extends React.Component {
       setTimeout(() => $(window).trigger('resize'), 0)
     }
 
-    return (<div style={{display: this.style, zIndex: '1000'}}>
+    return (<div id='instancesId' style={{display: this.style, zIndex: '1000'}}>
       <Tabs
         onTabAddButtonClick={() => {
           if (!$('.Modal').length) {

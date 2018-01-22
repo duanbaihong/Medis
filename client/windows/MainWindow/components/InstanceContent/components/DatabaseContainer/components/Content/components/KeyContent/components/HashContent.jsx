@@ -80,9 +80,9 @@ class HashContent extends BaseContent {
       return
     }
     showModal({
-      title: 'Delete selected item?',
-      button: 'Delete',
-      content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
+      title: '删除选中项目?',
+      button: '删除',
+      content: '你确定要删除选中的项目，删除后将无法恢复.'
     }).then(() => {
       const members = this.state.members
       const deleted = members.splice(this.state.selectedIndex, 1)
