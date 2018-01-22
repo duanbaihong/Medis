@@ -86,9 +86,10 @@ class App extends React.Component {
                 name: this.state.name || activePattern.get('name'),
                 value: this.state.value || activePattern.get('value')
               })
+              var thisname=this.state.name || activePattern.get('name')
               Notification.requestPermission(function(permission) {
-                redisNotification=new Notification('Medis连接成功',{
-                  body: '规则【'+this.state.name+'】保存成功！'
+                var redisNotification=new Notification('Medis连接成功',{
+                  body: '规则【'+thisname+'】保存成功！'
                 })
               }); 
               this.props.reloadPatterns()

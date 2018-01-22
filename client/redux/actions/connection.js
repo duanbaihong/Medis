@@ -86,8 +86,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     }));
     redis.once('ready',()=>{
       Notification.requestPermission(function(permission) {
-        console.log(permission)
-        redisNotification=new Notification('Medis连接成功',{
+        var redisNotification=new Notification('Medis连接成功',{
           body: '连接到['+config.host+':'+config.port+']的REDIS成功!',
           silent: true
         })
@@ -149,7 +148,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
         alert(msg);
       }
       Notification.requestPermission(function(permission) {
-        redisNotification=new Notification('Medis连接成功',{
+        var redisNotification=new Notification('Medis连接成功',{
           body: '退出连接['+config.host+':'+config.port+']成功'+(msg?'.退出原因：'+msg:'')+'!',
           silent: true
         })

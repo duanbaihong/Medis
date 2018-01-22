@@ -52,7 +52,7 @@ class InstanceContent extends PureComponent {
         {
          (instance.get('redis')
             ? <DatabaseContainer instance={instance} />
-            : <ConnectionSelectorContainer instance={instance} instances={this.props.instances}/>)
+            : <ConnectionSelectorContainer instance={instance}/>)
       }
       </div>
     ))

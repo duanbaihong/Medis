@@ -72,7 +72,7 @@ class Config extends React.Component {
     ]
     this.groups = [
       {
-        name: 'General',
+        name: '通用(General)',
         configs: [
           {name: 'port', type: 'number'},
           {name: 'bind'},
@@ -87,7 +87,7 @@ class Config extends React.Component {
         ]
       },
       {
-        name: 'Logging',
+        name: '日志(Logging)',
         configs: [
           {name: 'loglevel', type: ['debug', 'verbose', 'notice', 'warning']},
           {name: 'logfile'},
@@ -97,7 +97,7 @@ class Config extends React.Component {
         ]
       },
       {
-        name: 'Snap Shotting',
+        name: '快照(Snap Shotting)',
         configs: [
           {name: 'dbfilename'},
           {name: 'dir'},
@@ -108,7 +108,7 @@ class Config extends React.Component {
         ]
       },
       {
-        name: 'Replication',
+        name: '同步(Replication)',
         configs: [
           {name: 'slaveof'},
           {name: 'masterauth'},
@@ -127,14 +127,14 @@ class Config extends React.Component {
         ]
       },
       {
-        name: 'Security',
+        name: '安全(Security)',
         configs: [
           {name: 'requirepass'},
           {name: 'rename-command'}
         ]
       },
       {
-        name: 'Limits',
+        name: '配额(Limits)',
         configs: [
           {name: 'maxclients'},
           {name: 'maxmemory'},
@@ -143,7 +143,7 @@ class Config extends React.Component {
         ]
       },
       {
-        name: 'Append Only Mode',
+        name: '持久化(Append Only Mode)',
         configs: [
           {name: 'appendonly', type: 'boolean'},
           {name: 'appendfilename'},
@@ -155,13 +155,13 @@ class Config extends React.Component {
         ]
       },
       {
-        name: 'LUA Scripting',
+        name: 'LUA脚本(LUA Scripting)',
         configs: [
           {name: 'lua-time-limit', type: 'number'}
         ]
       },
       {
-        name: 'Cluster',
+        name: '集群配置(Cluster)',
         configs: [
           {name: 'cluster-enabled', type: 'boolean'},
           {name: 'cluster-config-file'},
@@ -172,26 +172,26 @@ class Config extends React.Component {
         ]
       },
       {
-        name: 'Slow Log',
+        name: '慢查询日志(Slow Log)',
         configs: [
           {name: 'slowlog-log-slower-than', type: 'number'},
           {name: 'slowlog-max-len', type: 'number'}
         ]
       },
       {
-        name: 'Latency Monitor',
+        name: '监控(Latency Monitor)',
         configs: [
           {name: 'latency-monitor-threshold', type: 'number'}
         ]
       },
       {
-        name: 'Event Notification',
+        name: '事件提醒(Event Notification)',
         configs: [
           {name: 'notify-keyspace-events'}
         ]
       },
       {
-        name: 'Advanced Config',
+        name: '高级配置(Advanced Config)',
         configs: [
           {name: 'hash-max-ziplist-entries', type: 'number'},
           {name: 'hash-max-ziplist-value', type: 'number'},
@@ -236,7 +236,7 @@ class Config extends React.Component {
       }).filter(g => g.configs.length)
 
       if (Object.keys(configs).length) {
-        groups.push({name: 'Other', configs: Object.keys(configs).map(key => {
+        groups.push({name: '其它(Other)', configs: Object.keys(configs).map(key => {
           return {
             name: key,
             value: configs[key]
@@ -387,13 +387,13 @@ class Config extends React.Component {
             ref="submit"
             className="nt-button"
             onClick={this.handleReload.bind(this)}
-            >Reload</button>
+            >重载</button>
           <button
             ref="submit"
             className="nt-button"
             disabled={!this.isChanged(true)}
             onClick={this.handleSave.bind(this)}
-            >Save To Config File</button>
+            >保存到config文件</button>
           <button
             ref="cancel"
             className="nt-button nt-button--primary"
@@ -401,7 +401,7 @@ class Config extends React.Component {
             onClick={() => {
               this.handleApply()
             }}
-            >Apply</button>
+            >保存</button>
         </div>
       </div>
     </div>)
