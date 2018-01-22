@@ -25,6 +25,7 @@ class ConnectionSelector extends PureComponent {
         <Favorite
           favorites={this.props.favorites}
           onSelect={this.handleSelectFavorite.bind(this, false)}
+          instances={this.props.instances}
           onRequireConnecting={this.handleSelectFavorite.bind(this, true)}
           updateFavorite={this.props.updateFavorite}
           createFavorite={this.props.createFavorite}

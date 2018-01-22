@@ -1,13 +1,17 @@
 'use strict'
 
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Sortable from 'sortablejs'
-
+import {remote} from 'electron'
+import fs from 'fs'
+// fs = require('fs')
 class Favorite extends React.PureComponent {
   constructor() {
     super()
     this.state = {
-      activeKey: null
+      activeKey: null,
+      exportKeyUp: false
     }
     this._updateSortableKey()
   }
@@ -33,7 +37,6 @@ class Favorite extends React.PureComponent {
       }
     })
   }
-
   componentDidMount() {
     this._bindSortable()
   }
@@ -88,19 +91,18 @@ class Favorite extends React.PureComponent {
               onClick={this.onClick.bind(this, index)}
               onDoubleClick={this.onDoubleClick.bind(this, index)}
               >
-              <span className="icon icon-home"/>
-              <span>{favorite.get('name')}</span>
+              <div className='' style={{margin: '2px 5px',borderRadius: '15px'}}>
+                <span className="icon icon-database"/>
+                <span>{favorite.get('name')}</span>
+              </div>
             </a>)
           })
         }</div>
       </nav>
-      <footer className="toolbar toolbar-footer">
-      <button><span className="icon icon-home"></span></button>
+      <footer className="toolbar toolbar-footer">      
         <button
           onClick={() => {
             this.props.createFavorite()
-          // TODO: auto select
-          // this.select(favorite);
           }}
           >+</button>
         <button
@@ -122,6 +124,66 @@ class Favorite extends React.PureComponent {
           }
         }
           >-</button>
+        <button ref="btnMenu" className='pull-right' onMouseLeave={()=>{
+          if(this.state.exportKeyUp){
+            this.setState({exportKeyUp: false})
+          }
+        }}><div className="icon icon-menu " onClick={(e)=>{
+          this.setState({exportKeyUp: !this.state.exportKeyUp})
+          var btnMenu=$(e.target).parent()
+          var menu=btnMenu.find('.pattern-dropup')
+          var instancesBar=$('#instancesId')
+          var instancesBarHeight=0
+          if(instancesBar.css('display') !== 'none'){
+              instancesBarHeight=26
+          }
+          console.log(this.props.instances)
+          menu.css('top',btnMenu.offset().top-menu.height()-2-instancesBarHeight)
+          menu.css('left',btnMenu.offset().left-menu.width()+btnMenu.width())
+        }}></div>
+          <div 
+          ref="export"
+          className={'js-pattern-dropdown pattern-dropup'+(this.state.exportKeyUp?" is-active":"")} >
+            <ul>
+              <li><a onClick={()=>{
+                const win = remote.getCurrentWindow()
+                const files = remote.dialog.showSaveDialog(win, {
+                  // properties: ['openFile'],
+                  title: "导出收藏",
+                  defaultPath: "./Desktop/"
+                })
+                if (files && files.length) {
+                  const file = files[0]
+                  const content = fs.readFileSync(file, 'utf8')
+                  console.log(content)
+                }
+                  
+              }}><span className="icon icon-export"></span>&nbsp;
+              导出收藏</a></li>
+              <li><hr/></li>
+              <li><a onClick={()=>{
+                const win = remote.getCurrentWindow()
+                const files = remote.dialog.showOpenDialog(win, {
+                  properties: ['openFile'],
+                  title: "导出收藏",
+                  defaultPath: "./Desktop/"
+                  // filters:{name: 'JSON Files', extensions: ['.json']}
+                })
+                if (files && files.length) {
+                  const file = files[0]
+                  const content = fs.readFileSync(file, 'utf8')
+                  console.log(content)
+                }
+              }}><span className="icon icon-download"></span>&nbsp;
+              导入收藏</a></li>
+              <li><hr/></li>
+              <li><a onClick={()=>{
+                
+              }}><span className="icon icon-layout"></span>&nbsp;
+              参数设置</a></li>
+            </ul>
+          </div>
+        </button>
       </footer>
     </div>)
   }

@@ -46,10 +46,10 @@ class PatternList extends React.Component {
       <span
         className={'js-pattern-dropdown icon icon-down-open' + (this.state.patternDropdown ? ' is-active' : '')}
         onClick={() => {
-          this.setState({patternDropdown: !this.state.patternDropdown})
+          this.setState({patternDropdown: !this.state.patternDropdown})          
         }}
         />
-      <div
+      <div 
         className={'js-pattern-dropdown pattern-dropdown' + (this.state.patternDropdown ? ' is-active' : '')}
         style={{maxHeight: this.props.height}}
         >

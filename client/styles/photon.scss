@@ -37,6 +37,13 @@
       background-color: #dcdfe1;
     }
   }
+  button:last-child{
+    border-left: 1px solid #c2c0c2;
+    box-shadow: 1px 0px 0px 0px rgba(255, 255, 255, 0.5);
+    border-right: none;
+    padding:1px;
+    height:25px;
+  }
 }
 
 button:focus {
