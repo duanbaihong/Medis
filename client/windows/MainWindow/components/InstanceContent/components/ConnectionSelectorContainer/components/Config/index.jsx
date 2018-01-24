@@ -58,11 +58,8 @@ class Config extends React.PureComponent {
     this.save()
   }
 
-  handleChange(property,val, e) {
-    let value=val?val:e.target.value
-    if(val){
-      this.setState({activetag: val})
-    }
+  handleChange(property,e) {
+    let value=e.target.value
     if (property === 'ssh' || property === 'ssl') {
       value = e.target.checked
     }
@@ -124,21 +121,38 @@ class Config extends React.PureComponent {
         </div>
         <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none',paddingLeft: '10px'}}>
           <label></label>
-          <span className="favorite-circle favorite-closetag" onClick={this.handleChange.bind(this, 'tag','')}>X</span>
+          <span className="favorite-circle favorite-closetag" 
+            onClick={()=>{
+              this.setProp('tag', '')
+            }}>X</span>
           <span className={'favorite-circle favorite-red ' + ((this.state.activetag=='favorite-red' || this.getProp('tag')=='favorite-red')?'favorite-circle-choise':'')}
-            onClick={this.handleChange.bind(this, 'tag','favorite-red')}></span>
+              onClick={()=>{
+                this.setProp('tag', 'favorite-red')
+              }}></span>
           <span className={'favorite-circle favorite-orage ' + ((this.state.activetag=='favorite-orage' || this.getProp('tag')=='favorite-orage')?'favorite-circle-choise':'')} 
-           onClick={this.handleChange.bind(this, 'tag','favorite-orage')}></span>
+              onClick={()=>{
+                this.setProp('tag', 'favorite-orage')
+              }}></span>
           <span className={'favorite-circle favorite-green ' + ((this.state.activetag=='favorite-green' || this.getProp('tag')=='favorite-green')?'favorite-circle-choise':'')}
-            onClick={this.handleChange.bind(this, 'tag','favorite-green')}></span>
+              onClick={()=>{
+                this.setProp('tag', 'favorite-green')
+              }}></span>
           <span className={'favorite-circle favorite-blue ' + ((this.state.activetag=='favorite-blue' || this.getProp('tag')=='favorite-blue')?'favorite-circle-choise':'')}
-             onClick={this.handleChange.bind(this, 'tag','favorite-blue')}></span>
+              onClick={()=>{
+                this.setProp('tag', 'favorite-blue')
+              }}></span>
           <span className={'favorite-circle favorite-violet ' + ((this.state.activetag=='favorite-violet' || this.getProp('tag')=='favorite-violet')?'favorite-circle-choise':'')}
-             onClick={this.handleChange.bind(this, 'tag','favorite-violet')}></span>
+              onClick={()=>{
+                this.setProp('tag', 'favorite-violet')
+              }}></span>
           <span className={'favorite-circle favorite-gray ' + ((this.state.activetag=='favorite-gray' || this.getProp('tag')=='favorite-gray')?'favorite-circle-choise':'')}
-            onClick={this.handleChange.bind(this, 'tag','favorite-gray')}></span>
+              onClick={()=>{
+                this.setProp('tag', 'favorite-gray')
+              }}></span>
           <span className={'favorite-circle favorite-pink ' + ((this.state.activetag=='favorite-pink' || this.getProp('tag')=='favorite-pink')?'favorite-circle-choise':'')}
-            onClick={this.handleChange.bind(this, 'tag','favorite-pink')}></span>
+              onClick={()=>{
+                this.setProp('tag', 'favorite-pink')
+              }}></span>
         </div>
         <div className="nt-form-row">
           <label htmlFor="host">主机地址:</label>

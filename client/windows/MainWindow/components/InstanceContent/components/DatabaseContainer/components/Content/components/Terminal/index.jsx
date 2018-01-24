@@ -52,8 +52,6 @@ class Terminal extends React.PureComponent {
         )
       },
       name: this.props.connectionKey,
-      height: '100%',
-      width: '100%',
       outputLimit: 200,
       prompt: `[[;#fff;]redis> ]`,
       keydown(e) {

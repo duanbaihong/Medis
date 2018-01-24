@@ -10,15 +10,12 @@ require('./index.scss')
 class Database extends React.PureComponent {
   constructor() {
     super()
-    this.$window = $(window)
-
     this.state = {
       sidebarWidth: 260,
       key: null,
       db: 0,
       version: 0,
       metaVersion: 0,
-      clientHeight: this.$window.height() - $('.tab-group').height(),
       pattern: '',
       tab: '内容(Content)'
     }
@@ -28,22 +25,6 @@ class Database extends React.PureComponent {
   handleTabChange(tab) {
     // this.props.onSelectTab(tab)
     this.setState(tab)
-  }
-
-  componentDidMount() {
-    this.updateLayoutBinded = this.updateLayout.bind(this)
-    $(window).on('resize', this.updateLayoutBinded)
-    this.updateLayout()
-  }
-
-  componentWillUnmount() {
-    $(window).off('resize', this.updateLayoutBinded)
-  }
-
-  updateLayout() {
-    this.setState({
-      clientHeight: this.$window.height() - $('.tab-group').height()
-    })
   }
 
   handleCreateKey(key) {
@@ -64,7 +45,7 @@ class Database extends React.PureComponent {
       <KeyBrowser
         patterns={this.props.patterns}
         pattern={this.state.pattern}
-        height={this.state.clientHeight}
+        // height={this.state.clientHeight}
         width={this.state.sidebarWidth}
         redis={this.props.redis}
         connectionKey={this.props.connectionKey}
@@ -77,7 +58,6 @@ class Database extends React.PureComponent {
         tab={this.state.tab}
         />
       <Content
-        height={this.state.clientHeight}
         keyName={this.state.key}
         version={this.state.version}
         metaVersion={this.state.metaVersion}

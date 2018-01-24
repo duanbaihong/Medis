@@ -136,7 +136,7 @@ class Tabs extends React.Component {
           onStop={this.handleDragStop.bind(this, tab.key)}>
           <div
               onClick={this.handleTabClick.bind(this, tab.key)}
-              className={this.state.selectedTab === tab.key ? 'tab-item active' : 'tab-item' }
+              className={'tab-item '+(this.state.selectedTab === tab.key ? 'active' : '') }
               ref={tab.key}>
             {tabTitle}
             <span className="icon icon-cancel icon-close-tab"

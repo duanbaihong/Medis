@@ -10,8 +10,8 @@ import {clipboard} from 'electron'
 require('./index.scss')
 
 class KeyList extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       keys: [],
       selectedKey: null,
@@ -20,7 +20,6 @@ class KeyList extends React.Component {
     }
     this.randomClass = 'pattern-table-' + (Math.random() * 100000 | 0)
   }
-
   refresh(firstTime) {
     this.setState({
       cursor: '0',
@@ -380,8 +379,6 @@ class KeyList extends React.Component {
         onRowClick={(evt, index) => this.handleSelect(index)}
         onRowDoubleClick={(evt, index) => {
           this.handleSelect(index)
-          // this.setState({tab: '内容(Content)'})
-          // this.props.onSelectTab('内容(Content)')
           this.setState({editableKey: this.state.keys[index][0]})
         }}
         width={this.props.width}

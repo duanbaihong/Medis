@@ -43,7 +43,7 @@ class Content extends React.PureComponent {
   }
 
   render() {
-    return (<div className="pane sidebar" style={{height: '100%'}}>
+    return (<div className="pane sidebar" >
       <TabBar
         onSelectTab={this.props.onSelectTab}
         redis={this.props.redis}
@@ -53,7 +53,6 @@ class Content extends React.PureComponent {
         style={{display: this.props.tab === '内容(Content)' ? 'flex' : 'none'}}
         keyName={this.props.keyName}
         keyType={this.state.keyType}
-        height={this.props.height - 66}
         redis={this.props.redis}
         onKeyContentChange={() => {
           this.setState({version: this.state.version + 1})
@@ -61,14 +60,12 @@ class Content extends React.PureComponent {
         />
       <Terminal
         style={{display: this.props.tab === '终端(Terminal)' ? 'block' : 'none'}}
-        height={this.props.height - 67}
         redis={this.props.redis}
         connectionKey={this.props.connectionKey}
         onDatabaseChange={this.props.onDatabaseChange}
         />
       <Config
         style={{display: this.props.tab === '系统配置(Config)' ? 'block' : 'none'}}
-        height={this.props.height - 67}
         redis={this.props.redis}
         connectionKey={this.props.connectionKey}
         />
