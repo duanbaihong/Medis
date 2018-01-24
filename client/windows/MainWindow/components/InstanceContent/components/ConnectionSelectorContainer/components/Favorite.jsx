@@ -6,6 +6,7 @@ import Sortable from 'sortablejs'
 import {remote} from 'electron'
 // import favorite from '/client/storage/Favorite'
 import fs from 'fs'
+require('./Favorite.scss')
 
 class Favorite extends React.PureComponent {
   constructor(props) {
@@ -128,7 +129,7 @@ class Favorite extends React.PureComponent {
       <nav className="nav-group">
         <h5 className="nav-group-title"/>
         <a
-          className={'nav-group-item' + (this.state.activeKey ? '' : ' active')}
+          className={'nav-quick-item' + (this.state.activeKey ? '' : ' active')}
           onClick={this.onClick.bind(this, -1)}
           onDoubleClick={this.onDoubleClick.bind(this, -1)}
           >
@@ -145,7 +146,7 @@ class Favorite extends React.PureComponent {
               onClick={this.onClick.bind(this, index)}
               onDoubleClick={this.onDoubleClick.bind(this, index)}
               >
-              <div className='' style={{margin: '2px 5px',borderRadius: '15px'}}>
+              <div className={(favorite.get('tag') && favorite.get('tag')!='')?'nav-item-cir '+favorite.get('tag'):'nav-item-cir' }>
                 <span className="icon icon-database"/>
                 <span>{favorite.get('name')}</span>
               </div>
@@ -185,29 +186,27 @@ class Favorite extends React.PureComponent {
         }}><div className="icon icon-menu " onClick={(e)=>{
           this.setState({exportKeyUp: !this.state.exportKeyUp})
           var btnMenu=$(e.target).parent()
-          // var menu=btnMenu.find('.pattern-dropup')
           var menu=$(ReactDOM.findDOMNode(this.refs.export))
           var instancesBar=$('#instancesId')
           var instancesBarHeight=0
           if(instancesBar.css('display') !== 'none'){
               instancesBarHeight=26
           }
-          menu.css('top',btnMenu.offset().top-menu.height()-2-instancesBarHeight)
-          menu.css('left',btnMenu.offset().left-menu.width()+btnMenu.width())
+          menu.css({'top':btnMenu.offset().top-menu.height()-2-instancesBarHeight,'left':btnMenu.offset().left-menu.width()+btnMenu.width()})
         }}></div>
           <div 
           ref="export"
           className={'js-pattern-dropdown pattern-dropup'+(this.state.exportKeyUp?" is-active":"")} >
             <ul>
-              <li><a onClick={this.exportFaviote.bind(this)}><span className="icon icon-export"></span>&nbsp;
+              <li><a onClick={this.exportFaviote.bind(this)}><span className="icon icon-export"></span>
               导出收藏</a></li>
               <li><hr/></li>
-              <li><a onClick={this.importFaviote.bind(this)}><span className="icon icon-download"></span>&nbsp;
+              <li><a onClick={this.importFaviote.bind(this)}><span className="icon icon-download"></span>
               导入收藏</a></li>
               <li><hr/></li>
               <li><a onClick={()=>{
                 
-              }}><span className="icon icon-layout"></span>&nbsp;
+              }}><span className="icon icon-cog"></span>
               参数设置</a></li>
             </ul>
           </div>

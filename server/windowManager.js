@@ -27,6 +27,9 @@ class WindowManager extends EventEmitter {
       option.height = 600;
       option.show = false;
       option.minWidth = 840;
+      option.webPreferences = {
+        nodeIntegrationInWorker: true
+      };
       option.minHeight = 400;
     } else if (type === 'patternManager') {
       option.width = 600;
@@ -36,6 +39,9 @@ class WindowManager extends EventEmitter {
       option.alwaysOnTop = true;
       option.resizable = true;
       option.modal = true;
+      option.webPreferences = {
+        nodeIntegrationInWorker: true
+      };
       option.fullscreen = false;
       option.minimizable = false;
       option.maximizable = false;
