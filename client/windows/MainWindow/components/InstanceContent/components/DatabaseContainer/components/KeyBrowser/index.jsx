@@ -13,7 +13,7 @@ class KeyBrowser extends React.Component {
     this.$window=$(window)
     this.state = {
       pattern: props.pattern,
-      clientHeight: this.$window.height() - $('.tab-group').height()
+      clientHeight: this.$window.height() - $('.tab-group').height()-66
     }
   }
   componentDidMount() {
@@ -27,11 +27,9 @@ class KeyBrowser extends React.Component {
   }
 
   updateLayout() {
-    // this.setState({
-    //   clientHeight: this.$window.height() - $('.tab-group').height()
-    // })
-    console.log("alert")
-    $(".fixedDataTableLayout_main").height(this.$window.height() - $('.tab-group').height())
+    this.setState({
+      clientHeight: this.$window.height() - $('.tab-group').height()-66
+    })
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.pattern !== this.props.pattern) {

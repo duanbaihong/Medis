@@ -223,7 +223,6 @@ class Config extends React.Component {
       for (let i = 0; i < config.length - 1; i += 2) {
         configs[config[i]] = config[i + 1]
       }
-
       const groups = clone(this.groups, true).map(g => {
         g.configs = g.configs.map(c => {
           if (typeof configs[c.name] !== 'undefined') {
