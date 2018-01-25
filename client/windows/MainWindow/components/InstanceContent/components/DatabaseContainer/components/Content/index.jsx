@@ -52,6 +52,7 @@ class Content extends React.PureComponent {
       <KeyContent
         style={{display: this.props.tab === '内容(Content)' ? 'flex' : 'none'}}
         keyName={this.props.keyName}
+        height={this.props.height}
         keyType={this.state.keyType}
         redis={this.props.redis}
         onKeyContentChange={() => {

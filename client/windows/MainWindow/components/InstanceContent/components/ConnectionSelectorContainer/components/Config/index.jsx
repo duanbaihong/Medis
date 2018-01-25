@@ -12,8 +12,7 @@ class Config extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      data: new Immutable.Map(),
-      activetag: ''
+      data: new Immutable.Map({'curmodel':'standalone'})
     }
   }
 
@@ -30,13 +29,10 @@ class Config extends React.PureComponent {
       changed: Boolean(this.props.favorite)
     })
   }
+
   componentWillReceiveProps(nextProps) {
     if (!this.props.connect && nextProps.connect) {
       this.connect()
-    }
-
-    if(this.props.favorite){
-      this.setState({ activetag: ''})
     }
     if (this.props.favorite || nextProps.favorite) {
       const leaving = !this.props.favorite || !nextProps.favorite ||
@@ -46,13 +42,12 @@ class Config extends React.PureComponent {
       }
     }
   }
-
   connect() {
     const {favorite, connectToRedis} = this.props
     const data = this.state.data
     const config = favorite ? favorite.merge(data).toJS() : data.toJS()
     config.host = config.host || 'localhost'
-    config.port = config.port || '6379'
+    config.port = config.port || (this.getProp('curmodel')=='sentinels'?'26379':'6379')
     config.sshPort = config.sshPort || '22'
     connectToRedis(config)
     this.save()
@@ -84,7 +79,6 @@ class Config extends React.PureComponent {
       this.setState({changed: false, data: new Immutable.Map()})
     }
   }
-
   renderCertInput(label, id) {
     return (<div className="nt-form-row">
       <label htmlFor="cert">{label}:</label>
@@ -115,6 +109,26 @@ class Config extends React.PureComponent {
   render() {
     return (<div>
       <div className="nt-box" style={{width: 500, margin: '60px auto 0'}}>
+        <div className="connectModel">
+          <span className={(this.getProp('curmodel')==='standalone' || (!this.props.favorite && this.getProp('curmodel')=='' ))?'active':''}
+              onClick={()=>{
+                this.setProp('curmodel','standalone')
+              }}>
+              Standalone
+          </span>
+          <span className={this.getProp('curmodel')==='sentinels'?'active':''}
+              onClick={()=>{
+                this.setProp('curmodel','sentinels')
+              }}>
+              Sentinels
+          </span>
+          <span className={this.getProp('curmodel')==='cluster'?'active':''}
+              onClick={()=>{
+                this.setProp('curmodel','cluster')
+              }}>
+              Cluster
+          </span>
+        </div>
         <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none'}}>
           <label htmlFor="name">连接名称:</label>
           <input type="text" id="name" value={this.getProp('name')} onChange={this.handleChange.bind(this, 'name')} placeholder="Bookmark name"/>
@@ -125,46 +139,49 @@ class Config extends React.PureComponent {
             onClick={()=>{
               this.setProp('tag', '')
             }}>X</span>
-          <span className={'favorite-circle favorite-red ' + ((this.state.activetag=='favorite-red' || this.getProp('tag')=='favorite-red')?'favorite-circle-choise':'')}
+          <span className={'favorite-circle favorite-red ' + ((this.getProp('tag')=='favorite-red')?'favorite-circle-choise':'')}
               onClick={()=>{
                 this.setProp('tag', 'favorite-red')
               }}></span>
-          <span className={'favorite-circle favorite-orage ' + ((this.state.activetag=='favorite-orage' || this.getProp('tag')=='favorite-orage')?'favorite-circle-choise':'')} 
+          <span className={'favorite-circle favorite-orage ' + ((this.getProp('tag')=='favorite-orage')?'favorite-circle-choise':'')} 
               onClick={()=>{
                 this.setProp('tag', 'favorite-orage')
               }}></span>
-          <span className={'favorite-circle favorite-green ' + ((this.state.activetag=='favorite-green' || this.getProp('tag')=='favorite-green')?'favorite-circle-choise':'')}
+          <span className={'favorite-circle favorite-green ' + ((this.getProp('tag')=='favorite-green')?'favorite-circle-choise':'')}
               onClick={()=>{
                 this.setProp('tag', 'favorite-green')
               }}></span>
-          <span className={'favorite-circle favorite-blue ' + ((this.state.activetag=='favorite-blue' || this.getProp('tag')=='favorite-blue')?'favorite-circle-choise':'')}
+          <span className={'favorite-circle favorite-blue ' + ((this.getProp('tag')=='favorite-blue')?'favorite-circle-choise':'')}
               onClick={()=>{
                 this.setProp('tag', 'favorite-blue')
               }}></span>
-          <span className={'favorite-circle favorite-violet ' + ((this.state.activetag=='favorite-violet' || this.getProp('tag')=='favorite-violet')?'favorite-circle-choise':'')}
+          <span className={'favorite-circle favorite-violet ' + ((this.getProp('tag')=='favorite-violet')?'favorite-circle-choise':'')}
               onClick={()=>{
                 this.setProp('tag', 'favorite-violet')
               }}></span>
-          <span className={'favorite-circle favorite-gray ' + ((this.state.activetag=='favorite-gray' || this.getProp('tag')=='favorite-gray')?'favorite-circle-choise':'')}
+          <span className={'favorite-circle favorite-gray ' + ((this.getProp('tag')=='favorite-gray')?'favorite-circle-choise':'')}
               onClick={()=>{
                 this.setProp('tag', 'favorite-gray')
               }}></span>
-          <span className={'favorite-circle favorite-pink ' + ((this.state.activetag=='favorite-pink' || this.getProp('tag')=='favorite-pink')?'favorite-circle-choise':'')}
+          <span className={'favorite-circle favorite-pink ' + ((this.getProp('tag')=='favorite-pink')?'favorite-circle-choise':'')}
               onClick={()=>{
                 this.setProp('tag', 'favorite-pink')
               }}></span>
         </div>
         <div className="nt-form-row">
-          <label htmlFor="host">主机地址:</label>
+          <label htmlFor="host">Redis地址:</label>
           <input type="text" id="host" value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} placeholder="localhost"/>
         </div>
         <div className="nt-form-row">
-          <label htmlFor="port">主机端口:</label>
-          <input type="text" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379"/>
+          <label htmlFor="port">Redis端口:</label>
+          <input type="text" id="port" 
+            value={this.getProp('port')} 
+            onChange={this.handleChange.bind(this, 'port')} 
+            placeholder={this.getProp('curmodel')=='sentinels'?"26379":"6379"}/>
         </div>
         <div className="nt-form-row">
-          <label htmlFor="password">主机密码:</label>
-          <input type="password" id="password" onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
+          <label htmlFor="password">Redis密码:</label>
+          <input type="password" id="password" placeholder='Redis密码' onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssl">启用SSL:</label>
@@ -182,11 +199,11 @@ class Config extends React.PureComponent {
         <div style={{display: this.getProp('ssh') ? 'block' : 'none'}}>
           <div className="nt-form-row">
             <label htmlFor="sshHost">SSH主机地址:</label>
-            <input type="text" id="sshHost" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} placeholder=""/>
+            <input type="text" id="sshHost" placeholder="SSH主机地址" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} />
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshUser">SSH用户:</label>
-            <input type="text" id="sshUser" onChange={this.handleChange.bind(this, 'sshUser')} value={this.getProp('sshUser')} placeholder=""/>
+            <input type="text" id="sshUser" placeholder="SSH用户" onChange={this.handleChange.bind(this, 'sshUser')} value={this.getProp('sshUser')} />
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshPassword">SSH {this.getProp('sshKey') ? '密钥' : '密码'}:</label>
@@ -196,7 +213,7 @@ class Config extends React.PureComponent {
               readOnly={Boolean(this.getProp('sshKey'))}
               onChange={this.handleChange.bind(this, 'sshPassword')}
               value={this.getProp('sshKeyFile') || this.getProp('sshPassword')}
-              placeholder=""
+              placeholder={'SSH'+(this.getProp('sshKey') ? '密钥' : '密码')}
               />
             <button
               className={'icon icon-key ssh-key' + (this.getProp('sshKey') ? ' is-active' : '')}
@@ -223,11 +240,11 @@ class Config extends React.PureComponent {
           </div>
           <div className="nt-form-row" style={{display: this.getProp('sshKey') && this.getProp('sshKey').indexOf('ENCRYPTED') > -1 ? 'block' : 'none'}}>
             <label htmlFor="sshKeyPassphrase">SSH Key密码:</label>
-            <input type="password" id="sshKeyPassphrase" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')}/>
+            <input type="password" id="sshKeyPassphrase" placeholder="SSH Key密码" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')}/>
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshPort">SSH 端口:</label>
-            <input type="text" id="sshPort" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')}/>
+            <input type="text" id="sshPort" placeholder="22" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')}/>
           </div>
         </div>
       </div>

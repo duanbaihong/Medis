@@ -10,12 +10,12 @@
   border-right-color: rgba(0, 0, 0, .037);
   border-bottom-color: rgba(0, 0, 0, .026);
   border-radius: 4px;
-  padding: 23px 18px 22px 18px;
+  /*padding: 23px 18px 22px 18px;*/
 }
 
 .nt-form-row, .form-control {
   padding: 5px 0;
-  $label-width: 140px;
+  $label-width: 160px;
   label {
     float: left;
     width: $label-width;

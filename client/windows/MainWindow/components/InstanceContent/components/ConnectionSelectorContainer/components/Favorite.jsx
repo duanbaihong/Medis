@@ -157,7 +157,7 @@ class Favorite extends React.PureComponent {
       <footer className="toolbar toolbar-footer">      
         <button
           onClick={() => {
-            this.props.createFavorite()
+            this.props.createFavorite({'curmodel':'standalone'})
           }}
           >+</button>
         <button

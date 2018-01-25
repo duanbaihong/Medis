@@ -10,27 +10,11 @@ class KeyBrowser extends React.Component {
   constructor(props) {
     super()
     this.footerHeight = 66
-    this.$window=$(window)
     this.state = {
-      pattern: props.pattern,
-      clientHeight: this.$window.height() - $('.tab-group').height()-66
+      pattern: props.pattern
     }
   }
-  componentDidMount() {
-    this.updateLayoutBinded = this.updateLayout.bind(this)
-    $(window).on('resize', this.updateLayoutBinded)
-    this.updateLayout()
-  }
 
-  componentWillUnmount() {
-    $(window).off('resize', this.updateLayoutBinded)
-  }
-
-  updateLayout() {
-    this.setState({
-      clientHeight: this.$window.height() - $('.tab-group').height()-66
-    })
-  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.pattern !== this.props.pattern) {
       this.setState({pattern: nextProps.pattern})
@@ -51,7 +35,7 @@ class KeyBrowser extends React.Component {
         }}
         />
       <KeyList
-        height={this.state.clientHeight}
+        height={this.props.height}
         width={this.props.width}
         db={this.props.db}
         pattern={this.state.pattern || '*'}

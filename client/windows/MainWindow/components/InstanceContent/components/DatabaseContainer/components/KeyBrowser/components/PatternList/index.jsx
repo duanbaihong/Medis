@@ -62,7 +62,7 @@ class PatternList extends React.Component {
                   this.props.onChange(value)
                   this.setState({patternDropdown: false, pattern: value})
                 }}
-                                         >{pattern.get('name')}</li>)
+              >{pattern.get('name')}</li>)
             })
           }
           <li

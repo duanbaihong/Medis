@@ -642,6 +642,10 @@ textarea {
     background-color: #FF6FCF;
     color:#FFFFFF;
 }
+.favorite-dgreen{
+    background-color: #B4FFA3;
+    color:#FFFFFF;
+}
 .favorite-circle{
     transition: all .3s;
     height: 17px;

@@ -117,6 +117,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
           return;
         }
         const version = redis.serverInfo.redis_version;
+        console.log(redis.serverInfo.redis_mode)
         if (version && version.length >= 5) {
           const versionNumber = Number(version[0] + version[2]);
           if (versionNumber < 28) {

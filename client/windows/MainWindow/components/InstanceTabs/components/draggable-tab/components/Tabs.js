@@ -138,7 +138,9 @@ class Tabs extends React.Component {
               onClick={this.handleTabClick.bind(this, tab.key)}
               className={'tab-item '+(this.state.selectedTab === tab.key ? 'active' : '') }
               ref={tab.key}>
-            {tabTitle}
+              <div className="">
+                {tabTitle}
+              </div>
             <span className="icon icon-cancel icon-close-tab"
               onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
           </div>

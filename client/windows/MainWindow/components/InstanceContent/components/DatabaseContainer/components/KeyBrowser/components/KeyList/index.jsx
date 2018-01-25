@@ -207,8 +207,11 @@ class KeyList extends React.Component {
       }
     }).catch(() => {})
   }
-
+  componentWillUnmount() {
+    this._isMounted=false;
+  }
   componentDidMount() {
+    this._isMounted=true;
     $(ReactDOM.findDOMNode(this)).on('keydown', e => {
       if (typeof this.index === 'number' && typeof this.state.editableKey !== 'string') {
         if (e.keyCode === 8) {
