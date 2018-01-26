@@ -48,17 +48,19 @@ class Database extends React.PureComponent {
   }
 
   render() {
-    return (<SplitPane
-      className="pane-group"
-      split="vertical"
-      minSize={250}
-      defaultSize={260}
-      ref="node"
-      onChange={size => {
-        this.setState({sidebarWidth: size})
-      }}
-      >
-      <KeyBrowser
+    const content=(<Content
+        height={this.state.clientHeight}
+        keyName={this.state.key}
+        version={this.state.version}
+        metaVersion={this.state.metaVersion}
+        connectionKey={this.props.connectionKey}
+        redis={this.props.redis}
+        db={this.state.db}
+        onDatabaseChange={db => this.setState({db})}
+        onSelectTab={this.handleTabChange.bind(this)}
+        tab={this.state.tab}
+        />)
+    const keybrow=(<KeyBrowser
         patterns={this.props.patterns}
         pattern={this.state.pattern}
         height={this.state.clientHeight}
@@ -72,27 +74,32 @@ class Database extends React.PureComponent {
         onKeyMetaChange={() => this.setState({metaVersion: this.state.metaVersion + 1})}
         onSelectTab={this.handleTabChange.bind(this)}
         tab={this.state.tab}
-        />
-      <Content
-        height={this.state.clientHeight}
-        keyName={this.state.key}
-        version={this.state.version}
-        metaVersion={this.state.metaVersion}
-        connectionKey={this.props.connectionKey}
-        redis={this.props.redis}
-        db={this.state.db}
-        onDatabaseChange={db => this.setState({db})}
-        onSelectTab={this.handleTabChange.bind(this)}
-        tab={this.state.tab}
-        />
-    </SplitPane>)
-  }
+        />)
+    let {redis,config}=this.props
+    return config.toJS().curmodel!='sentinel'?(
+      <SplitPane
+      className="pane-group"
+      split="vertical"
+      minSize={250}
+      defaultSize={260}
+      ref="node"
+      onChange={size => {
+        this.setState({sidebarWidth: size})
+      }}
+      >
+      {keybrow}
+      {content}
+    </SplitPane>):(
+      <div className='pane-group'>{content}</div>
+    )
+  } 
 }
 
 function mapStateToProps(state, {instance}) {
   return {
     patterns: state.patterns,
     redis: instance.get('redis'),
+    config: instance.get('config'),
     connectionKey: instance.get('connectionKey')
   }
 }

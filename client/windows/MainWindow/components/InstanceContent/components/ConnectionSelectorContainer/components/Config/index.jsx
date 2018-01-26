@@ -47,7 +47,7 @@ class Config extends React.PureComponent {
     const data = this.state.data
     const config = favorite ? favorite.merge(data).toJS() : data.toJS()
     config.host = config.host || 'localhost'
-    config.port = config.port || (this.getProp('curmodel')=='sentinels'?'26379':'6379')
+    config.port = config.port || (this.getProp('curmodel')=='sentinel'?'26379':'6379')
     config.sshPort = config.sshPort || '22'
     connectToRedis(config)
     this.save()
@@ -107,7 +107,7 @@ class Config extends React.PureComponent {
   }
 
   render() {
-    const modelEn={standalone: '标准',sentinels: '哨兵',cluster:'集群'}
+    const modelEn={standalone: '标准',sentinel: '哨兵',cluster:'集群'}
     const tags=['favorite-closetag','favorite-red','favorite-orage','favorite-green','favorite-blue','favorite-violet','favorite-gray','favorite-pink','favorite-purple']
     const tagHtml=tags.map(style=>(
         <span 
@@ -126,9 +126,9 @@ class Config extends React.PureComponent {
               }}>
               标准模式
           </span>
-          <span className={this.getProp('curmodel')==='sentinels'?'active':''}
+          <span className={this.getProp('curmodel')==='sentinel'?'active':''}
               onClick={()=>{
-                this.setProp('curmodel','sentinels')
+                this.setProp('curmodel','sentinel')
               }}>
               哨兵模式
           </span>
@@ -148,9 +148,9 @@ class Config extends React.PureComponent {
           {tagHtml}
         </div>
         <div className="nt-form-row">
-          <label htmlFor={this.getProp('curmodel')=='sentinels'?'sentinels':'host'}>{modelEn[this.getProp('curmodel')]}地址:</label>
+          <label htmlFor={this.getProp('curmodel')=='sentinel'?'sentinel':'host'}>{modelEn[this.getProp('curmodel')]}地址:</label>
           <input type="text" 
-            id={this.getProp('curmodel')=='sentinels'?'sentinels':'host'} 
+            id={this.getProp('curmodel')=='sentinel'?'sentinel':'host'} 
             value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} 
             placeholder={this.getProp('curmodel')=='standalone'?'localhost':'host1:port1,host2:port2,.....'}/>
         </div>
@@ -160,7 +160,7 @@ class Config extends React.PureComponent {
           <input type="text" id="port" 
             value={this.getProp('port')} 
             onChange={this.handleChange.bind(this, 'port')} 
-            placeholder={this.getProp('curmodel')=='sentinels'?"26379":"6379"}/>
+            placeholder={this.getProp('curmodel')=='sentinel'?"26379":"6379"}/>
         </div>
         <div className="nt-form-row">
           <label htmlFor="password">{modelEn[this.getProp('curmodel')]}密码:</label>
