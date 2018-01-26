@@ -3,6 +3,7 @@
 import React from 'react'
 import humanFormat from 'human-format'
 import ExitRedis from './ExitRedis'
+import CurrDate from './CurrDate'
 
 const timeScale = new humanFormat.Scale({
   ms: 1,
@@ -77,6 +78,7 @@ class Footer extends React.PureComponent {
     .filter(item => typeof item.value === 'string')
     return (<footer className="toolbar toolbar-footer">
       <ExitRedis cstyle='cbutton' redis={this.props.redis} />
+      <CurrDate />
       {
         desc.map(({key, value}) => <span
           key={key}

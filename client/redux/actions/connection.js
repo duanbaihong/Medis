@@ -4,6 +4,7 @@ import {createAction} from 'Utils';
 import {Client} from 'ssh2';
 import net from 'net';
 import Redis from 'ioredis';
+// import Cluster from 'ioredis';
 import _ from 'lodash';
 
 function getIndex(getState) {
@@ -27,7 +28,6 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
   let conn
   if (config.ssh) {
     dispatch(updateConnectStatus('SSH 连接中...'))
-
     const conn = new Client();
     conn.on('ready', () => {
       const server = net.createServer(function (sock) {
@@ -79,11 +79,21 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if (config.tlskey) config.tls.key = config.tlskey;
       if (config.tlscert) config.tls.cert = config.tlscert;
     }
-    const redis = new Redis(_.assign({}, config, override, {
-      retryStrategy() {
-        return false;
-      }
-    }));
+    console.log(config)
+    let redis
+    if(config.curmodel=='cluster'){
+        redis = new Redis.Cluster(_.assign({}, config, override, {
+        retryStrategy() {
+          return false;
+        }
+      }));
+    }else{
+        redis = new Redis(_.assign({}, config, override, {
+        retryStrategy() {
+          return false;
+        }
+      }));
+    }
     redis.once('ready',()=>{
       Notification.requestPermission(function(permission) {
         var redisNotification=new Notification('Medis连接成功',{

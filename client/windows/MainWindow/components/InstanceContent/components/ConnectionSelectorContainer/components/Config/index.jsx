@@ -107,6 +107,16 @@ class Config extends React.PureComponent {
   }
 
   render() {
+    const modelEn={standalone: '标准',sentinels: '哨兵',cluster:'集群'}
+    const tags=['favorite-closetag','favorite-red','favorite-orage','favorite-green','favorite-blue','favorite-violet','favorite-gray','favorite-pink','favorite-purple']
+    const tagHtml=tags.map(style=>(
+        <span 
+          key={style}
+          className={'favorite-circle '+style+((style==this.getProp('tag') && this.getProp('tag')!='favorite-closetag')?' favorite-circle-choise':'')} 
+          onClick={()=>{
+            this.setProp('tag',style=='favorite-closetag'?'':style)
+          }}>{style=='favorite-closetag'?'X':''}</span>
+      ))
     return (<div>
       <div className="nt-box" style={{width: 500, margin: '60px auto 0'}}>
         <div className="connectModel">
@@ -114,19 +124,19 @@ class Config extends React.PureComponent {
               onClick={()=>{
                 this.setProp('curmodel','standalone')
               }}>
-              Standalone
+              标准模式
           </span>
           <span className={this.getProp('curmodel')==='sentinels'?'active':''}
               onClick={()=>{
                 this.setProp('curmodel','sentinels')
               }}>
-              Sentinels
+              哨兵模式
           </span>
           <span className={this.getProp('curmodel')==='cluster'?'active':''}
               onClick={()=>{
                 this.setProp('curmodel','cluster')
               }}>
-              Cluster
+              集群模式
           </span>
         </div>
         <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none'}}>
@@ -135,53 +145,26 @@ class Config extends React.PureComponent {
         </div>
         <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none',paddingLeft: '10px'}}>
           <label></label>
-          <span className="favorite-circle favorite-closetag" 
-            onClick={()=>{
-              this.setProp('tag', '')
-            }}>X</span>
-          <span className={'favorite-circle favorite-red ' + ((this.getProp('tag')=='favorite-red')?'favorite-circle-choise':'')}
-              onClick={()=>{
-                this.setProp('tag', 'favorite-red')
-              }}></span>
-          <span className={'favorite-circle favorite-orage ' + ((this.getProp('tag')=='favorite-orage')?'favorite-circle-choise':'')} 
-              onClick={()=>{
-                this.setProp('tag', 'favorite-orage')
-              }}></span>
-          <span className={'favorite-circle favorite-green ' + ((this.getProp('tag')=='favorite-green')?'favorite-circle-choise':'')}
-              onClick={()=>{
-                this.setProp('tag', 'favorite-green')
-              }}></span>
-          <span className={'favorite-circle favorite-blue ' + ((this.getProp('tag')=='favorite-blue')?'favorite-circle-choise':'')}
-              onClick={()=>{
-                this.setProp('tag', 'favorite-blue')
-              }}></span>
-          <span className={'favorite-circle favorite-violet ' + ((this.getProp('tag')=='favorite-violet')?'favorite-circle-choise':'')}
-              onClick={()=>{
-                this.setProp('tag', 'favorite-violet')
-              }}></span>
-          <span className={'favorite-circle favorite-gray ' + ((this.getProp('tag')=='favorite-gray')?'favorite-circle-choise':'')}
-              onClick={()=>{
-                this.setProp('tag', 'favorite-gray')
-              }}></span>
-          <span className={'favorite-circle favorite-pink ' + ((this.getProp('tag')=='favorite-pink')?'favorite-circle-choise':'')}
-              onClick={()=>{
-                this.setProp('tag', 'favorite-pink')
-              }}></span>
+          {tagHtml}
         </div>
         <div className="nt-form-row">
-          <label htmlFor="host">Redis地址:</label>
-          <input type="text" id="host" value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} placeholder="localhost"/>
+          <label htmlFor={this.getProp('curmodel')=='sentinels'?'sentinels':'host'}>{modelEn[this.getProp('curmodel')]}地址:</label>
+          <input type="text" 
+            id={this.getProp('curmodel')=='sentinels'?'sentinels':'host'} 
+            value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} 
+            placeholder={this.getProp('curmodel')=='standalone'?'localhost':'host1:port1,host2:port2,.....'}/>
         </div>
+
         <div className="nt-form-row">
-          <label htmlFor="port">Redis端口:</label>
+          <label htmlFor="port">{modelEn[this.getProp('curmodel')]}端口:</label>
           <input type="text" id="port" 
             value={this.getProp('port')} 
             onChange={this.handleChange.bind(this, 'port')} 
             placeholder={this.getProp('curmodel')=='sentinels'?"26379":"6379"}/>
         </div>
         <div className="nt-form-row">
-          <label htmlFor="password">Redis密码:</label>
-          <input type="password" id="password" placeholder='Redis密码' onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
+          <label htmlFor="password">{modelEn[this.getProp('curmodel')]}密码:</label>
+          <input type="password" id="password" placeholder={modelEn[this.getProp('curmodel')]+'密码'} onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssl">启用SSL:</label>
