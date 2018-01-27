@@ -18,7 +18,6 @@ class InstanceTabs extends React.Component {
       this.style = style
       setTimeout(() => $(window).trigger('resize'), 0)
     }
-
     return (<div id='instancesId' style={{display: this.style, zIndex: '1000'}}>
       <Tabs
         onTabAddButtonClick={() => {
@@ -38,7 +37,7 @@ class InstanceTabs extends React.Component {
         }}
         onTabPositionChange={onMoveInstance}
         selectedTab={activeInstanceKey}
-        tabs={instances.map(instance => <Tab key={instance.get('key')} title={instance.get('title')}/>).toJS()}
+        tabs={instances.map(instance => <Tab key={instance.get('key')} instanceStyle={instance.has('config')?instance.get('config').toJS():''}  title={instance.get('title')}/>).toJS()}
         />
     </div>)
   }

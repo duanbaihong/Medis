@@ -1591,7 +1591,7 @@ td:last-child, th:last-child {
 }
 .tab-item {
     flex: 1;
-    padding: 3px;
+    padding: 2px;
     font-size: 12px;
     text-align: center;
     border-left: 1px solid #989698;
@@ -1610,11 +1610,18 @@ td:last-child, th:last-child {
     background-image: linear-gradient(to bottom, #d4d2d4 0, #cccacc 100%)
 }
 .tab-item .icon-close-tab:hover, .tab-item:after {
-    background-color: rgba(0, 0, 0, .08)
+    background-color: rgba(0, 0, 0, .08);
+}
+.tab-item .icon-close-tab:hover{
+    cursor: pointer;
+}
+.instanceItem{
+    border-radius: 10px;
+    margin: 0px 2px;
 }
 .tab-item .icon-close-tab {
     position: absolute;
-    top: 50%;
+    top: 49%;
     left: 5px;
     width: 15px;
     height: 15px;

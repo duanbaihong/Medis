@@ -23,9 +23,8 @@ class Content extends React.PureComponent {
         this.tabs.map(tab => {
           return (<div
             className={'item' + (tab[0] === this.props.tab ? ' is-active' : '')}
-            key={tab[0]}
+            key={tab[1]}
             onClick={() => {
-              // this.setState({activeTab: tab[0]})
               this.props.onSelectTab({tab: tab[0]})
             }}
             >

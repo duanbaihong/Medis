@@ -48,6 +48,7 @@ class Database extends React.PureComponent {
   }
 
   render() {
+    let {redis,config}=this.props
     const content=(<Content
         height={this.state.clientHeight}
         keyName={this.state.key}
@@ -55,6 +56,7 @@ class Database extends React.PureComponent {
         metaVersion={this.state.metaVersion}
         connectionKey={this.props.connectionKey}
         redis={this.props.redis}
+        config={this.props.config}
         db={this.state.db}
         onDatabaseChange={db => this.setState({db})}
         onSelectTab={this.handleTabChange.bind(this)}
@@ -75,7 +77,6 @@ class Database extends React.PureComponent {
         onSelectTab={this.handleTabChange.bind(this)}
         tab={this.state.tab}
         />)
-    let {redis,config}=this.props
     return config.toJS().curmodel!='sentinel'?(
       <SplitPane
       className="pane-group"

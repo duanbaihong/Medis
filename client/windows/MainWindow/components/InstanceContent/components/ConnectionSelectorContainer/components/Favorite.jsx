@@ -90,7 +90,6 @@ class Favorite extends React.PureComponent {
           })
         })
       } catch(e){
-        console.log(e)
         alert("导出收藏失败！")
       }
     }

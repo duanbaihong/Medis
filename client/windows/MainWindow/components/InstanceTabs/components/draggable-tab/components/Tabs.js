@@ -122,7 +122,11 @@ class Tabs extends React.Component {
   render() {
     const tabs = _.map(this.state.tabs, (tab) => {
       const tabTitle = tab.props.title;
-
+      const tabStyle=tab.props.instanceStyle;
+      let  tabCss
+      if(tabStyle!= "" && typeof(tabStyle) === 'object' && tabStyle['tag'] != undefined){
+          tabCss=tabStyle.tag
+      }
       return (
         <Draggable
           key={'draggable_tabs_' + tab.key }
@@ -138,7 +142,7 @@ class Tabs extends React.Component {
               onClick={this.handleTabClick.bind(this, tab.key)}
               className={'tab-item '+(this.state.selectedTab === tab.key ? 'active' : '') }
               ref={tab.key}>
-              <div className="">
+              <div className={"instanceItem "+tabCss}>
                 {tabTitle}
               </div>
             <span className="icon icon-cancel icon-close-tab"

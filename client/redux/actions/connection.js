@@ -79,7 +79,6 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if (config.tlskey) config.tls.key = config.tlskey;
       if (config.tlscert) config.tls.cert = config.tlscert;
     }
-    console.log(config)
     let redis
     if(config.curmodel=='cluster'){
         redis = new Redis.Cluster(_.assign({}, config, override, {

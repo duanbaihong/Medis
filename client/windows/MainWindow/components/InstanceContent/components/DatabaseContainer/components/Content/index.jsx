@@ -8,15 +8,15 @@ import Config from './components/Config'
 import Footer from './components/Footer'
 require('./index.scss')
 class Content extends React.PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       pattern: '',
       db: 0,
-      version: 0
+      version: 0,
     }
-  }
 
+  }
   init(keyName) {
     this.setState({keyType: null})
     if (keyName !== null) {
@@ -30,7 +30,6 @@ class Content extends React.PureComponent {
   }
   componentDidMount() {
     this.init(this.props.keyName)
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -43,13 +42,7 @@ class Content extends React.PureComponent {
   }
 
   render() {
-    return (<div className="pane sidebar" >
-      <TabBar
-        onSelectTab={this.props.onSelectTab}
-        redis={this.props.redis}
-        tab={this.props.tab}
-        />
-      <KeyContent
+    const contentValue=(<KeyContent
         style={{display: this.props.tab === '内容(Content)' ? 'flex' : 'none'}}
         keyName={this.props.keyName}
         height={this.props.height}
@@ -58,9 +51,16 @@ class Content extends React.PureComponent {
         onKeyContentChange={() => {
           this.setState({version: this.state.version + 1})
         }}
+        />)
+    return (<div className="pane sidebar" >
+      <TabBar
+        onSelectTab={this.props.onSelectTab}
+        redis={this.props.redis}
+        tab={this.props.tab}
         />
+        {contentValue}
       <Terminal
-        style={{display: this.props.tab === '终端(Terminal)' ? 'block' : 'none'}}
+        style={{display: this.props.tab === '终端(Terminal)'? 'block' : 'none'}}
         redis={this.props.redis}
         connectionKey={this.props.connectionKey}
         onDatabaseChange={this.props.onDatabaseChange}
