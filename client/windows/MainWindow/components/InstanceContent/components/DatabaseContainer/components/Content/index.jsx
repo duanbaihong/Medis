@@ -62,12 +62,14 @@ class Content extends React.PureComponent {
       <Terminal
         style={{display: this.props.tab === '终端(Terminal)'? 'block' : 'none'}}
         redis={this.props.redis}
+        config={this.props.config}
         connectionKey={this.props.connectionKey}
         onDatabaseChange={this.props.onDatabaseChange}
         />
       <Config
         style={{display: this.props.tab === '系统配置(Config)' ? 'block' : 'none'}}
         redis={this.props.redis}
+        config={this.props.config}
         connectionKey={this.props.connectionKey}
         />
       <Footer

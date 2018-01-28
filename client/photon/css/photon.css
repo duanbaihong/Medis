@@ -1618,6 +1618,7 @@ td:last-child, th:last-child {
 .instanceItem{
     border-radius: 10px;
     margin: 0px 2px;
+    opacity: .7;
 }
 .tab-item .icon-close-tab {
     position: absolute;

@@ -27,7 +27,7 @@ export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}
   if (instance.get('redis')){
     instance.get('redis').emit('end',false);
     Notification.requestPermission(function(permission) {
-        redisNotification=new Notification('Medis退出成功',{
+        let redisNotification=new Notification('Medis退出成功',{
           body: '退出Redis实例'+instance.get('key')+'['+targetIndex+']成功!'
         })
       }); 

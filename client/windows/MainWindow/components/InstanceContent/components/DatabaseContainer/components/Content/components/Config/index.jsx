@@ -191,6 +191,30 @@ class Config extends React.Component {
         ]
       },
       {
+        name: '哨兵(sentinel)配置Master',
+        configs:[
+          {name: 'name'},
+          {name: 'port'},
+          {name: 'ip'},{name: 'runid'},
+          {name: 'flags'},
+          {name: 'link-pending-commands'},
+          {name: 'link-refcount'},
+          {name: 'last-ping-sent'},
+          {name: 'last-ok-ping-reply'},
+          {name: 'last-ping-reply'},
+          {name: 'down-after-milliseconds'},
+          {name: 'info-refresh'},
+          {name: 'role-reported'},
+          {name: 'role-reported-time'},
+          {name: 'config-epoch'},
+          {name: 'num-slaves'},
+          {name: 'num-other-sentinels'},
+          {name: 'quorum'},
+          {name: 'failover-timeout'},
+          {name: 'parallel-syncs'}
+        ]
+      },
+      {
         name: '高级配置(Advanced Config)',
         configs: [
           {name: 'hash-max-ziplist-entries', type: 'number'},
@@ -215,11 +239,24 @@ class Config extends React.Component {
     }
     this.load()
   }
-
+  redismodel(model){
+    let redis=this.props.redis
+    if(model=='sentinel' && redis.serverInfo.redis_mode==model && model != ''){
+      return redis.sentinel('masters');
+    }else{
+      return redis.config('get','*');
+    }
+  }
   load() {
-    this.props.redis.config('get', '*').then(config => {
+    let cnf=this.props.config.toJS()
+    let model=(cnf.curmodel != undefined?cnf.curmodel:'')
+    // let redis=this.props.redis
+    this.props.redis.info().then(a =>{
+      console.log(a)
+    });
+    this.redismodel(model).then(config => {
       const configs = {}
-
+      config=(model=='sentinel'?config[0]:config)
       for (let i = 0; i < config.length - 1; i += 2) {
         configs[config[i]] = config[i + 1]
       }
@@ -233,7 +270,6 @@ class Config extends React.Component {
         }).filter(c => typeof c.value !== 'undefined')
         return g
       }).filter(g => g.configs.length)
-
       if (Object.keys(configs).length) {
         groups.push({name: '其它(Other)', configs: Object.keys(configs).map(key => {
           return {

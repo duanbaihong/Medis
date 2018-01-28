@@ -31,7 +31,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     const conn = new Client();
     conn.on('ready', () => {
       const server = net.createServer(function (sock) {
-        console.log(server.address().port)
+        // console.log(server.address().port)
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
             sock.end()
@@ -126,7 +126,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
           return;
         }
         const version = redis.serverInfo.redis_version;
-        console.log(redis.serverInfo.redis_mode)
+        // console.log(redis.serverInfo.redis_mode)
         if (version && version.length >= 5) {
           const versionNumber = Number(version[0] + version[2]);
           if (versionNumber < 28) {
