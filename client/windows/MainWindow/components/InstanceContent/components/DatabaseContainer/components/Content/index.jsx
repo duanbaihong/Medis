@@ -48,6 +48,7 @@ class Content extends React.PureComponent {
         height={this.props.height}
         keyType={this.state.keyType}
         redis={this.props.redis}
+        config={this.props.config}
         onKeyContentChange={() => {
           this.setState({version: this.state.version + 1})
         }}

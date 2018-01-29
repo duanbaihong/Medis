@@ -70,8 +70,6 @@ class Terminal extends React.PureComponent {
         }
         if (e.ctrlKey) {
           if (e.keyCode === 67) {
-            console.log(e.keyCode)
-            console.log(terminal.level())
             if (terminal.level() > 1) {
               terminal.pop()
               if (terminal.paused()) {

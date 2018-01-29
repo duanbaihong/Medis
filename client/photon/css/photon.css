@@ -449,7 +449,8 @@ h5 {
 label {
     display: inline-block;
     font-size: 13px;
-    margin-bottom: 5px
+    margin-top: 1px;
+    margin-bottom: 2px
 }
 input[type=search] {
     -webkit-appearance: textfield;

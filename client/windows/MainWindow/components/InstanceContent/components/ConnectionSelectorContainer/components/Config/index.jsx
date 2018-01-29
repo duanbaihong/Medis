@@ -204,15 +204,16 @@ class Config extends React.PureComponent {
           {tagHtml}
         </div>
         <div className="nt-form-row">
-          <label htmlFor={this.getProp('curmodel')=='sentinel'?'sentinel':'host'}>{modelEn[this.getProp('curmodel')]}地址:</label>
-          <input type="text"  readOnly={this.getProp('curmodel')=='cluster'?true:false}
+          <label htmlFor='host'>{modelEn[this.getProp('curmodel')]}地址:</label>
+          <textarea type="text"  readOnly={this.getProp('curmodel')=='cluster'?true:false}
             onDoubleClick={this.delhost.bind(this,'host')}
             id='host' 
             ref="host"
             title="主机地址"
+            rows={this.getProp('curmodel')=='cluster'?3:1}
             style={{paddingRight: this.getProp('curmodel')=='cluster'?"30px":'' }}
             value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} 
-            placeholder={this.getProp('curmodel')!='cluster'?'localhost':'host1:port1,host2:port2,.....'}/>
+            placeholder={this.getProp('curmodel')!='cluster'?'localhost':'host1:port1,host2:port2,.....'}></textarea>
             {this.getProp('curmodel')=='cluster'?(<button onClick={this.addMulihost.bind(this)} className="icon icon-plus add-host"></button>):''}
         </div>
 

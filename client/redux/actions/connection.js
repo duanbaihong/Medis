@@ -64,7 +64,9 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if (config.sshKey) {
         conn.connect(Object.assign(connectionConfig, {
           privateKey: config.sshKey,
-          passphrase: config.sshKeyPassphrase
+          passphrase: config.sshKeyPassphrase,
+          keepaliveInterval: 30000
+          // agentForward: true
         }))
       } else {
         conn.connect(Object.assign(connectionConfig, {
