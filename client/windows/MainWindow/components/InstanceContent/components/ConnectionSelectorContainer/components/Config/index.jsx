@@ -12,8 +12,9 @@ class Config extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      data: new Immutable.Map({'curmodel':'standalone'})
+      data: new Immutable.Map({'curmodel': 'standalone'})
     }
+    console.log(this.state.data.toJS())
   }
 
   getProp(property) {
@@ -29,8 +30,11 @@ class Config extends React.PureComponent {
       changed: Boolean(this.props.favorite)
     })
   }
-
+  
   componentWillReceiveProps(nextProps) {
+    if(nextProps.favorite){
+      this.state.data=nextProps.favorite
+    }
     if (!this.props.connect && nextProps.connect) {
       this.connect()
     }
@@ -49,8 +53,11 @@ class Config extends React.PureComponent {
     config.host = config.host || 'localhost'
     config.port = config.port || (this.getProp('curmodel')=='sentinel'?'26379':'6379')
     config.sshPort = config.sshPort || '22'
-    connectToRedis(config)
-    this.save()
+    if(this.state.changed && this.save()){
+      connectToRedis(config)
+    }else{
+      connectToRedis(config)
+    }
   }
 
   handleChange(property,e) {
@@ -72,10 +79,51 @@ class Config extends React.PureComponent {
       this.props.onDuplicate(data)
     }
   }
+  delhost(property){
+    this.setProp({[property]:''})
+  }
+  addMulihost(){
+    showModal({
+      button: '添加',
+      form: {
+        type: 'object',
+        properties: {
+          host: {
+            type: 'string',
+            minLength: 7,
+            default: "127.0.0.1"
+          },
+          port: {
+            type: 'number',
+            minLength: 2,
+            default: (this.getProp('curmodel')=='sentinel'?'26379':'6379')
+          }
+        }
+      }
+    }).then(res=>{
+      console.log(res)
+      let hostreg=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
+      let portreg=/\d{2,6}/
+      
+      if(this.getProp('host').match(res.host+":"+res.port)){
+        alert("主机重复。")
+        return false;
+      }
+      if(hostreg.test(res.host) && portreg.test(res.port)){
+        this.setProp('host',(this.getProp('host')!=''?this.getProp('host')+','+res.host+":"+res.port:res.host+":"+res.port))
+        //////        
+
+      }else{
+        alert('主机或端口设置不正确！');
+        return false;
+      }
+    }).catch(() => {})
+  }
 
   save() {
     if (this.props.favorite && this.state.changed) {
       this.props.onSave(this.state.data.toJS())
+      console.log(this.state.data.toJS())
       this.setState({changed: false, data: new Immutable.Map()})
     }
   }
@@ -117,6 +165,14 @@ class Config extends React.PureComponent {
             this.setProp('tag',style=='favorite-closetag'?'':style)
           }}>{style=='favorite-closetag'?'X':''}</span>
       ))
+    const portHtml=(
+        <div className="nt-form-row">
+          <label htmlFor="port">{modelEn[this.getProp('curmodel')]}端口:</label>
+          <input type="text" id="port" 
+            value={this.getProp('port')} 
+            onChange={this.handleChange.bind(this, 'port')} 
+            placeholder={this.getProp('curmodel')=='sentinel'?"26379":"6379"}/>
+        </div>)
     return (<div>
       <div className="nt-box" style={{width: 500, margin: '60px auto 0'}}>
         <div className="connectModel">
@@ -134,7 +190,7 @@ class Config extends React.PureComponent {
           </span>
           <span className={this.getProp('curmodel')==='cluster'?'active':''}
               onClick={()=>{
-                this.setProp('curmodel','cluster')
+                this.setProp({curmodel:'cluster',host:'',port:''})
               }}>
               集群模式
           </span>
@@ -149,20 +205,19 @@ class Config extends React.PureComponent {
         </div>
         <div className="nt-form-row">
           <label htmlFor={this.getProp('curmodel')=='sentinel'?'sentinel':'host'}>{modelEn[this.getProp('curmodel')]}地址:</label>
-          <input type="text" 
-            id={this.getProp('curmodel')=='sentinel'?'sentinel':'host'} 
+          <input type="text"  readOnly={this.getProp('curmodel')=='cluster'?true:false}
+            onDoubleClick={this.delhost.bind(this,'host')}
+            id='host' 
+            ref="host"
+            title="主机地址"
+            style={{paddingRight: this.getProp('curmodel')=='cluster'?"30px":'' }}
             value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} 
-            placeholder={this.getProp('curmodel')=='standalone'?'localhost':'host1:port1,host2:port2,.....'}/>
+            placeholder={this.getProp('curmodel')!='cluster'?'localhost':'host1:port1,host2:port2,.....'}/>
+            {this.getProp('curmodel')=='cluster'?(<button onClick={this.addMulihost.bind(this)} className="icon icon-plus add-host"></button>):''}
         </div>
 
-        <div className="nt-form-row">
-          <label htmlFor="port">{modelEn[this.getProp('curmodel')]}端口:</label>
-          <input type="text" id="port" 
-            value={this.getProp('port')} 
-            onChange={this.handleChange.bind(this, 'port')} 
-            placeholder={this.getProp('curmodel')=='sentinel'?"26379":"6379"}/>
-        </div>
-        <div className="nt-form-row">
+        {(this.getProp('curmodel')!='cluster' || (!this.props.favorite && this.getProp('curmodel')=='' ))?portHtml:''}
+        <div className="nt-form-row" >
           <label htmlFor="password">{modelEn[this.getProp('curmodel')]}密码:</label>
           <input type="password" id="password" placeholder={modelEn[this.getProp('curmodel')]+'密码'} onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
         </div>
@@ -233,22 +288,21 @@ class Config extends React.PureComponent {
       </div>
       <div className="nt-button-group nt-button-group--pull-right" style={{width: 500, margin: '10px auto 0', paddingBottom: 10}}>
         <button
-          className="nt-button" style={{float: 'left'}} onClick={() => {
-            this.duplicate()
-          }}
-                                                        >{ this.props.favorite ? '复制项目' : '添加到收藏' }</button>
+          className="nt-button" style={{float: 'left'}} onClick={this.duplicate.bind(this)}>
+            { this.props.favorite ? '复制项目' : '添加到收藏' }
+          </button>
         <button
           className="nt-button"
           style={{display: this.state.changed ? 'inline-block' : 'none'}}
-          onClick={() => {
-            this.save()
-          }}
+          onClick={this.save.bind(this)}
           >保存修改</button>
         <button
-          disabled={Boolean(this.props.connectStatus)} ref="connectButton" className="nt-button nt-button--primary" onClick={() => {
-            this.connect()
-          }}
-                                                                                                                    >{this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接')}</button>
+          disabled={Boolean(this.props.connectStatus)} 
+          ref="connectButton" 
+          className="nt-button nt-button--primary" 
+          onClick={this.connect.bind(this)}>
+            {this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接')}
+          </button>
       </div>
     </div>)
   }

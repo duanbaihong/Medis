@@ -29,9 +29,17 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
   if (config.ssh) {
     dispatch(updateConnectStatus('SSH 连接中...'))
     const conn = new Client();
+    if (config.curmodel=='cluster'){
+      config['sentinels']=Array()
+      config.host.split(',').map(h=>{
+        config.sentinels.push({host: h.split(":")[0],port: h.split(":")[1]})
+      })
+      delete config.host
+      delete config.host
+      console.log(config)
+    }
     conn.on('ready', () => {
       const server = net.createServer(function (sock) {
-        // console.log(server.address().port)
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
             sock.end()

@@ -77,7 +77,7 @@ class Database extends React.PureComponent {
         onSelectTab={this.handleTabChange.bind(this)}
         tab={this.state.tab}
         />)
-    return config.toJS().curmodel!='sentinel'?(
+    return (config.toJS().curmodel!='sentinel' && this.props.redis.serverInfo.redis_mode!='sentinel')?(
       <SplitPane
       className="pane-group"
       split="vertical"
