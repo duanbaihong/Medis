@@ -13,9 +13,8 @@ class Content extends React.PureComponent {
     this.state = {
       pattern: '',
       db: 0,
-      version: 0,
+      version: 0
     }
-
   }
   init(keyName) {
     this.setState({keyType: null})

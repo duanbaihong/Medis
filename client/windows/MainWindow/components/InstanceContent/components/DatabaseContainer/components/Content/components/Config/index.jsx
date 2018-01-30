@@ -74,12 +74,29 @@ class Config extends React.Component {
       {
         name: '通用(General)',
         configs: [
+          {name: 'os'},
+          {name: 'redis-version'},
+          {name: 'redis-git-sha1'},
+          {name: 'redis-git-dirty'},
+          {name: 'multiplexing-api'},
+          {name: 'gcc-version'},
+          {name: 'lru-clock'},
+          {name: 'redis-build-id'},
           {name: 'port', type: 'number'},
           {name: 'bind'},
+          {name: 'daemonize', type: 'boolean'},
+          {name: 'arch-bits'},
+          {name: 'process-id'},
+          {name: 'redis-mode'},
+          {name: 'run-id'},
+          {name: 'executable'},
+          {name: 'tcp-port',type:'number'},
+          {name: 'uptime-in-days'},
+          {name: 'uptime-in-seconds'},
+          {name: 'config-file'},
+          {name: 'pidfile'},
           {name: 'unixsocket'},
           {name: 'unixsocketperm', type: 'number'},
-          {name: 'daemonize', type: 'boolean'},
-          {name: 'pidfile'},
           {name: 'tcp-backlog', type: 'number'},
           {name: 'tcp-keepalive', type: 'number'},
           {name: 'timeout', type: 'number'},
@@ -110,8 +127,22 @@ class Config extends React.Component {
       {
         name: '同步(Replication)',
         configs: [
+          {name: 'role'},
           {name: 'slaveof'},
+          {name: 'master-link-status'},
+          {name: 'master-host'},
+          {name: 'master-port'},
+          {name: 'connected-slaves'},
           {name: 'masterauth'},
+          {name: 'slave0'},
+          {name: 'master-link-status'},
+          {name: 'master-last-io-seconds-ago'},
+          {name: 'master-sync-in-progress'},
+          {name: 'slave-repl-offset'},
+          {name: 'master-repl-offset'},
+          {name: 'repl-backlog-active'},
+          {name: 'repl-backlog-first-byte-offset'},
+          {name: 'repl-backlog-histlen'},
           {name: 'slave-serve-stale-data', type: 'boolean'},
           {name: 'slave-read-only', type: 'boolean'},
           {name: 'repl-diskless-sync', type: 'boolean'},
@@ -146,6 +177,7 @@ class Config extends React.Component {
         name: '持久化(Append Only Mode)',
         configs: [
           {name: 'appendonly', type: 'boolean'},
+          {name: 'aof-enabled', type: 'boolean'},
           {name: 'appendfilename'},
           {name: 'appendfsync', type: ['everysec', 'always', 'no']},
           {name: 'no-appendfsync-on-rewrite', type: 'boolean'},
@@ -248,41 +280,59 @@ class Config extends React.Component {
     }
   }
   load() {
+    let redis=this.props.redis
+    const configs = {}
+    ///////
     let cnf=this.props.config.toJS()
     let model=(cnf.curmodel != undefined?cnf.curmodel:'')
-    // let redis=this.props.redis
-    this.props.redis.info().then(a =>{
-      console.log(a)
-    });
-    this.redismodel(model).then(config => {
-      const configs = {}
-      config=(model=='sentinel'?config[0]:config)
-      for (let i = 0; i < config.length - 1; i += 2) {
-        configs[config[i]] = config[i + 1]
+    let configtmp={}
+    this.redismodel(model).then(config1 =>{
+      config1=(model=='sentinel'?config1[0]:config1)
+      for (let i = 0; i < config1.length - 1; i += 2) {
+        configs[config1[i]] = config1[i + 1]
       }
-      const groups = clone(this.groups, true).map(g => {
-        g.configs = g.configs.map(c => {
-          if (typeof configs[c.name] !== 'undefined') {
-            c.value = configs[c.name]
-            delete configs[c.name]
+      redis.info().then(config => {
+        var tmpconf=config.replace(/_/g,"-").split("\n")
+        var grps={name:'',configs: []}
+        for(var v in tmpconf){
+          var val=tmpconf[v].trim().split(":")
+          if (/^#/.test(val[0])){
+            if(grps.configs.length>0){
+              this.groups.push(grps)
+              grps={name:'',configs: []}
+            }
+            grps['name']= val[0]
           }
-          return c
-        }).filter(c => typeof c.value !== 'undefined')
-        return g
-      }).filter(g => g.configs.length)
-      if (Object.keys(configs).length) {
-        groups.push({name: '其它(Other)', configs: Object.keys(configs).map(key => {
-          return {
-            name: key,
-            value: configs[key]
+          if ( val[0] == "" || val[0] == undefined || /^#\s/.test(val[0]) || val[0]=='tcp-port') {
+            continue;
           }
-        })})
-      }
+          grps['configs'].push({name: val[0]})
+          configs[val[0]]=val[1]
+        }
+        const groups = clone(this.groups, true).map(g => {
+          g.configs = g.configs.map(c => {
+            if (typeof configs[c.name] !== 'undefined') {
+              c.value = configs[c.name]
+              delete configs[c.name]
+            }
+            return c
+          }).filter(c => typeof c.value !== 'undefined')
+          return g
+        }).filter(g => g.configs.length)
+        if (Object.keys(configs).length) {
+          groups.push({name: '其它(Other)', configs: Object.keys(configs).map(key => {
+            return {
+              name: key,
+              value: configs[key]
+            }
+          })})
+        }
 
-      this.setState({
-        groups,
-        unsavedConfigs: {},
-        unsavedRewrites: {}
+        this.setState({
+          groups,
+          unsavedConfigs: {},
+          unsavedRewrites: {}
+        })
       })
     })
   }

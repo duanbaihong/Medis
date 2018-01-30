@@ -2,10 +2,18 @@
   overflow: auto;
   flex: 1 1 0%;
   .wrapper {
-    width: 500px;
+    width: 90%;
     margin: 0 auto;
+    padding: 20px;
     .nt-form-row label {
+      width: 170px;
+    }
+    .nt-form-row input,select {
       width: 210px;
+    }
+    .nt-form-row{
+      display: inline-block;
+      width: 410px;
     }
   }
 

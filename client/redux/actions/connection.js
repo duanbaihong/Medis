@@ -39,6 +39,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       console.log(config)
     }
     conn.on('ready', () => {
+
       const server = net.createServer(function (sock) {
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
@@ -50,6 +51,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       }).listen(0, function () {
         handleRedis(config, { host: '127.0.0.1', port: server.address().port },conn,server)
       })
+      
     }).on('error', err => {
       sshErrorThrown = true;
       dispatch(disconnect());

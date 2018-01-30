@@ -14,7 +14,6 @@ class Config extends React.PureComponent {
     this.state = {
       data: new Immutable.Map({'curmodel': 'standalone'})
     }
-    console.log(this.state.data.toJS())
   }
 
   getProp(property) {
@@ -123,7 +122,6 @@ class Config extends React.PureComponent {
   save() {
     if (this.props.favorite && this.state.changed) {
       this.props.onSave(this.state.data.toJS())
-      console.log(this.state.data.toJS())
       this.setState({changed: false, data: new Immutable.Map()})
     }
   }
