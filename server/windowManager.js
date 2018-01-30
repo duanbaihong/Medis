@@ -23,14 +23,13 @@ class WindowManager extends EventEmitter {
       backgroundColor: '#ececec'
     };
     if (type === 'main') {
-      option.width = 960;
+      option.width = 1020;
       option.height = 600;
       option.show = false;
-      option.minWidth = 840;
+      option.minWidth = 940;
       option.webPreferences = {
         nodeIntegrationInWorker: true
       };
-      option.minHeight = 400;
     } else if (type === 'patternManager') {
       option.width = 600;
       option.height = 300;

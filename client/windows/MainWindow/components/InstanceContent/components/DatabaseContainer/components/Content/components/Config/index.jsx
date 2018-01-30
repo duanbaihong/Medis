@@ -82,7 +82,7 @@ class Config extends React.Component {
           {name: 'gcc-version'},
           {name: 'lru-clock'},
           {name: 'redis-build-id'},
-          {name: 'port', type: 'number'},
+          {name: 'tcp-port', type: 'number'},
           {name: 'bind'},
           {name: 'daemonize', type: 'boolean'},
           {name: 'arch-bits'},
@@ -177,13 +177,33 @@ class Config extends React.Component {
         name: '持久化(Append Only Mode)',
         configs: [
           {name: 'appendonly', type: 'boolean'},
+          {name: 'loading',type: 'number'},
           {name: 'aof-enabled', type: 'boolean'},
           {name: 'appendfilename'},
           {name: 'appendfsync', type: ['everysec', 'always', 'no']},
           {name: 'no-appendfsync-on-rewrite', type: 'boolean'},
           {name: 'auto-aof-rewrite-percentage', type: 'number'},
           {name: 'auto-aof-rewrite-min-size'},
-          {name: 'aof-load-truncated', type: 'number'}
+          {name: 'aof-load-truncated', type: 'number'},
+          {name: 'rdb-changes-since-last-save',type: 'number'},
+          {name: 'rdb-bgsave-in-progress',type: 'number'},
+          {name: 'rdb-last-save-time',type: 'number'},
+          {name: 'rdb-last-bgsave-status'},
+          {name: 'rdb-last-bgsave-time-sec',type: 'number'},
+          {name: 'rdb-current-bgsave-time-sec',type: 'number'},
+          {name: 'aof-rewrite-in-progress',type: 'number'},
+          {name: 'aof-rewrite-scheduled',type: 'number'},
+          {name: 'aof-last-rewrite-time-sec',type: 'number'},
+          {name: 'aof-current-rewrite-time-sec',type: 'number'},
+          {name: 'aof-last-bgrewrite-status'},
+          {name: 'aof-last-write-status'},
+          {name: 'aof-current-size',type: 'number'},
+          {name: 'aof-base-size',type: 'number'},
+          {name: 'aof-pending-rewrite',type: 'number'},
+          {name: 'aof-buffer-length',type: 'number'},
+          {name: 'aof-rewrite-buffer-length',type: 'number'},
+          {name: 'aof-pending-bio-fsync',type: 'number'},
+          {name: 'aof-delayed-fsync',type: 'number'}
         ]
       },
       {
@@ -223,7 +243,19 @@ class Config extends React.Component {
         ]
       },
       {
-        name: '哨兵(sentinel)配置Master',
+        name: '哨兵(sentinel)',
+        configs:[
+          {name: 'sentinel-masters'},
+          {name: 'sentinel-tilt'},
+          {name: 'sentinel-running-scripts'},
+          {name: 'sentinel-scripts-queue-length'},
+          {name: 'sentinel-simulate-failure-flags'},
+          {name: 'master0'},
+          {name: 'master1'}
+        ]
+      },
+      {
+        name: '哨兵(sentinel)监听Master',
         configs:[
           {name: 'name'},
           {name: 'port'},
@@ -282,6 +314,10 @@ class Config extends React.Component {
   load() {
     let redis=this.props.redis
     const configs = {}
+    const infoGroupName={'Stats':'状态(Stats)',
+                        'Memory':'内存(Memory)',
+                        'Clients':'内存(Clients)',
+                        'CPU':'服务器(CPU)'}
     ///////
     let cnf=this.props.config.toJS()
     let model=(cnf.curmodel != undefined?cnf.curmodel:'')
@@ -301,9 +337,9 @@ class Config extends React.Component {
               this.groups.push(grps)
               grps={name:'',configs: []}
             }
-            grps['name']= val[0]
+            grps['name']= infoGroupName[val[0].replace(/^#\s+/,'').trim()]
           }
-          if ( val[0] == "" || val[0] == undefined || /^#\s/.test(val[0]) || val[0]=='tcp-port') {
+          if ( val[0] == "" || val[0] == undefined || /^#\s/.test(val[0])) {
             continue;
           }
           grps['configs'].push({name: val[0]})
