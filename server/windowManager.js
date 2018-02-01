@@ -27,6 +27,7 @@ class WindowManager extends EventEmitter {
       option.height = 600;
       option.show = false;
       option.minWidth = 940;
+      option.icon=__dirname + '/icns/Icon1024.png',
       option.webPreferences = {
         nodeIntegrationInWorker: true
       };
@@ -38,6 +39,7 @@ class WindowManager extends EventEmitter {
       option.alwaysOnTop = true;
       option.resizable = true;
       option.modal = true;
+      option.icon=__dirname + '/icns/Icon1024.png',
       option.webPreferences = {
         nodeIntegrationInWorker: true
       };

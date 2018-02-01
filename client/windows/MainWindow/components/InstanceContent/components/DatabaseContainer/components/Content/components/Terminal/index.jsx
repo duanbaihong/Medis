@@ -54,7 +54,7 @@ class Terminal extends React.PureComponent {
         )
       },
       name: this.props.connectionKey,
-      outputLimit: 200,
+      outputLimit: 600,
       prompt: `[[;#fff;]`+cmdName+`> ]`,
       keydown(e) {
         if (!terminal.enabled()) {
@@ -80,7 +80,7 @@ class Terminal extends React.PureComponent {
           }
         }
       }
-    })
+    });
   }
 
   onSelect(db) {

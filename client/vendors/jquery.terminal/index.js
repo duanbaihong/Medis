@@ -2404,9 +2404,9 @@
     // -----------------------------------------------------------------------
     function get_num_chars(terminal) {
         var width = char_size().width;
-        var result = Math.floor(terminal.width() / width);
+        var result = Math.floor(terminal.width() / width)-4;
         if (have_scrollbars(terminal)) {
-            var SCROLLBAR_WIDTH = 20;
+            var SCROLLBAR_WIDTH = 30;
             // assume that scrollbars are 20px - in my Laptop with
             // Linux/Chrome they are 16px
             var margins = terminal.innerWidth() - terminal.width();
@@ -2912,19 +2912,23 @@
                 output_buffer.push(NEW_LINE);
                 if (!line_settings.raw && (string.length > num_chars || string.match(/\n/))) {
                     var array = $.terminal.split_equal(string, num_chars);
-                    for (i = 0, len = array.length; i < len; ++i) {
-                        if (array[i] === '' || array[i] === '\r') {
-                            output_buffer.push('&nbsp;');
-                        } else {
-                            if (line_settings.raw) {
-                                output_buffer.push(array[i]);
-                            } else {
-                                output_buffer.push($.terminal.format(array[i], {
-                                    linksNoReferer: settings.linksNoReferer
-                                }));
-                            }
-                        }
-                    }
+                    var array = string.replace('HOST:','')
+
+                    console.log(array)
+                    output_buffer.push(array)
+                    // for (i = 0, len = array.length; i < len; ++i) {
+                    //     if (array[i] === '' || array[i] === '\r') {
+                    //         output_buffer.push('&nbsp;');
+                    //     } else {
+                    //         if (line_settings.raw) {
+                    //             output_buffer.push(array[i]);
+                    //         } else {
+                    //             output_buffer.push($.terminal.format(array[i], {
+                    //                 linksNoReferer: settings.linksNoReferer
+                    //             }));
+                    //         }
+                    //     }
+                    // }
                 } else {
                     if (!line_settings.raw) {
                         string = $.terminal.format(string, {
@@ -3272,7 +3276,7 @@
                         for (i=strings.length-1; i>0; i--) {
                             // treat escape space as part of the string
                             if (strings[i-1][strings[i-1].length-1] == '\\') {
-                                string = strings[i-1] + ' ' + string;
+                                string = strings[i-1] + string;
                             } else {
                                 break;
                             }

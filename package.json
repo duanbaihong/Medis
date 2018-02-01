@@ -64,6 +64,7 @@
     "lodash": "^3.10.1",
     "node-uuid": "^1.4.8",
     "redis-commands": "^1.0.1",
+    "sips": "^1.0.3",
     "ssh2": "^0.5.4"
   },
   "devDependencies": {
