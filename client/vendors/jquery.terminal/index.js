@@ -952,7 +952,7 @@
                     var tabs_rm = tabs ? tabs.length * 3 : 0;
                     //quick tabulation hack
                     if (tabs) {
-                        string = string.replace(/\t/g, '\x00\x00\x00\x00');
+                        string = string.replace(/\t/g, '\x00\x00');
                     }
                     // command contains new line characters
                     if (string.match(/\n/)) {
@@ -982,7 +982,7 @@
                     }
                     if (tabs) {
                         array = $.map(array, function(line) {
-                            return line.replace(/\x00\x00\x00\x00/g, '\t');
+                            return line.replace(/\x00\x00/g, '\t');
                         });
                     }
                     first_len = array[0].length;
@@ -1803,7 +1803,7 @@
             }
             return str.replace(/</g, '&lt;').replace(/>/g, '&gt;')
                       .replace(/ /g, '&nbsp;')
-                      .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+                      .replace(/\t/g, '&nbsp;&nbsp;');
         },
         // -----------------------------------------------------------------------
         // :: Replace terminal formatting with html

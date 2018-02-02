@@ -325,6 +325,7 @@ class Config extends React.Component {
     this.redismodel(model).then(config1 =>{
       config1=(model=='sentinel'?config1[0]:config1)
       for (let i = 0; i < config1.length - 1; i += 2) {
+        if (model!= 'sentinel' && config1[i] == 'port') continue;
         configs[config1[i]] = config1[i + 1]
       }
       redis.info().then(config => {

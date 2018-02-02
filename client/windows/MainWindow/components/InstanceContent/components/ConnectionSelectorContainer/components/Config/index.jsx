@@ -151,7 +151,6 @@ class Config extends React.PureComponent {
         />
     </div>)
   }
-
   render() {
     const modelEn={standalone: '标准',sentinel: '哨兵',cluster:'集群'}
     const tags=['favorite-closetag','favorite-red','favorite-orage','favorite-green','favorite-blue','favorite-violet','favorite-gray','favorite-pink','favorite-purple']

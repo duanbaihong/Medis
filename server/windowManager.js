@@ -27,19 +27,22 @@ class WindowManager extends EventEmitter {
       option.height = 600;
       option.show = false;
       option.minWidth = 940;
-      option.icon=__dirname + '/icns/Icon1024.png',
+      option.autoHideMenuBar=true;
+      option.icon='../../icns/Icon1024.png',
       option.webPreferences = {
         nodeIntegrationInWorker: true
       };
     } else if (type === 'patternManager') {
-      option.width = 600;
+      option.width = 700;
       option.height = 300;
       option.title = '管理过滤正则';
       option.show=false;
       option.alwaysOnTop = true;
       option.resizable = true;
       option.modal = true;
-      option.icon=__dirname + '/icns/Icon1024.png',
+      option.autoHideMenuBar=true;
+      option.parent= 'top';
+      option.icon='../../icns/Icon1024.png',
       option.webPreferences = {
         nodeIntegrationInWorker: true
       };

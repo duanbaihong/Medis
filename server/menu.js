@@ -19,6 +19,28 @@ const menuTemplate = [{
     }
   }, {
     type: 'separator'
+  },{
+    label: '导出收藏',
+    accelerator: 'CmdOrCtrl+E',
+    click() {
+      windowManager.current.webContents.send('action', 'exportFavorite');
+    }
+  },{
+    label: '导入收藏',
+    accelerator: 'CmdOrCtrl+I',
+    click() {
+      windowManager.current.webContents.send('action', 'importFavorite');
+    }
+  },{
+    type: 'separator'
+  },  {
+    label: '参数设置',
+    accelerator: 'CmdOrCtrl+S',
+    click() {
+      windowManager.current.webContents.send('action', 'sysSetting');
+    }
+  },{
+    type: 'separator'
   }, {
     label: '关闭窗口',
     accelerator: 'Shift+CmdOrCtrl+W',
@@ -123,15 +145,6 @@ const menuTemplate = [{
     label: '学习更多',
     click() {
       require('shell').openExternal('http://getmedis.com');
-    }
-  },{
-    label: 'test',
-    click(){
-      console.info(Notification)
-        info=new Notification({
-          title: "test",
-          body: "test"
-        })
     }
   }]
 }]
