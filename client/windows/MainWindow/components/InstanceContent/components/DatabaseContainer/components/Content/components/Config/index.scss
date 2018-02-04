@@ -8,8 +8,13 @@
     .nt-form-row label {
       width: 170px;
     }
+    .nt-form-row input[type="checkbox"] {
+      margin-top:0px;
+    }
     .nt-form-row input,select {
       width: 210px;
+      height: 23px;
+      line-height:23px;
     }
     .nt-form-row{
       display: inline-block;

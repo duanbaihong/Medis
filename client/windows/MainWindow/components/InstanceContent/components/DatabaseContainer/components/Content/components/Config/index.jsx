@@ -9,6 +9,10 @@ require('./index.scss')
 class Config extends React.Component {
   constructor(props) {
     super(props)
+    this.fieldType={
+      "aof-enabled": 'boolean',
+      "cluster-enabled": 'boolean'
+    }
     this.writeableFields = [
       'dbfilename',
       'requirepass',
@@ -100,7 +104,8 @@ class Config extends React.Component {
           {name: 'tcp-backlog', type: 'number'},
           {name: 'tcp-keepalive', type: 'number'},
           {name: 'timeout', type: 'number'},
-          {name: 'databases', type: 'number'}
+          {name: 'databases', type: 'number'},
+          {name: 'atomicvar-api'}
         ]
       },
       {
@@ -154,14 +159,19 @@ class Config extends React.Component {
           {name: 'repl-backlog-ttl', type: 'number'},
           {name: 'slave-priority', type: 'number'},
           {name: 'min-slaves-to-write', type: 'number'},
-          {name: 'min-slaves-max-lag', type: 'number'}
+          {name: 'min-slaves-max-lag', type: 'number'},
+          {name: 'master-replid'},
+          {name: 'master-replid2'},
+          {name: 'second-repl-offset'},
+          {name: 'second-repl-offset'},
         ]
       },
       {
         name: '安全(Security)',
         configs: [
           {name: 'requirepass'},
-          {name: 'rename-command'}
+          {name: 'rename-command'},
+          {name: 'protected-mode'}
         ]
       },
       {
@@ -191,6 +201,8 @@ class Config extends React.Component {
           {name: 'rdb-last-bgsave-status'},
           {name: 'rdb-last-bgsave-time-sec',type: 'number'},
           {name: 'rdb-current-bgsave-time-sec',type: 'number'},
+          {name: 'rdb-last-cow-size',type: 'number'},
+          {name: 'aof-last-cow-size',type: 'number'},
           {name: 'aof-rewrite-in-progress',type: 'number'},
           {name: 'aof-rewrite-scheduled',type: 'number'},
           {name: 'aof-last-rewrite-time-sec',type: 'number'},
@@ -216,11 +228,28 @@ class Config extends React.Component {
         name: '集群配置(Cluster)',
         configs: [
           {name: 'cluster-enabled', type: 'boolean'},
+          {name: 'cluster-state'},
           {name: 'cluster-config-file'},
           {name: 'cluster-node-timeout', type: 'number'},
           {name: 'cluster-slave-validity-factor', type: 'nubmer'},
           {name: 'cluster-migration-barrier', type: 'number'},
-          {name: 'cluster-require-full-coverage', type: 'boolean'}
+          {name: 'cluster-require-full-coverage', type: 'boolean'},
+          {name: 'cluster-known-nodes',type:'number'},
+          {name: 'cluster-size'},
+          {name: 'cluster-current-epoch'},
+          {name: 'cluster-my-epoch'},
+          {name: 'cluster-stats-messages-ping-sent',type:'number'},
+          {name: 'cluster-stats-messages-pong-sent',type:'number'},
+          {name: 'cluster-stats-messages-meet-sent',type:'number'},
+          {name: 'cluster-stats-messages-sent',type:'number'},
+          {name: 'cluster-stats-messages-ping-received',type:'number'},
+          {name: 'cluster-stats-messages-pong-received',type:'number'},
+          {name: 'cluster-stats-messages-received',type:'number'},
+          {name: 'cluster-slots-assigned'},
+          {name: 'cluster-slots-ok'},
+          {name: 'cluster-slots-pfail'},
+          {name: 'cluster-slots-fail'},
+          {name: 'cluster-stats-messages-update-sent'},
         ]
       },
       {
@@ -251,7 +280,9 @@ class Config extends React.Component {
           {name: 'sentinel-scripts-queue-length'},
           {name: 'sentinel-simulate-failure-flags'},
           {name: 'master0'},
-          {name: 'master1'}
+          {name: 'master1'},
+          {name: 'master2'},
+          {name: 'master3'}
         ]
       },
       {
@@ -307,6 +338,8 @@ class Config extends React.Component {
     let redis=this.props.redis
     if(model=='sentinel' && redis.serverInfo.redis_mode==model && model != ''){
       return redis.sentinel('masters');
+    }else if(redis.serverInfo.redis_mode=='cluster' && model != ''){
+      return redis.cluster('info');
     }else{
       return redis.config('get','*');
     }
@@ -316,17 +349,25 @@ class Config extends React.Component {
     const configs = {}
     const infoGroupName={'Stats':'状态(Stats)',
                         'Memory':'内存(Memory)',
-                        'Clients':'内存(Clients)',
+                        'Clients':'客户端(Clients)',
                         'CPU':'服务器(CPU)'}
     ///////
     let cnf=this.props.config.toJS()
     let model=(cnf.curmodel != undefined?cnf.curmodel:'')
     let configtmp={}
     this.redismodel(model).then(config1 =>{
-      config1=(model=='sentinel'?config1[0]:config1)
-      for (let i = 0; i < config1.length - 1; i += 2) {
-        if (model!= 'sentinel' && config1[i] == 'port') continue;
-        configs[config1[i]] = config1[i + 1]
+      let redismode=redis.serverInfo.redis_mode
+      let fI=(redismode=='cluster'?1:2)
+      config1=(redismode=='sentinel'?config1[0]:(redismode=='cluster'?config1.split('\n'):config1))
+      for (let i = 0; i < config1.length - 1; i += fI) {
+        if (redismode!= 'sentinel' && config1[i] == 'port') continue;
+        if(redismode == 'cluster'){
+          var sVal=config1[i].replace(/_/g,"-").split(":")
+          if (sVal[0]== undefined) continue;
+          configs[sVal[0]] = sVal[1]
+        }else{
+          configs[config1[i]] = config1[i + 1]
+        }
       }
       redis.info().then(config => {
         var tmpconf=config.replace(/_/g,"-").split("\n")
@@ -403,10 +444,14 @@ class Config extends React.Component {
     const props = {readOnly: this.writeableFields.indexOf(config.name) === -1}
     props.disabled = props.readOnly
     if (config.type === 'boolean' &&
-        (config.value === 'yes' || config.value === 'no')) {
+        (config.value === 'yes' || config.value === 'no' || (config.value.length === 1 && parseInt(config.value,10)<2))) {
       input = (<input
-        type="checkbox" checked={config.value === 'yes'} onChange={e => {
-          config.value = e.target.checked ? 'yes' : 'no'
+        type="checkbox" checked={config.value === 'yes' || (config.value.length === 1 && parseInt(config.value,10)<2)} onChange={e => {
+          if(config.value.length === 1){
+            config.value = e.target.checked ? '1' : '0'
+          }else{
+            config.value = e.target.checked ? 'yes' : 'no'
+          }
           this.change(config)
         }} {...props}
            />)

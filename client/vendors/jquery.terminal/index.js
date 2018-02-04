@@ -1803,7 +1803,7 @@
             }
             return str.replace(/</g, '&lt;').replace(/>/g, '&gt;')
                       .replace(/ /g, '&nbsp;')
-                      .replace(/\t/g, '&nbsp;&nbsp;');
+                      .replace(/\t/g, ' ');
         },
         // -----------------------------------------------------------------------
         // :: Replace terminal formatting with html
@@ -2914,8 +2914,7 @@
                     var array = $.terminal.split_equal(string, num_chars);
                     var array = string.replace('HOST:','')
 
-                    console.log(array)
-                    output_buffer.push(array)
+                    output_buffer.push($.terminal.format(array))
                     // for (i = 0, len = array.length; i < len; ++i) {
                     //     if (array[i] === '' || array[i] === '\r') {
                     //         output_buffer.push('&nbsp;');

@@ -59,13 +59,15 @@
     "conventional-changelog": "^1.1.7",
     "electron-debug": "^1.5.0",
     "fixed-data-table-contextmenu": "^1.6.5",
-    "ioredis": "^3.2.2",
+    "ioredis": "^3.0.0",
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
+    "node-sass": "^4.7.2",
     "node-uuid": "^1.4.8",
     "redis-commands": "^1.0.1",
-    "sips": "^1.0.3",
-    "ssh2": "^0.5.4"
+    "sass-loader": "^6.0.6",
+    "ssh2": "^0.5.4",
+    "url-loader": "^0.6.2"
   },
   "devDependencies": {
     "asar": "^0.8.3",
@@ -92,7 +94,6 @@
     "lint": "^1.1.2",
     "minimatch": "^3.0.4",
     "msgpack5": "^3.3.0",
-    "node-sass": "^4.7.2",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.5.2",
@@ -106,10 +107,8 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.0.3",
     "reselect": "^3.0.1",
-    "sass-loader": "^3.0.0",
     "sortablejs": "^1.4.1",
     "style-loader": "^0.12.4",
-    "url-loader": "^0.5.7",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.16.5",
     "xo": "^0.18.1"
