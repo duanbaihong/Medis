@@ -26,20 +26,20 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
   let redisErrorMessage
   let server
   let conn
+  if(config.host == ""){
+    alert('host为空');
+    return false;
+  }
+  if (config.curmodel=='cluster'){
+    config['cluster']=Array()
+    config.host.split(',').map(h=>{
+      config.cluster.push({host: h.split(":")[0],port: h.split(":")[1]})
+    })
+  }
   if (config.ssh) {
     dispatch(updateConnectStatus('SSH 连接中...'))
     const conn = new Client();
-    if (config.curmodel=='cluster'){
-      config['sentinels']=Array()
-      config.host.split(',').map(h=>{
-        config.sentinels.push({host: h.split(":")[0],port: h.split(":")[1]})
-      })
-      delete config.host
-      delete config.host
-      // console.log(config)
-    }
     conn.on('ready', () => {
-
       const server = net.createServer(function (sock) {
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
@@ -93,11 +93,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     }
     let redis
     if(config.curmodel=='cluster'){
-        redis = new Redis.Cluster(_.assign({}, config, override, {
-        retryStrategy() {
-          return false;
-        }
-      }));
+        redis = new Redis.Cluster(config.cluster);
     }else{
         redis = new Redis(_.assign({}, config, override, {
         retryStrategy() {
@@ -127,6 +123,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       lua: 'local dump = redis.call("dump", KEYS[1]) local pttl = 0 if ARGV[1] == "TTL" then pttl = redis.call("pttl", KEYS[1]) end return redis.call("restore", KEYS[2], pttl, dump)'
     });
     redis.once('connect', function () {
+      console.log(redis)
       redis.ping((err, res) => {
         if (err) {
           if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
@@ -139,7 +136,6 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
           return;
         }
         const version = redis.serverInfo.redis_version;
-        // console.log(redis.serverInfo.redis_mode)
         if (version && version.length >= 5) {
           const versionNumber = Number(version[0] + version[2]);
           if (versionNumber < 28) {

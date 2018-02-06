@@ -11,7 +11,7 @@
     .nt-form-row input[type="checkbox"] {
       margin-top:0px;
     }
-    .nt-form-row input,select {
+    .nt-form-row input[type="text"],input[type="number"],input[type="password"],select {
       width: 210px;
       height: 23px;
       line-height:23px;
