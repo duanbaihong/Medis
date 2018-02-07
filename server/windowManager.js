@@ -30,10 +30,10 @@ class WindowManager extends EventEmitter {
       option.show = false;
       option.minWidth = 940;
       option.autoHideMenuBar=true;
-      option.icon='../../icns/Icon1024.png',
-      option.webPreferences = {
-        nodeIntegrationInWorker: true
-      };
+      option.icon='../../icns/Icon1024.png'
+      // option.webPreferences = {
+      //   nodeIntegrationInWorker: true
+      // };
     } else if (type === 'patternManager') {
       option.width = 700;
       option.height = 300;

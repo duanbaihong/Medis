@@ -91,17 +91,21 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if (config.tlskey) config.tls.key = config.tlskey;
       if (config.tlscert) config.tls.cert = config.tlscert;
     }
-    let redis
+    var redis
     if(config.curmodel=='cluster'){
-        redis = new Redis.Cluster(config.cluster);
+      redis = new Redis.Cluster(config.cluster,{enableReadyCheck: true});
     }else{
-        redis = new Redis(_.assign({}, config, override, {
+      redis = new Redis(_.assign({}, config, override, {
         retryStrategy() {
           return false;
         }
       }));
     }
     redis.once('ready',()=>{
+      console.log(redis)
+      redis.cluster('nodes').then(config=>{
+        console.log(config)
+      })
       Notification.requestPermission(function(permission) {
         var redisNotification=new Notification('Medis连接成功',{
           body: '连接到['+config.host+':'+config.port+']的REDIS成功!',
@@ -123,7 +127,6 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       lua: 'local dump = redis.call("dump", KEYS[1]) local pttl = 0 if ARGV[1] == "TTL" then pttl = redis.call("pttl", KEYS[1]) end return redis.call("restore", KEYS[2], pttl, dump)'
     });
     redis.once('connect', function () {
-      console.log(redis)
       redis.ping((err, res) => {
         if (err) {
           if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
@@ -135,6 +138,25 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
           }
           return;
         }
+        if(!redis.hasOwnProperty('serverInfo')){
+          redis.serverInfo={}
+        }
+        redis.info(function(err,info) {
+          if (err) {
+            return callback(err);
+          }
+          if (typeof info !== 'string') {
+            return callback(this);
+          }
+
+          var lines = info.split('\r\n');
+          for (var i = 0; i < lines.length; ++i) {
+            var parts = lines[i].split(':');
+            if (parts[1]) {
+              redis.serverInfo[parts[0]] = parts[1];
+            }
+          }
+        })
         const version = redis.serverInfo.redis_version;
         if (version && version.length >= 5) {
           const versionNumber = Number(version[0] + version[2]);
