@@ -123,6 +123,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       lua: 'local dump = redis.call("dump", KEYS[1]) local pttl = 0 if ARGV[1] == "TTL" then pttl = redis.call("pttl", KEYS[1]) end return redis.call("restore", KEYS[2], pttl, dump)'
     });
     redis.once('connect', function () {
+      console.log(redis)
       redis.ping((err, res) => {
         if (err) {
           if (err.message === 'Ready check failed: NOAUTH Authentication required.') {

@@ -336,8 +336,6 @@ class Config extends React.Component {
   }
   redismodel(model){
     let redis=this.props.redis
-    console.log(model)
-    console.log(redis.serverInfo.redis_mode)
     if(model=='sentinel' || redis.serverInfo.redis_mode=='sentinel'){
       return redis.sentinel('masters');
     }else if(redis.serverInfo.redis_mode=='cluster' && model != ''){
