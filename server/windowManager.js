@@ -1,6 +1,8 @@
 'use strict';
 
 const {app, BrowserWindow} = require('electron');
+const url = require('url');
+const path = require('path');
 const EventEmitter = require('events');
 
 class WindowManager extends EventEmitter {
@@ -55,7 +57,14 @@ class WindowManager extends EventEmitter {
       return false
     }
     const newWindow = new BrowserWindow(option);
-    newWindow.loadURL(`file://${__dirname}/windows/${type}.html${arg ? '?arg=' + arg : ''}`);
+    var loadurl=url.format({
+        pathname: path.join(__dirname, `/windows/${type}.html`),
+        protocol: 'file:',
+        slashes: true,
+        search: (arg ? '?arg=' + arg : '')
+        })
+    console.log(loadurl);
+    newWindow.loadURL(loadurl);
     this._register(newWindow);
     if (!option.show) {
       newWindow.once('ready-to-show', () => {

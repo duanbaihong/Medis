@@ -414,8 +414,7 @@ h5 {
 .toolbar-footer {
     border-top: 1px solid #c2c0c2;
     -webkit-app-region: drag;
-    height: 23px;
-    line-height: 23px;
+    line-height: 21px;
 }
 .toolbar-dark {
     box-shadow: none;

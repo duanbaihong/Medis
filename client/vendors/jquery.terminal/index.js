@@ -517,6 +517,7 @@
     // :: Split string to array of strings with the same length
     // -----------------------------------------------------------------------
     function str_parts(str, length) {
+        if (str === undefined) return false;
         var result = [];
         var len = str.length;
         if (len < length) {
