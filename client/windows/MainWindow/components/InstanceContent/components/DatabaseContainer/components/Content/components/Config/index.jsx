@@ -143,8 +143,10 @@ class Config extends React.Component {
           {name: 'master-link-status'},
           {name: 'master-last-io-seconds-ago'},
           {name: 'master-sync-in-progress'},
-          {name: 'slave-repl-offset'},
           {name: 'master-repl-offset'},
+          {name: 'slave-repl-offset'},
+          {name: 'slave-announce-ip'},
+          {name: 'slave-announce-port'},
           {name: 'repl-backlog-active'},
           {name: 'repl-backlog-first-byte-offset'},
           {name: 'repl-backlog-histlen'},
@@ -164,6 +166,7 @@ class Config extends React.Component {
           {name: 'master-replid2'},
           {name: 'second-repl-offset'},
           {name: 'second-repl-offset'},
+          {name: 'slave-expires-tracked-keys'},
         ]
       },
       {
@@ -215,13 +218,7 @@ class Config extends React.Component {
           {name: 'aof-buffer-length',type: 'number'},
           {name: 'aof-rewrite-buffer-length',type: 'number'},
           {name: 'aof-pending-bio-fsync',type: 'number'},
-          {name: 'aof-delayed-fsync',type: 'number'}
-        ]
-      },
-      {
-        name: 'LUA脚本(LUA Scripting)',
-        configs: [
-          {name: 'lua-time-limit', type: 'number'}
+          {name: 'aof-delayed-fsync',type: 'number'},
         ]
       },
       {
@@ -250,6 +247,14 @@ class Config extends React.Component {
           {name: 'cluster-slots-pfail'},
           {name: 'cluster-slots-fail'},
           {name: 'cluster-stats-messages-update-sent'},
+          {name: 'cluster-stats-messages-fail-sent'},
+          {name: 'cluster-stats-messages-fail-received'},
+        ]
+      },
+      {
+        name: 'LUA脚本(LUA Scripting)',
+        configs: [
+          {name: 'lua-time-limit', type: 'number'}
         ]
       },
       {
@@ -260,9 +265,74 @@ class Config extends React.Component {
         ]
       },
       {
-        name: '监控(Latency Monitor)',
+        name: '监控延迟(Latency Monitor)',
         configs: [
           {name: 'latency-monitor-threshold', type: 'number'}
+        ]
+      },
+      {
+        name: '状态(Stats)',
+        configs: [
+          {name: 'total-connections-received'},
+          {name: 'total-commands-processed'},
+          {name: 'instantaneous-ops-per-sec'},
+          {name: 'total-net-input-bytes'},
+          {name: 'total-net-output-bytes'},
+          {name: 'instantaneous-input-kbps'},
+          {name: 'instantaneous-output-kbps'},
+          {name: 'rejected-connections'},
+          {name: 'sync-full'},
+          {name: 'sync-partial-ok'},
+          {name: 'sync-partial-err'},
+          {name: 'expired-keys'},
+          {name: 'evicted-keys'},
+          {name: 'keyspace-hits'},
+          {name: 'keyspace-misses'},
+          {name: 'pubsub-channels'},
+          {name: 'pubsub-patterns'},
+          {name: 'latest-fork-usec'},
+          {name: 'migrate-cached-sockets'}
+        ]
+      },
+      {
+        name: '内存(Memory)',
+        configs: [
+          {name: 'used-memory'},
+          {name: 'used-memory-human'},
+          {name: 'used-memory-rss'},
+          {name: 'used-memory-rss-human'},
+          {name: 'used-memory-peak'},
+          {name: 'used-memory-peak-human'},
+          {name: 'total-system-memory'},
+          {name: 'total-system-memory-human'},
+          {name: 'used-memory-lua'},
+          {name: 'used-memory-lua-human'},
+          {name: 'maxmemory-human'},
+          {name: 'mem-fragmentation-ratio'},
+          {name: 'mem-allocator'},
+          {name: 'used-memory-peak-perc'},
+          {name: 'used-memory-dataset-perc'},
+          {name: 'used-memory-dataset'},
+          {name: 'used-memory-overhead'},
+          {name: 'used-memory-startup'},
+        ]
+      },
+      {
+        name: '客户端(Clients)',
+        configs: [
+          {name: 'connected-clients'},
+          {name: 'client-longest-output-list'},
+          {name: 'client-biggest-input-buf'},
+          {name: 'blocked-clients'}
+        ]
+      },
+      {
+        name: '服务器(CPU)',
+        configs: [
+          {name: 'used-cpu-sys'},
+          {name: 'used-cpu-user'},
+          {name: 'used-cpu-sys-children'},
+          {name: 'used-cpu-user-children'}
         ]
       },
       {
@@ -323,7 +393,8 @@ class Config extends React.Component {
           {name: 'activerehashing', type: 'boolean'},
           {name: 'client-output-buffer-limit'},
           {name: 'hz', type: 'number'},
-          {name: 'aof-rewrite-incremental-fsync', type: 'boolean'}
+          {name: 'aof-rewrite-incremental-fsync', type: 'boolean'},
+          {name: 'list-compress-depth'}
         ]
       }
     ]
@@ -344,13 +415,9 @@ class Config extends React.Component {
       return redis.config('get','*');
     }
   }
-  load() {
+  load(reload=false) {
     let redis=this.props.redis
     const configs = {}
-    const infoGroupName={'Stats':'状态(Stats)',
-                        'Memory':'内存(Memory)',
-                        'Clients':'客户端(Clients)',
-                        'CPU':'服务器(CPU)'}
     ///////
     let cnf=this.props.config.toJS()
     let model=(cnf.curmodel != undefined?cnf.curmodel:'')
@@ -369,48 +436,33 @@ class Config extends React.Component {
           configs[config1[i]] = config1[i + 1]
         }
       }
-      redis.info().then(config => {
-        var tmpconf=config.replace(/_/g,"-").split("\n")
-        var grps={name:'',configs: []}
-        for(var v in tmpconf){
-          var val=tmpconf[v].trim().split(":")
-          if (/^#/.test(val[0])){
-            if(grps.configs.length>0){
-              this.groups.push(grps)
-              grps={name:'',configs: []}
-            }
-            grps['name']= infoGroupName[val[0].replace(/^#\s+/,'').trim()]
+      var info=redis.serverInfo;
+      for( var key in info){
+        configs[key.replace(/_/g,'-')]=info[key];
+      }
+      const groups = clone(this.groups, true).map(g => {
+        g.configs = g.configs.map(c => {
+          if (typeof configs[c.name] !== 'undefined') {
+            c.value = configs[c.name]
+            delete configs[c.name]
           }
-          if ( val[0] == "" || val[0] == undefined || /^#\s/.test(val[0])) {
-            continue;
+          return c
+        }).filter(c => typeof c.value !== 'undefined')
+        return g
+      }).filter(g => g.configs.length)
+      if (Object.keys(configs).length) {
+        groups.push({name: '其它(Other)', configs: Object.keys(configs).map(key => {
+          return {
+            name: key,
+            value: configs[key]
           }
-          grps['configs'].push({name: val[0]})
-          configs[val[0]]=val[1]
-        }
-        const groups = clone(this.groups, true).map(g => {
-          g.configs = g.configs.map(c => {
-            if (typeof configs[c.name] !== 'undefined') {
-              c.value = configs[c.name]
-              delete configs[c.name]
-            }
-            return c
-          }).filter(c => typeof c.value !== 'undefined')
-          return g
-        }).filter(g => g.configs.length)
-        if (Object.keys(configs).length) {
-          groups.push({name: '其它(Other)', configs: Object.keys(configs).map(key => {
-            return {
-              name: key,
-              value: configs[key]
-            }
-          })})
-        }
+        })})
+      }
 
-        this.setState({
-          groups,
-          unsavedConfigs: {},
-          unsavedRewrites: {}
-        })
+      this.setState({
+        groups,
+        unsavedConfigs: {},
+        unsavedRewrites: {}
       })
     })
   }
@@ -500,10 +552,10 @@ class Config extends React.Component {
         content: '你确定要重新加载配置？你现在的配置将丢失！',
         button: '重新加载'
       }).then(() => {
-        this.load()
+        this.load(true)
       })
     } else {
-      this.load()
+      this.load(true)
     }
   }
 

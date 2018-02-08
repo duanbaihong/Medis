@@ -5,6 +5,7 @@ import TabBar from './components/TabBar'
 import KeyContent from './components/KeyContent'
 import Terminal from './components/Terminal'
 import Config from './components/Config'
+import Status from './components/Status'
 import Footer from './components/Footer'
 require('./index.scss')
 class Content extends React.PureComponent {
@@ -15,6 +16,7 @@ class Content extends React.PureComponent {
       db: 0,
       version: 0
     }
+    this.intervalObj=''
   }
   init(keyName) {
     this.setState({keyType: null})
@@ -27,10 +29,34 @@ class Content extends React.PureComponent {
       })
     }
   }
-  componentDidMount() {
-    this.init(this.props.keyName)
+  setRedisInfo(redis){
+    if(this._isMounted){
+      redis.info(function(err,info) {
+        if (err) {
+          return callback(err);
+        }
+        if (typeof info !== 'string') {
+          return callback(info);
+        }
+        var lines = info.split('\r\n');
+        for (var i = 0; i < lines.length; ++i) {
+          var parts = lines[i].split(':');
+          if (parts[1]) {
+            redis.serverInfo[parts[0]] = parts[1];
+          }
+        }
+      })
+    }
   }
-
+  componentDidMount() {
+    this.init(this.props.keyName);
+    this._isMounted=true;
+    this.intervalObj=setInterval(this.setRedisInfo.bind(this),1000,this.props.redis)
+  }
+  componentWillUnmount(){
+    this._isMounted=false;
+    clearInterval(this.intervalObj);
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
       this.init(nextProps.keyName)
@@ -72,6 +98,10 @@ class Content extends React.PureComponent {
         config={this.props.config}
         connectionKey={this.props.connectionKey}
         />
+      <Status
+        style={{display: this.props.tab === '状态(Status)' ? 'block' : 'none'}}
+        redis={this.props.redis}
+      />
       <Footer
         keyName={this.props.keyName}
         keyType={this.state.keyType}

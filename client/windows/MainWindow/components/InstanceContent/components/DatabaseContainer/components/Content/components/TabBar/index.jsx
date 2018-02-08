@@ -12,7 +12,8 @@ class Content extends React.PureComponent {
     this.tabs = [
       ['内容(Content)','icon-book'],
       ['终端(Terminal)','icon-window'],
-      ['系统配置(Config)','icon-cog']
+      ['系统配置(Config)','icon-cog'],
+      ['状态(Status)','icon-soundcloud']
     ]
     this.state = {activeTab: '内容(Content)'}
 

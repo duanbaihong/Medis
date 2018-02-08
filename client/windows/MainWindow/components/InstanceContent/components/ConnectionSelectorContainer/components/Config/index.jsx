@@ -170,13 +170,7 @@ class Config extends React.PureComponent {
             onChange={this.handleChange.bind(this, 'port')} 
             placeholder={this.getProp('curmodel')=='sentinel'?"26379":"6379"}/>
         </div>)
-    return (<div style={{
-          position: 'relative', 
-          padding: '0px', width: '510px',
-          transition: 'all .5s', 
-          margin: '0px auto', 
-          top: '50%', 
-          transform: 'translateY(-48%)'}}>
+    return (<div className='configbox'>
       <div className="nt-box">
         <div className="connectModel">
           <span className={(this.getProp('curmodel')==='standalone' || (!this.props.favorite && this.getProp('curmodel')=='' ))?'active':''}

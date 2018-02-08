@@ -14,6 +14,7 @@ class CurrDate extends React.Component{
       m: "01",
       s: "01"
     }
+    this.stoptime
   }
   getTime(){
     let now=new Date()
@@ -30,10 +31,11 @@ class CurrDate extends React.Component{
   }
   componentDidMount() {
     this._isMounted=true;
-    let stoptime=setInterval(this.getTime.bind(this),1000)
+    this.stoptime=setInterval(this.getTime.bind(this),1000)
   }
   componentWillUnmount() {
     this._isMounted=false;
+    clearInterval(this.stoptime);
   }
   render() {
     return (

@@ -1,7 +1,15 @@
 #sshPassword {
   padding-right: 32px;
 }
-
+.configbox {
+  position: relative;
+  padding: 0px;
+  width: 610px;
+  transition: all .5s;
+  margin: 0px auto;
+  top: 50%;
+  transform: translateY(-48%);
+}
 .ssh-key {
   height: 22px;
   line-height: 20px;
@@ -62,16 +70,10 @@
   position: relative;
   display: flex;
   width: 230px;
-  heigth:24px;
-  line-height:23px;
+  height: 25px;
+  line-height:24px;
   margin: 0px auto;
   top: -13px;
-  text-align: center;
-  border-radius: 5px;
-  overflow: hidden;
-  border:1px solid #BBBCBF;
-  box-sizing: content-box;
-  box-shadow: 0px 2px 2px rgba(187, 188, 191, 0.65);
   span {
     -webkit-transition: all .3s ease-in-out;
        -moz-transition: all .3s ease-in-out;
@@ -79,21 +81,32 @@
          -o-transition: all .3s ease-in-out;
             transition: all .3s ease-in-out;
     flex: 1 1 0%;
-    border-right: 1px solid #999C9E;
-    margin: 0px;
+    text-align: center;
+    height: 25px;
     background-image: -webkit-linear-gradient(top, #FFF8F6 0%, #DBDBE3 90%);
+    border-top: 1px solid #AEB0B5;
+    border-bottom: 1px solid #AEB0B5;
+    border-right: 1px solid #AEB0B5;
+    box-shadow: 0px 2px 2px rgba(187, 188, 191, 0.75);
   }
   .active {
     cursor: pointer;
-    background-image: -webkit-linear-gradient(top, #A5ACFF 0%, #5988EA 80%);
+    background-image: -webkit-linear-gradient(top, #A5ACFF 0%, #5988EA 100%);
+    box-shadow: 0px 3px 3px rgba(187, 188, 191, 0.95);
   }
   span:hover {
-    border-right: 1px solid -webkit-linear-gradient(top, #A5ACFF 0%, #5988EA 80%);
     cursor: pointer;
     background-image: -webkit-linear-gradient(top, #A5ACFF 0%, #5988EA 80%);
   }
+  span:first-child{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left: 1px solid #AEB0B5;
+  }
   span:last-child{
-    border-right: 1px ;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius:5px;
+    border-right: 1px solid #AEB0B5;
   }
   
 }

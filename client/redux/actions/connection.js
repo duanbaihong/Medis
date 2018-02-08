@@ -102,10 +102,6 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       }));
     }
     redis.once('ready',()=>{
-      console.log(redis)
-      redis.cluster('nodes').then(config=>{
-        console.log(config)
-      })
       Notification.requestPermission(function(permission) {
         var redisNotification=new Notification('Medis连接成功',{
           body: '连接到['+config.host+':'+config.port+']的REDIS成功!',
@@ -127,47 +123,47 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       lua: 'local dump = redis.call("dump", KEYS[1]) local pttl = 0 if ARGV[1] == "TTL" then pttl = redis.call("pttl", KEYS[1]) end return redis.call("restore", KEYS[2], pttl, dump)'
     });
     redis.once('connect', function () {
-      redis.ping((err, res) => {
-        if (err) {
-          if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
-            err.message = 'Redis 错误：访问被拒绝。请检查密码是否正确。';
-          }
-          if (err.message !== 'Connection is closed.') {
-            alert(err.message);
-            redis.disconnect();
-          }
-          return;
-        }
-        if(!redis.hasOwnProperty('serverInfo')){
+      if(!redis.hasOwnProperty('serverInfo')){
           redis.serverInfo={}
         }
-        redis.info(function(err,info) {
-          if (err) {
-            return callback(err);
-          }
-          if (typeof info !== 'string') {
-            return callback(this);
-          }
+      redis.info(function(err,info) {
+        if (err) {
+          return callback(err);
+        }
+        if (typeof info !== 'string') {
+          return callback(info);
+        }
 
-          var lines = info.split('\r\n');
-          for (var i = 0; i < lines.length; ++i) {
-            var parts = lines[i].split(':');
-            if (parts[1]) {
-              redis.serverInfo[parts[0]] = parts[1];
-            }
-          }
-        })
-        const version = redis.serverInfo.redis_version;
-        if (version && version.length >= 5) {
-          const versionNumber = Number(version[0] + version[2]);
-          if (versionNumber < 28) {
-            alert('Medis 只支持 Redis 版本 >= 2.8 是因为小于 2.8 版本的，不支持 SCAN 命令, which means it not possible to access keys without blocking Redis.');
-            dispatch(disconnect());
-            return;
+        var lines = info.split('\r\n');
+        for (var i = 0; i < lines.length; ++i) {
+          var parts = lines[i].split(':');
+          if (parts[1]) {
+            redis.serverInfo[parts[0]] = parts[1];
           }
         }
-        next({redis, config, index: getIndex(getState)});
-      })
+        redis.ping((err, res) => {
+          if (err) {
+            if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
+              err.message = 'Redis 错误：访问被拒绝。请检查密码是否正确。';
+            }
+            if (err.message !== 'Connection is closed.') {
+              alert(err.message);
+              redis.disconnect();
+            }
+            return;
+          }        
+          const version = redis.serverInfo.redis_version;
+          if (version && version.length >= 5) {
+            const versionNumber = Number(version[0] + version[2]);
+            if (versionNumber < 28) {
+              alert('Medis 只支持 Redis 版本 >= 2.8 是因为小于 2.8 版本的，不支持 SCAN 命令, which means it not possible to access keys without blocking Redis.');
+              dispatch(disconnect());
+              return;
+            }
+          }
+          next({redis, config, index: getIndex(getState)});
+        })
+      })      
     });
     redis.once('error', function (error) {
       redisErrorMessage = error;
