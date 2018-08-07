@@ -164,12 +164,42 @@ class Config extends React.PureComponent {
       ))
     const portHtml=(
         <div className="nt-form-row">
-          <label htmlFor="port">{modelEn[this.getProp('curmodel')]}端口:</label>
+          <label htmlFor="port">{modelEn[this.getProp('curmodel')] || "标准"}端口:</label>
           <input type="text" id="port" 
             value={this.getProp('port')} 
             onChange={this.handleChange.bind(this, 'port')} 
             placeholder={this.getProp('curmodel')=='sentinel'?"26379":"6379"}/>
         </div>)
+    const cluster_host=(
+           <div className="nt-form-row" style={{height:"68px"}}>
+            <label htmlFor='host'>{modelEn[this.getProp('curmodel')] || "标准"}地址:</label>
+            <textarea type="text" 
+              readOnly={true}
+              onDoubleClick={this.delhost.bind(this,'host')}
+              id='host' 
+              ref="host"
+              title="主机地址"
+              rows={3}
+              style={{paddingRight:"30px"}}
+              value={this.getProp('host')} 
+              onChange={this.handleChange.bind(this, 'host')} 
+              placeholder='host1:port1,host2:port2,.....' >
+            </textarea>
+            <button onClick={this.addMulihost.bind(this)} className="icon icon-plus add-host"></button>
+          </div>)
+    const default_host=(
+        <div className="nt-form-row">
+          <label htmlFor='host'>{modelEn[this.getProp('curmodel')] || "标准"}地址:</label>
+          <input type="text"
+            onDoubleClick={this.delhost.bind(this,'host')}
+            id='host' 
+            ref="host"
+            title="主机地址"
+            value={this.getProp('host')}
+            onChange={this.handleChange.bind(this, 'host')} 
+            placeholder='localhost' />
+        </div>)
+
     return (<div className='configbox'>
       <div className="nt-box">
         <div className="connectModel">
@@ -200,24 +230,11 @@ class Config extends React.PureComponent {
           <label></label>
           {tagHtml}
         </div>
-        <div className="nt-form-row">
-          <label htmlFor='host'>{modelEn[this.getProp('curmodel')]}地址:</label>
-          <textarea type="text"  readOnly={this.getProp('curmodel')=='cluster'?true:false}
-            onDoubleClick={this.delhost.bind(this,'host')}
-            id='host' 
-            ref="host"
-            title="主机地址"
-            rows={this.getProp('curmodel')=='cluster'?3:1}
-            style={{paddingRight: this.getProp('curmodel')=='cluster'?"30px":'' }}
-            value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} 
-            placeholder={this.getProp('curmodel')!='cluster'?'localhost':'host1:port1,host2:port2,.....'}></textarea>
-            {this.getProp('curmodel')=='cluster'?(<button onClick={this.addMulihost.bind(this)} className="icon icon-plus add-host"></button>):''}
-        </div>
-
+        {this.getProp('curmodel')==='cluster'?cluster_host:default_host}
         {(this.getProp('curmodel')!='cluster' || (!this.props.favorite && this.getProp('curmodel')=='' ))?portHtml:''}
         <div className="nt-form-row" >
-          <label htmlFor="password">{modelEn[this.getProp('curmodel')]}密码:</label>
-          <input type="password" id="password" placeholder={modelEn[this.getProp('curmodel')]+'密码'} onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
+          <label htmlFor="password">{modelEn[this.getProp('curmodel')] || "标准"}密码:</label>
+          <input type="password" id="password" placeholder={(modelEn[this.getProp('curmodel')] || "标准")+'密码'} onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssl">启用SSL:</label>

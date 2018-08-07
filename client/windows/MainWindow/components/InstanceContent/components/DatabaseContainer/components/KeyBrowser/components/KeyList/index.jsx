@@ -389,7 +389,7 @@ class KeyList extends React.Component {
         headerHeight={24}
         >
         <Column
-          header="type"
+          header="类型"
           width={40}
           cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
@@ -407,7 +407,7 @@ class KeyList extends React.Component {
         <Column
           header={
             <AddButton
-              reload="true" title="name" onReload={() => {
+              reload="true" title="键名" onReload={() => {
                 this.refresh()
               }} onClick={() => {
                 showModal({
