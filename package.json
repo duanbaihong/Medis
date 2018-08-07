@@ -3,7 +3,7 @@
   "description": "GUI For Redis Dbh888 ",
   "productName": "Medis",
   "version": "0.6.3",
-  "electronVersion": "1.6.1",
+  "electronVersion": "2.0.2",
   "license": "MIT",
   "author": "duanbaihong <duanbaihong@qq.com> (http://duanbaihong.com)",
   "main": "server/main.js",

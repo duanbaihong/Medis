@@ -24,13 +24,27 @@ packager({
     throw err;
   }
 
-  const app = path.join(res[0], `${pkg.productName}.app`)
-  console.log('flating...', app)
-  console.log(res)
-  flat({ app }, function done (err) {
-    if (err) {
-      throw err
-    }
-    process.exit(0);
-  })
+  const app = path.join(res[0], `${pkg.productName}`)
+  switch(process.platform){
+    case "darwin":
+      console.log('flating...', app+".app")
+      flat({ app+".app" }, function done (err) {
+        if (err) {
+          throw err
+        }
+        process.exit(0);
+      })
+      break;
+    case "linux":
+    case "aix":
+    case "freebsd":
+    case "openbsd":
+    case "sunos":
+      console.log("package complated! please to ["+app+"]")
+      break;
+    case "win32":
+
+      break;
+    default:
+  }
 })

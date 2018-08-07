@@ -178,7 +178,7 @@ class SetContent extends BaseContent {
             }}
             header={
               <AddButton
-                title="member" onClick={() => {
+                title="成员" onClick={() => {
                   showModal({
                     button: '插入成员',
                     form: {
