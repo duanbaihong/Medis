@@ -10,8 +10,8 @@ import {clipboard} from 'electron'
 require('./index.scss')
 
 class KeyList extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       keys: [],
       selectedKey: null,
@@ -20,7 +20,6 @@ class KeyList extends React.Component {
     }
     this.randomClass = 'pattern-table-' + (Math.random() * 100000 | 0)
   }
-
   refresh(firstTime) {
     this.setState({
       cursor: '0',
@@ -208,8 +207,11 @@ class KeyList extends React.Component {
       }
     }).catch(() => {})
   }
-
+  componentWillUnmount() {
+    this._isMounted=false;
+  }
   componentDidMount() {
+    this._isMounted=true;
     $(ReactDOM.findDOMNode(this)).on('keydown', e => {
       if (typeof this.index === 'number' && typeof this.state.editableKey !== 'string') {
         if (e.keyCode === 8) {
@@ -380,8 +382,6 @@ class KeyList extends React.Component {
         onRowClick={(evt, index) => this.handleSelect(index)}
         onRowDoubleClick={(evt, index) => {
           this.handleSelect(index)
-          // this.setState({tab: '内容(Content)'})
-          // this.props.onSelectTab('内容(Content)')
           this.setState({editableKey: this.state.keys[index][0]})
         }}
         width={this.props.width}
@@ -389,7 +389,7 @@ class KeyList extends React.Component {
         headerHeight={24}
         >
         <Column
-          header="type"
+          header="类型"
           width={40}
           cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
@@ -407,7 +407,7 @@ class KeyList extends React.Component {
         <Column
           header={
             <AddButton
-              reload="true" title="name" onReload={() => {
+              reload="true" title="键名" onReload={() => {
                 this.refresh()
               }} onClick={() => {
                 showModal({

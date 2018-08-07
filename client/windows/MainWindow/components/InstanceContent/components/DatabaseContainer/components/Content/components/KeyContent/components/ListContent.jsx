@@ -175,7 +175,7 @@ class ListContent extends BaseContent {
           <Column
             header={
               <SortHeaderCell
-                title="index"
+                title="序号"
                 onOrderChange={desc => this.setState({
                   desc,
                   selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
@@ -192,20 +192,20 @@ class ListContent extends BaseContent {
           <Column
             header={
               <AddButton
-                title="item" onClick={() => {
+                title="成员" onClick={() => {
                   showModal({
                     button: '插入成员',
                     form: {
                       type: 'object',
                       properties: {
-                        'Insert To:': {
+                        '插入到:': {
                           type: 'string',
                           enum: ['head', 'tail']
                         }
                       }
                     }
                   }).then(res => {
-                    return res['Insert To:'] === 'head' ? 'lpush' : 'rpush'
+                    return res['插入到:'] === 'head' ? 'lpush' : 'rpush'
                   }).then(method => {
                     const data = '新成员'
                     this.props.redis[method](this.state.keyName, data).then(() => {

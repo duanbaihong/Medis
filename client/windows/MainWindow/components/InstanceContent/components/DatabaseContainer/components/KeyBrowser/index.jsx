@@ -10,8 +10,9 @@ class KeyBrowser extends React.Component {
   constructor(props) {
     super()
     this.footerHeight = 66
-
-    this.state = {pattern: props.pattern}
+    this.state = {
+      pattern: props.pattern
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,7 +35,7 @@ class KeyBrowser extends React.Component {
         }}
         />
       <KeyList
-        height={this.props.height - this.footerHeight}
+        height={this.props.height}
         width={this.props.width}
         db={this.props.db}
         pattern={this.state.pattern || '*'}

@@ -9,6 +9,10 @@ require('./index.scss')
 class Config extends React.Component {
   constructor(props) {
     super(props)
+    this.fieldType={
+      "aof-enabled": 'boolean',
+      "cluster-enabled": 'boolean'
+    }
     this.writeableFields = [
       'dbfilename',
       'requirepass',
@@ -74,16 +78,34 @@ class Config extends React.Component {
       {
         name: '通用(General)',
         configs: [
-          {name: 'port', type: 'number'},
+          {name: 'os'},
+          {name: 'redis-version'},
+          {name: 'redis-git-sha1'},
+          {name: 'redis-git-dirty'},
+          {name: 'multiplexing-api'},
+          {name: 'gcc-version'},
+          {name: 'lru-clock'},
+          {name: 'redis-build-id'},
+          {name: 'tcp-port', type: 'number'},
           {name: 'bind'},
+          {name: 'daemonize', type: 'boolean'},
+          {name: 'arch-bits'},
+          {name: 'process-id'},
+          {name: 'redis-mode'},
+          {name: 'run-id'},
+          {name: 'executable'},
+          {name: 'tcp-port',type:'number'},
+          {name: 'uptime-in-days'},
+          {name: 'uptime-in-seconds'},
+          {name: 'config-file'},
+          {name: 'pidfile'},
           {name: 'unixsocket'},
           {name: 'unixsocketperm', type: 'number'},
-          {name: 'daemonize', type: 'boolean'},
-          {name: 'pidfile'},
           {name: 'tcp-backlog', type: 'number'},
           {name: 'tcp-keepalive', type: 'number'},
           {name: 'timeout', type: 'number'},
-          {name: 'databases', type: 'number'}
+          {name: 'databases', type: 'number'},
+          {name: 'atomicvar-api'}
         ]
       },
       {
@@ -110,8 +132,24 @@ class Config extends React.Component {
       {
         name: '同步(Replication)',
         configs: [
+          {name: 'role'},
           {name: 'slaveof'},
+          {name: 'master-link-status'},
+          {name: 'master-host'},
+          {name: 'master-port'},
+          {name: 'connected-slaves'},
           {name: 'masterauth'},
+          {name: 'slave0'},
+          {name: 'master-link-status'},
+          {name: 'master-last-io-seconds-ago'},
+          {name: 'master-sync-in-progress'},
+          {name: 'master-repl-offset'},
+          {name: 'slave-repl-offset'},
+          {name: 'slave-announce-ip'},
+          {name: 'slave-announce-port'},
+          {name: 'repl-backlog-active'},
+          {name: 'repl-backlog-first-byte-offset'},
+          {name: 'repl-backlog-histlen'},
           {name: 'slave-serve-stale-data', type: 'boolean'},
           {name: 'slave-read-only', type: 'boolean'},
           {name: 'repl-diskless-sync', type: 'boolean'},
@@ -123,14 +161,20 @@ class Config extends React.Component {
           {name: 'repl-backlog-ttl', type: 'number'},
           {name: 'slave-priority', type: 'number'},
           {name: 'min-slaves-to-write', type: 'number'},
-          {name: 'min-slaves-max-lag', type: 'number'}
+          {name: 'min-slaves-max-lag', type: 'number'},
+          {name: 'master-replid'},
+          {name: 'master-replid2'},
+          {name: 'second-repl-offset'},
+          {name: 'second-repl-offset'},
+          {name: 'slave-expires-tracked-keys'},
         ]
       },
       {
         name: '安全(Security)',
         configs: [
           {name: 'requirepass'},
-          {name: 'rename-command'}
+          {name: 'rename-command'},
+          {name: 'protected-mode'}
         ]
       },
       {
@@ -146,29 +190,71 @@ class Config extends React.Component {
         name: '持久化(Append Only Mode)',
         configs: [
           {name: 'appendonly', type: 'boolean'},
+          {name: 'loading',type: 'number'},
+          {name: 'aof-enabled', type: 'boolean'},
           {name: 'appendfilename'},
           {name: 'appendfsync', type: ['everysec', 'always', 'no']},
           {name: 'no-appendfsync-on-rewrite', type: 'boolean'},
           {name: 'auto-aof-rewrite-percentage', type: 'number'},
           {name: 'auto-aof-rewrite-min-size'},
-          {name: 'aof-load-truncated', type: 'number'}
-        ]
-      },
-      {
-        name: 'LUA脚本(LUA Scripting)',
-        configs: [
-          {name: 'lua-time-limit', type: 'number'}
+          {name: 'aof-load-truncated', type: 'number'},
+          {name: 'rdb-changes-since-last-save',type: 'number'},
+          {name: 'rdb-bgsave-in-progress',type: 'number'},
+          {name: 'rdb-last-save-time',type: 'number'},
+          {name: 'rdb-last-bgsave-status'},
+          {name: 'rdb-last-bgsave-time-sec',type: 'number'},
+          {name: 'rdb-current-bgsave-time-sec',type: 'number'},
+          {name: 'rdb-last-cow-size',type: 'number'},
+          {name: 'aof-last-cow-size',type: 'number'},
+          {name: 'aof-rewrite-in-progress',type: 'number'},
+          {name: 'aof-rewrite-scheduled',type: 'number'},
+          {name: 'aof-last-rewrite-time-sec',type: 'number'},
+          {name: 'aof-current-rewrite-time-sec',type: 'number'},
+          {name: 'aof-last-bgrewrite-status'},
+          {name: 'aof-last-write-status'},
+          {name: 'aof-current-size',type: 'number'},
+          {name: 'aof-base-size',type: 'number'},
+          {name: 'aof-pending-rewrite',type: 'number'},
+          {name: 'aof-buffer-length',type: 'number'},
+          {name: 'aof-rewrite-buffer-length',type: 'number'},
+          {name: 'aof-pending-bio-fsync',type: 'number'},
+          {name: 'aof-delayed-fsync',type: 'number'},
         ]
       },
       {
         name: '集群配置(Cluster)',
         configs: [
           {name: 'cluster-enabled', type: 'boolean'},
+          {name: 'cluster-state'},
           {name: 'cluster-config-file'},
           {name: 'cluster-node-timeout', type: 'number'},
           {name: 'cluster-slave-validity-factor', type: 'nubmer'},
           {name: 'cluster-migration-barrier', type: 'number'},
-          {name: 'cluster-require-full-coverage', type: 'boolean'}
+          {name: 'cluster-require-full-coverage', type: 'boolean'},
+          {name: 'cluster-known-nodes',type:'number'},
+          {name: 'cluster-size'},
+          {name: 'cluster-current-epoch'},
+          {name: 'cluster-my-epoch'},
+          {name: 'cluster-stats-messages-ping-sent',type:'number'},
+          {name: 'cluster-stats-messages-pong-sent',type:'number'},
+          {name: 'cluster-stats-messages-meet-sent',type:'number'},
+          {name: 'cluster-stats-messages-sent',type:'number'},
+          {name: 'cluster-stats-messages-ping-received',type:'number'},
+          {name: 'cluster-stats-messages-pong-received',type:'number'},
+          {name: 'cluster-stats-messages-received',type:'number'},
+          {name: 'cluster-slots-assigned'},
+          {name: 'cluster-slots-ok'},
+          {name: 'cluster-slots-pfail'},
+          {name: 'cluster-slots-fail'},
+          {name: 'cluster-stats-messages-update-sent'},
+          {name: 'cluster-stats-messages-fail-sent'},
+          {name: 'cluster-stats-messages-fail-received'},
+        ]
+      },
+      {
+        name: 'LUA脚本(LUA Scripting)',
+        configs: [
+          {name: 'lua-time-limit', type: 'number'}
         ]
       },
       {
@@ -179,15 +265,118 @@ class Config extends React.Component {
         ]
       },
       {
-        name: '监控(Latency Monitor)',
+        name: '监控延迟(Latency Monitor)',
         configs: [
           {name: 'latency-monitor-threshold', type: 'number'}
+        ]
+      },
+      {
+        name: '状态(Stats)',
+        configs: [
+          {name: 'total-connections-received'},
+          {name: 'total-commands-processed'},
+          {name: 'instantaneous-ops-per-sec'},
+          {name: 'total-net-input-bytes'},
+          {name: 'total-net-output-bytes'},
+          {name: 'instantaneous-input-kbps'},
+          {name: 'instantaneous-output-kbps'},
+          {name: 'rejected-connections'},
+          {name: 'sync-full'},
+          {name: 'sync-partial-ok'},
+          {name: 'sync-partial-err'},
+          {name: 'expired-keys'},
+          {name: 'evicted-keys'},
+          {name: 'keyspace-hits'},
+          {name: 'keyspace-misses'},
+          {name: 'pubsub-channels'},
+          {name: 'pubsub-patterns'},
+          {name: 'latest-fork-usec'},
+          {name: 'migrate-cached-sockets'}
+        ]
+      },
+      {
+        name: '内存(Memory)',
+        configs: [
+          {name: 'used-memory'},
+          {name: 'used-memory-human'},
+          {name: 'used-memory-rss'},
+          {name: 'used-memory-rss-human'},
+          {name: 'used-memory-peak'},
+          {name: 'used-memory-peak-human'},
+          {name: 'total-system-memory'},
+          {name: 'total-system-memory-human'},
+          {name: 'used-memory-lua'},
+          {name: 'used-memory-lua-human'},
+          {name: 'maxmemory-human'},
+          {name: 'mem-fragmentation-ratio'},
+          {name: 'mem-allocator'},
+          {name: 'used-memory-peak-perc'},
+          {name: 'used-memory-dataset-perc'},
+          {name: 'used-memory-dataset'},
+          {name: 'used-memory-overhead'},
+          {name: 'used-memory-startup'},
+        ]
+      },
+      {
+        name: '客户端(Clients)',
+        configs: [
+          {name: 'connected-clients'},
+          {name: 'client-longest-output-list'},
+          {name: 'client-biggest-input-buf'},
+          {name: 'blocked-clients'}
+        ]
+      },
+      {
+        name: '服务器(CPU)',
+        configs: [
+          {name: 'used-cpu-sys'},
+          {name: 'used-cpu-user'},
+          {name: 'used-cpu-sys-children'},
+          {name: 'used-cpu-user-children'}
         ]
       },
       {
         name: '事件提醒(Event Notification)',
         configs: [
           {name: 'notify-keyspace-events'}
+        ]
+      },
+      {
+        name: '哨兵(sentinel)',
+        configs:[
+          {name: 'sentinel-masters'},
+          {name: 'sentinel-tilt'},
+          {name: 'sentinel-running-scripts'},
+          {name: 'sentinel-scripts-queue-length'},
+          {name: 'sentinel-simulate-failure-flags'},
+          {name: 'master0'},
+          {name: 'master1'},
+          {name: 'master2'},
+          {name: 'master3'}
+        ]
+      },
+      {
+        name: '哨兵(sentinel)监听Master',
+        configs:[
+          {name: 'name'},
+          {name: 'port'},
+          {name: 'ip'},{name: 'runid'},
+          {name: 'flags'},
+          {name: 'link-pending-commands'},
+          {name: 'link-refcount'},
+          {name: 'last-ping-sent'},
+          {name: 'last-ok-ping-reply'},
+          {name: 'last-ping-reply'},
+          {name: 'down-after-milliseconds'},
+          {name: 'info-refresh'},
+          {name: 'role-reported'},
+          {name: 'role-reported-time'},
+          {name: 'config-epoch'},
+          {name: 'num-slaves'},
+          {name: 'num-other-sentinels'},
+          {name: 'quorum'},
+          {name: 'failover-timeout'},
+          {name: 'parallel-syncs'}
         ]
       },
       {
@@ -204,7 +393,8 @@ class Config extends React.Component {
           {name: 'activerehashing', type: 'boolean'},
           {name: 'client-output-buffer-limit'},
           {name: 'hz', type: 'number'},
-          {name: 'aof-rewrite-incremental-fsync', type: 'boolean'}
+          {name: 'aof-rewrite-incremental-fsync', type: 'boolean'},
+          {name: 'list-compress-depth'}
         ]
       }
     ]
@@ -215,15 +405,41 @@ class Config extends React.Component {
     }
     this.load()
   }
-
-  load() {
-    this.props.redis.config('get', '*').then(config => {
-      const configs = {}
-
-      for (let i = 0; i < config.length - 1; i += 2) {
-        configs[config[i]] = config[i + 1]
+  redismodel(model){
+    let redis=this.props.redis
+    if(model=='sentinel' || redis.serverInfo.redis_mode=='sentinel'){
+      return redis.sentinel('masters');
+    }else if(redis.serverInfo.redis_mode=='cluster' && model != ''){
+      return redis.cluster('info');
+    }else{
+      return redis.config('get','*');
+    }
+  }
+  load(reload=false) {
+    let redis=this.props.redis
+    const configs = {}
+    ///////
+    let cnf=this.props.config.toJS()
+    let model=(cnf.curmodel != undefined?cnf.curmodel:'')
+    let configtmp={}
+    this.redismodel(model).then(config1 =>{
+      let redismode=redis.serverInfo.redis_mode
+      let fI=(redismode=='cluster'?1:2)
+      config1=(redismode=='sentinel'?config1[0]:(redismode=='cluster'?config1.split('\n'):config1))
+      for (let i = 0; i < config1.length - 1; i += fI) {
+        if (redismode!= 'sentinel' && config1[i] == 'port') continue;
+        if(redismode == 'cluster'){
+          var sVal=config1[i].replace(/_/g,"-").split(":")
+          if (sVal[0]== undefined) continue;
+          configs[sVal[0]] = sVal[1]
+        }else{
+          configs[config1[i]] = config1[i + 1]
+        }
       }
-
+      var info=redis.serverInfo;
+      for( var key in info){
+        configs[key.replace(/_/g,'-')]=info[key];
+      }
       const groups = clone(this.groups, true).map(g => {
         g.configs = g.configs.map(c => {
           if (typeof configs[c.name] !== 'undefined') {
@@ -234,7 +450,6 @@ class Config extends React.Component {
         }).filter(c => typeof c.value !== 'undefined')
         return g
       }).filter(g => g.configs.length)
-
       if (Object.keys(configs).length) {
         groups.push({name: '其它(Other)', configs: Object.keys(configs).map(key => {
           return {
@@ -281,10 +496,14 @@ class Config extends React.Component {
     const props = {readOnly: this.writeableFields.indexOf(config.name) === -1}
     props.disabled = props.readOnly
     if (config.type === 'boolean' &&
-        (config.value === 'yes' || config.value === 'no')) {
+        (config.value === 'yes' || config.value === 'no' || (config.value.length === 1 && parseInt(config.value,10)<2))) {
       input = (<input
-        type="checkbox" checked={config.value === 'yes'} onChange={e => {
-          config.value = e.target.checked ? 'yes' : 'no'
+        type="checkbox" checked={config.value === 'yes' || (config.value.length === 1 && parseInt(config.value,10)<2)} onChange={e => {
+          if(config.value.length === 1){
+            config.value = e.target.checked ? '1' : '0'
+          }else{
+            config.value = e.target.checked ? 'yes' : 'no'
+          }
           this.change(config)
         }} {...props}
            />)
@@ -333,10 +552,10 @@ class Config extends React.Component {
         content: '你确定要重新加载配置？你现在的配置将丢失！',
         button: '重新加载'
       }).then(() => {
-        this.load()
+        this.load(true)
       })
     } else {
-      this.load()
+      this.load(true)
     }
   }
 

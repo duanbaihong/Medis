@@ -9,10 +9,10 @@ import fs from 'fs'
 require('./index.scss')
 
 class Config extends React.PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-      data: new Immutable.Map()
+      data: new Immutable.Map({'curmodel': 'standalone'})
     }
   }
 
@@ -29,8 +29,11 @@ class Config extends React.PureComponent {
       changed: Boolean(this.props.favorite)
     })
   }
-
+  
   componentWillReceiveProps(nextProps) {
+    if(nextProps.favorite){
+      this.state.data=nextProps.favorite
+    }
     if (!this.props.connect && nextProps.connect) {
       this.connect()
     }
@@ -42,20 +45,22 @@ class Config extends React.PureComponent {
       }
     }
   }
-
   connect() {
     const {favorite, connectToRedis} = this.props
     const data = this.state.data
     const config = favorite ? favorite.merge(data).toJS() : data.toJS()
     config.host = config.host || 'localhost'
-    config.port = config.port || '6379'
+    config.port = config.port || (this.getProp('curmodel')=='sentinel'?'26379':'6379')
     config.sshPort = config.sshPort || '22'
-    connectToRedis(config)
-    this.save()
+    if(this.state.changed && this.save()){
+      connectToRedis(config)
+    }else{
+      connectToRedis(config)
+    }
   }
 
-  handleChange(property, e) {
-    let value = e.target.value
+  handleChange(property,e) {
+    let value=e.target.value
     if (property === 'ssh' || property === 'ssl') {
       value = e.target.checked
     }
@@ -73,6 +78,46 @@ class Config extends React.PureComponent {
       this.props.onDuplicate(data)
     }
   }
+  delhost(property){
+    this.setProp({[property]:''})
+  }
+  addMulihost(){
+    showModal({
+      button: '添加',
+      form: {
+        type: 'object',
+        properties: {
+          host: {
+            type: 'string',
+            minLength: 7,
+            default: "127.0.0.1"
+          },
+          port: {
+            type: 'number',
+            minLength: 2,
+            default: (this.getProp('curmodel')=='sentinel'?'26379':'6379')
+          }
+        }
+      }
+    }).then(res=>{
+      console.log(res)
+      let hostreg=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
+      let portreg=/\d{2,6}/
+      
+      if(this.getProp('host').match(res.host+":"+res.port)){
+        alert("主机重复。")
+        return false;
+      }
+      if(hostreg.test(res.host) && portreg.test(res.port)){
+        this.setProp('host',(this.getProp('host')!=''?this.getProp('host')+','+res.host+":"+res.port:res.host+":"+res.port))
+        //////        
+
+      }else{
+        alert('主机或端口设置不正确！');
+        return false;
+      }
+    }).catch(() => {})
+  }
 
   save() {
     if (this.props.favorite && this.state.changed) {
@@ -80,7 +125,6 @@ class Config extends React.PureComponent {
       this.setState({changed: false, data: new Immutable.Map()})
     }
   }
-
   renderCertInput(label, id) {
     return (<div className="nt-form-row">
       <label htmlFor="cert">{label}:</label>
@@ -107,25 +151,90 @@ class Config extends React.PureComponent {
         />
     </div>)
   }
-
   render() {
-    return (<div>
-      <div className="nt-box" style={{width: 500, margin: '60px auto 0'}}>
+    const modelEn={standalone: '标准',sentinel: '哨兵',cluster:'集群'}
+    const tags=['favorite-closetag','favorite-red','favorite-orage','favorite-green','favorite-blue','favorite-violet','favorite-gray','favorite-pink','favorite-purple']
+    const tagHtml=tags.map(style=>(
+        <span 
+          key={style}
+          className={'favorite-circle '+style+((style==this.getProp('tag') && this.getProp('tag')!='favorite-closetag')?' favorite-circle-choise':'')} 
+          onClick={()=>{
+            this.setProp('tag',style=='favorite-closetag'?'':style)
+          }}>{style=='favorite-closetag'?'X':''}</span>
+      ))
+    const portHtml=(
+        <div className="nt-form-row">
+          <label htmlFor="port">{modelEn[this.getProp('curmodel')] || "标准"}端口:</label>
+          <input type="text" id="port" 
+            value={this.getProp('port')} 
+            onChange={this.handleChange.bind(this, 'port')} 
+            placeholder={this.getProp('curmodel')=='sentinel'?"26379":"6379"}/>
+        </div>)
+    const cluster_host=(
+           <div className="nt-form-row" style={{height:"68px"}}>
+            <label htmlFor='host'>{modelEn[this.getProp('curmodel')] || "标准"}地址:</label>
+            <textarea type="text" 
+              readOnly={true}
+              onDoubleClick={this.delhost.bind(this,'host')}
+              id='host' 
+              ref="host"
+              title="主机地址"
+              rows={3}
+              style={{paddingRight:"30px"}}
+              value={this.getProp('host')} 
+              onChange={this.handleChange.bind(this, 'host')} 
+              placeholder='host1:port1,host2:port2,.....' >
+            </textarea>
+            <button onClick={this.addMulihost.bind(this)} className="icon icon-plus add-host"></button>
+          </div>)
+    const default_host=(
+        <div className="nt-form-row">
+          <label htmlFor='host'>{modelEn[this.getProp('curmodel')] || "标准"}地址:</label>
+          <input type="text"
+            onDoubleClick={this.delhost.bind(this,'host')}
+            id='host' 
+            ref="host"
+            title="主机地址"
+            value={this.getProp('host')}
+            onChange={this.handleChange.bind(this, 'host')} 
+            placeholder='localhost' />
+        </div>)
+
+    return (<div className='configbox'>
+      <div className="nt-box">
+        <div className="connectModel">
+          <span className={(this.getProp('curmodel')==='standalone' || (!this.props.favorite && this.getProp('curmodel')=='' ))?'active':''}
+              onClick={()=>{
+                this.setProp('curmodel','standalone')
+              }}>
+              标准模式
+          </span>
+          <span className={this.getProp('curmodel')==='sentinel'?'active':''}
+              onClick={()=>{
+                this.setProp('curmodel','sentinel')
+              }}>
+              哨兵模式
+          </span>
+          <span className={this.getProp('curmodel')==='cluster'?'active':''}
+              onClick={()=>{
+                this.setProp({curmodel:'cluster',host:'',port:''})
+              }}>
+              集群模式
+          </span>
+        </div>
         <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none'}}>
           <label htmlFor="name">连接名称:</label>
           <input type="text" id="name" value={this.getProp('name')} onChange={this.handleChange.bind(this, 'name')} placeholder="Bookmark name"/>
         </div>
-        <div className="nt-form-row">
-          <label htmlFor="host">主机地址:</label>
-          <input type="text" id="host" value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} placeholder="localhost"/>
+        <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none',paddingLeft: '10px'}}>
+          <label></label>
+          {tagHtml}
         </div>
-        <div className="nt-form-row">
-          <label htmlFor="port">主机端口:</label>
-          <input type="text" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379"/>
-        </div>
-        <div className="nt-form-row">
-          <label htmlFor="password">主机密码:</label>
-          <input type="password" id="password" onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
+        {this.getProp('curmodel')==='cluster'?cluster_host:default_host}
+        {(this.getProp('curmodel')!='cluster' || (!this.props.favorite && this.getProp('curmodel')=='' ))?portHtml:''}
+        <div className="nt-form-row" >
+          <label htmlFor="password">{modelEn[this.getProp('curmodel')] || "标准"}密码:</label>
+          <input type="password" id="password" placeholder={(modelEn[this.getProp('curmodel')] || "标准")+'密码'} onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssl">启用SSL:</label>
@@ -143,11 +252,11 @@ class Config extends React.PureComponent {
         <div style={{display: this.getProp('ssh') ? 'block' : 'none'}}>
           <div className="nt-form-row">
             <label htmlFor="sshHost">SSH主机地址:</label>
-            <input type="text" id="sshHost" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} placeholder=""/>
+            <input type="text" id="sshHost" placeholder="SSH主机地址" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} />
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshUser">SSH用户:</label>
-            <input type="text" id="sshUser" onChange={this.handleChange.bind(this, 'sshUser')} value={this.getProp('sshUser')} placeholder=""/>
+            <input type="text" id="sshUser" placeholder="SSH用户" onChange={this.handleChange.bind(this, 'sshUser')} value={this.getProp('sshUser')} />
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshPassword">SSH {this.getProp('sshKey') ? '密钥' : '密码'}:</label>
@@ -157,7 +266,7 @@ class Config extends React.PureComponent {
               readOnly={Boolean(this.getProp('sshKey'))}
               onChange={this.handleChange.bind(this, 'sshPassword')}
               value={this.getProp('sshKeyFile') || this.getProp('sshPassword')}
-              placeholder=""
+              placeholder={'SSH'+(this.getProp('sshKey') ? '密钥' : '密码')}
               />
             <button
               className={'icon icon-key ssh-key' + (this.getProp('sshKey') ? ' is-active' : '')}
@@ -184,32 +293,31 @@ class Config extends React.PureComponent {
           </div>
           <div className="nt-form-row" style={{display: this.getProp('sshKey') && this.getProp('sshKey').indexOf('ENCRYPTED') > -1 ? 'block' : 'none'}}>
             <label htmlFor="sshKeyPassphrase">SSH Key密码:</label>
-            <input type="password" id="sshKeyPassphrase" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')}/>
+            <input type="password" id="sshKeyPassphrase" placeholder="SSH Key密码" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')}/>
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshPort">SSH 端口:</label>
-            <input type="text" id="sshPort" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')}/>
+            <input type="text" id="sshPort" placeholder="22" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')}/>
           </div>
         </div>
       </div>
       <div className="nt-button-group nt-button-group--pull-right" style={{width: 500, margin: '10px auto 0', paddingBottom: 10}}>
         <button
-          className="nt-button" style={{float: 'left'}} onClick={() => {
-            this.duplicate()
-          }}
-                                                        >{ this.props.favorite ? '复制项目' : '添加到收藏' }</button>
+          className="nt-button" style={{float: 'left'}} onClick={this.duplicate.bind(this)}>
+            { this.props.favorite ? '复制项目' : '添加到收藏' }
+          </button>
         <button
           className="nt-button"
           style={{display: this.state.changed ? 'inline-block' : 'none'}}
-          onClick={() => {
-            this.save()
-          }}
+          onClick={this.save.bind(this)}
           >保存修改</button>
         <button
-          disabled={Boolean(this.props.connectStatus)} ref="connectButton" className="nt-button nt-button--primary" onClick={() => {
-            this.connect()
-          }}
-                                                                                                                    >{this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接')}</button>
+          disabled={Boolean(this.props.connectStatus)} 
+          ref="connectButton" 
+          className="nt-button nt-button--primary" 
+          onClick={this.connect.bind(this)}>
+            {this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接')}
+          </button>
       </div>
     </div>)
   }

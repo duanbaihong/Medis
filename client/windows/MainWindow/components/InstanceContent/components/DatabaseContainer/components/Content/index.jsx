@@ -5,18 +5,19 @@ import TabBar from './components/TabBar'
 import KeyContent from './components/KeyContent'
 import Terminal from './components/Terminal'
 import Config from './components/Config'
+import Status from './components/Status'
 import Footer from './components/Footer'
 require('./index.scss')
 class Content extends React.PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       pattern: '',
       db: 0,
       version: 0
     }
+    this.intervalObj=''
   }
-
   init(keyName) {
     this.setState({keyType: null})
     if (keyName !== null) {
@@ -28,11 +29,34 @@ class Content extends React.PureComponent {
       })
     }
   }
-  componentDidMount() {
-    this.init(this.props.keyName)
-
+  setRedisInfo(redis){
+    if(this._isMounted){
+      redis.info(function(err,info) {
+        if (err) {
+          return callback(err);
+        }
+        if (typeof info !== 'string') {
+          return callback(info);
+        }
+        var lines = info.split('\r\n');
+        for (var i = 0; i < lines.length; ++i) {
+          var parts = lines[i].split(':');
+          if (parts[1]) {
+            redis.serverInfo[parts[0]] = parts[1];
+          }
+        }
+      })
+    }
   }
-
+  componentDidMount() {
+    this.init(this.props.keyName);
+    this._isMounted=true;
+    this.intervalObj=setInterval(this.setRedisInfo.bind(this),1000,this.props.redis)
+  }
+  componentWillUnmount(){
+    this._isMounted=false;
+    clearInterval(this.intervalObj);
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
       this.init(nextProps.keyName)
@@ -43,35 +67,41 @@ class Content extends React.PureComponent {
   }
 
   render() {
-    return (<div className="pane sidebar" style={{height: '100%'}}>
+    const contentValue=(<KeyContent
+        style={{display: this.props.tab === '内容(Content)' ? 'flex' : 'none'}}
+        keyName={this.props.keyName}
+        height={this.props.height}
+        keyType={this.state.keyType}
+        redis={this.props.redis}
+        config={this.props.config}
+        onKeyContentChange={() => {
+          this.setState({version: this.state.version + 1})
+        }}
+        />)
+    return (<div className="pane sidebar" >
       <TabBar
         onSelectTab={this.props.onSelectTab}
         redis={this.props.redis}
         tab={this.props.tab}
         />
-      <KeyContent
-        style={{display: this.props.tab === '内容(Content)' ? 'flex' : 'none'}}
-        keyName={this.props.keyName}
-        keyType={this.state.keyType}
-        height={this.props.height - 66}
-        redis={this.props.redis}
-        onKeyContentChange={() => {
-          this.setState({version: this.state.version + 1})
-        }}
-        />
+        {contentValue}
       <Terminal
-        style={{display: this.props.tab === '终端(Terminal)' ? 'block' : 'none'}}
-        height={this.props.height - 67}
+        style={{display: this.props.tab === '终端(Terminal)'? 'block' : 'none'}}
         redis={this.props.redis}
+        config={this.props.config}
         connectionKey={this.props.connectionKey}
         onDatabaseChange={this.props.onDatabaseChange}
         />
       <Config
         style={{display: this.props.tab === '系统配置(Config)' ? 'block' : 'none'}}
-        height={this.props.height - 67}
         redis={this.props.redis}
+        config={this.props.config}
         connectionKey={this.props.connectionKey}
         />
+      <Status
+        style={{display: this.props.tab === '状态(Status)' ? 'block' : 'none'}}
+        redis={this.props.redis}
+      />
       <Footer
         keyName={this.props.keyName}
         keyType={this.state.keyType}

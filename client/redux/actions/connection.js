@@ -4,13 +4,14 @@ import {createAction} from 'Utils';
 import {Client} from 'ssh2';
 import net from 'net';
 import Redis from 'ioredis';
+// import Cluster from 'ioredis';
 import _ from 'lodash';
 
 function getIndex(getState) {
   const {activeInstanceKey, instances} = getState()
   return instances.findIndex(instance => instance.get('key') === activeInstanceKey)
 }
-
+ 
 export const updateConnectStatus = createAction('UPDATE_CONNECT_STATUS', status => ({getState, next}) => {
   next({status, index: getIndex(getState)})
 })
@@ -25,13 +26,21 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
   let redisErrorMessage
   let server
   let conn
+  if(config.host == ""){
+    alert('host为空');
+    return false;
+  }
+  if (config.curmodel=='cluster'){
+    config['cluster']=Array()
+    config.host.split(',').map(h=>{
+      config.cluster.push({host: h.split(":")[0],port: h.split(":")[1]})
+    })
+  }
   if (config.ssh) {
     dispatch(updateConnectStatus('SSH 连接中...'))
-
     const conn = new Client();
     conn.on('ready', () => {
       const server = net.createServer(function (sock) {
-        console.log(server.address().port)
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
             sock.end()
@@ -42,6 +51,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       }).listen(0, function () {
         handleRedis(config, { host: '127.0.0.1', port: server.address().port },conn,server)
       })
+      
     }).on('error', err => {
       sshErrorThrown = true;
       dispatch(disconnect());
@@ -56,7 +66,9 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if (config.sshKey) {
         conn.connect(Object.assign(connectionConfig, {
           privateKey: config.sshKey,
-          passphrase: config.sshKeyPassphrase
+          passphrase: config.sshKeyPassphrase,
+          keepaliveInterval: 30000
+          // agentForward: true
         }))
       } else {
         conn.connect(Object.assign(connectionConfig, {
@@ -79,15 +91,21 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if (config.tlskey) config.tls.key = config.tlskey;
       if (config.tlscert) config.tls.cert = config.tlscert;
     }
-    const redis = new Redis(_.assign({}, config, override, {
-      retryStrategy() {
-        return false;
-      }
-    }));
+    var redis
+    if(config.curmodel=='cluster'){
+      redis = new Redis.Cluster(config.cluster,{enableReadyCheck: true});
+    }else{
+      redis = new Redis(_.assign({}, config, override, {
+        retryStrategy() {
+          return false;
+        }
+      }));
+    }
     redis.once('ready',()=>{
       Notification.requestPermission(function(permission) {
         var redisNotification=new Notification('Medis连接成功',{
           body: '连接到['+config.host+':'+config.port+']的REDIS成功!',
+          icon: '../../icns/Icon1024.png',
           silent: true
         })
       }); 
@@ -105,28 +123,47 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       lua: 'local dump = redis.call("dump", KEYS[1]) local pttl = 0 if ARGV[1] == "TTL" then pttl = redis.call("pttl", KEYS[1]) end return redis.call("restore", KEYS[2], pttl, dump)'
     });
     redis.once('connect', function () {
-      redis.ping((err, res) => {
+      if(!redis.hasOwnProperty('serverInfo')){
+          redis.serverInfo={}
+        }
+      redis.info(function(err,info) {
         if (err) {
-          if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
-            err.message = 'Redis 错误：访问被拒绝。请检查密码是否正确。';
-          }
-          if (err.message !== 'Connection is closed.') {
-            alert(err.message);
-            redis.disconnect();
-          }
-          return;
+          return callback(err);
         }
-        const version = redis.serverInfo.redis_version;
-        if (version && version.length >= 5) {
-          const versionNumber = Number(version[0] + version[2]);
-          if (versionNumber < 28) {
-            alert('Medis 只支持 Redis 版本 >= 2.8 是因为小于 2.8 版本的，不支持 SCAN 命令, which means it not possible to access keys without blocking Redis.');
-            dispatch(disconnect());
+        if (typeof info !== 'string') {
+          return callback(info);
+        }
+
+        var lines = info.split('\r\n');
+        for (var i = 0; i < lines.length; ++i) {
+          var parts = lines[i].split(':');
+          if (parts[1]) {
+            redis.serverInfo[parts[0]] = parts[1];
+          }
+        }
+        redis.ping((err, res) => {
+          if (err) {
+            if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
+              err.message = 'Redis 错误：访问被拒绝。请检查密码是否正确。';
+            }
+            if (err.message !== 'Connection is closed.') {
+              alert(err.message);
+              redis.disconnect();
+            }
             return;
+          }        
+          const version = redis.serverInfo.redis_version;
+          if (version && version.length >= 5) {
+            const versionNumber = Number(version[0] + version[2]);
+            if (versionNumber < 28) {
+              alert('Medis 只支持 Redis 版本 >= 2.8 是因为小于 2.8 版本的，不支持 SCAN 命令, which means it not possible to access keys without blocking Redis.');
+              dispatch(disconnect());
+              return;
+            }
           }
-        }
-        next({redis, config, index: getIndex(getState)});
-      })
+          next({redis, config, index: getIndex(getState)});
+        })
+      })      
     });
     redis.once('error', function (error) {
       redisErrorMessage = error;
@@ -145,11 +182,11 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
         if (redisErrorMessage) {
           msg += `(${redisErrorMessage})`;
         }
-        alert(msg);
       }
       Notification.requestPermission(function(permission) {
-        var redisNotification=new Notification('Medis连接成功',{
+        var redisNotification=new Notification('Medis退出连接',{
           body: '退出连接['+config.host+':'+config.port+']成功'+(msg?'.退出原因：'+msg:'')+'!',
+          icon: '../../icns/Icon1024.png',
           silent: true
         })
       }); 

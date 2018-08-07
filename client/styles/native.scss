@@ -2,40 +2,45 @@
   box-sizing: border-box;
   position: relative;
   cursor: default;
-  background-color: rgba(0, 0, 0, .04);
+  background-color: rgba(0, 0, 0, 0.08);
   border-width: 1px;
   border-style: solid;
   border-top-color: rgba(0, 0, 0, .07);
   border-left-color: rgba(0, 0, 0, .037);
   border-right-color: rgba(0, 0, 0, .037);
   border-bottom-color: rgba(0, 0, 0, .026);
-  border-radius: 4px;
-  padding: 23px 18px 22px 18px;
+  border-radius: 12px;
+  padding: 0px 18px 22px 18px;
 }
 
 .nt-form-row, .form-control {
   padding: 5px 0;
-  $label-width: 140px;
+  $label-width: 160px;
   label {
     float: left;
     width: $label-width;
     text-align: right;
     -webkit-user-select: text;
   }
+  textarea{
+    resize: none;
+  }
   input, textarea, select {
     margin-left: 10px;
   }
-  input[type="text"], input[type="number"], input[type="password"], select {
+  input[type="text"], input[type="number"], input[type="password"], select,textarea {
     width: 250px;
     -webkit-user-select: text;
     border-width: 1px;
+    min-height:24px;
     border-style: solid;
+    border-radius: 4px;
     border-color: #b0b0b0;
     border-left-color: #b1b1b1;
     border-right-color: #b1b1b1;
     box-shadow: inset 0 0 0 1px #f0f0f0;
     padding-top: 4px;
-    padding-bottom: 1px;
+    padding-bottom: 2px;
     padding-left: 3.5px;
     padding-right: 3.5px;
     line-height: 14px;
@@ -80,6 +85,7 @@
   cursor: default;
   background-color: #ffffff;
   outline: none;
+  height:25px;
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;

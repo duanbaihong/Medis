@@ -13,7 +13,10 @@ class Terminal extends React.PureComponent {
   }
 
   componentDidMount() {
-    const {redis} = this.props
+    const {redis,config} = this.props
+    let cmdName=(redis.serverInfo.redis_mode=='standalone'?'redis':redis.serverInfo.redis_mode)
+    console.log(redis.serverInfo.redis_mode)
+    cmdName=cmdName.substring(0,1).toUpperCase()+cmdName.substring(1)
     redis.on('select', this.onSelectBinded)
     const terminal = this.terminal = $(this.refs.terminal).terminal((command, term) => {
       if (!command) {
@@ -52,10 +55,8 @@ class Terminal extends React.PureComponent {
         )
       },
       name: this.props.connectionKey,
-      height: '100%',
-      width: '100%',
-      outputLimit: 200,
-      prompt: `[[;#fff;]redis> ]`,
+      outputLimit: 600,
+      prompt: `[[;#fff;]`+cmdName+`> ]`,
       keydown(e) {
         if (!terminal.enabled()) {
           return true
@@ -80,7 +81,7 @@ class Terminal extends React.PureComponent {
           }
         }
       }
-    })
+    });
   }
 
   onSelect(db) {

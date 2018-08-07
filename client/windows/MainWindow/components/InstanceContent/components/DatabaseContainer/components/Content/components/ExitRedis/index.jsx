@@ -28,7 +28,7 @@ class ExitRedis extends React.Component{
       <div className={this.props.cstyle?this.props.cstyle:'exitredis'} onClick={()=>{
         this.disconnRedis()        
       }}>
-        <span className="icon icon-cancel-circled"/>
+        <span className="icon icon-logout"/>
         退出连接
       </div>
     )

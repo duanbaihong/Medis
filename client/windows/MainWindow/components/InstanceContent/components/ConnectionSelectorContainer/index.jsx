@@ -6,7 +6,7 @@ import Favorite from './components/Favorite'
 import Config from './components/Config'
 import store from 'Redux/store'
 import {connectToRedis,disconnect} from 'Redux/actions'
-import {removeFavorite, updateFavorite, createFavorite, reorderFavorites} from 'Redux/actions'
+import {removeFavorite, updateFavorite, createFavorite, reorderFavorites, exportFavorite, importFavorite} from 'Redux/actions'
 
 class ConnectionSelector extends PureComponent {
   constructor() {
@@ -59,7 +59,9 @@ const mapDispatchToProps = {
   createFavorite,
   connectToRedis,
   reorderFavorites,
-  removeFavorite
+  removeFavorite,
+  exportFavorite,
+  importFavorite
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectionSelector)

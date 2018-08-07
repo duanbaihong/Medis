@@ -27,18 +27,14 @@ export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}
   if (instance.get('redis')){
     instance.get('redis').emit('end',false);
     Notification.requestPermission(function(permission) {
-        console.log(permission)
-        redisNotification=new Notification('Medis退出成功',{
+        let redisNotification=new Notification('Medis退出成功',{
           body: '退出Redis实例'+instance.get('key')+'['+targetIndex+']成功!'
         })
       }); 
   }
-
   const ret = {activeInstanceKey, targetIndex}
-
   if (key === activeInstanceKey) {
     const item = instances.get(targetIndex + 1) || (targetIndex > 0 && instances.get(targetIndex - 1))
-
     // console.log('still', item, targetIndex, instances.size)
     if (item) {
       ret.activeInstanceKey = item.get('key')
@@ -47,6 +43,5 @@ export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}
       return;
     }
   }
-
   next(ret)
 })

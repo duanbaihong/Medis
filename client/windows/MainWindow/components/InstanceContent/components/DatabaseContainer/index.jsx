@@ -10,26 +10,18 @@ require('./index.scss')
 class Database extends React.PureComponent {
   constructor() {
     super()
-    this.$window = $(window)
-
+    this.$window=$(window)
     this.state = {
       sidebarWidth: 260,
       key: null,
       db: 0,
       version: 0,
       metaVersion: 0,
-      clientHeight: this.$window.height() - $('.tab-group').height(),
       pattern: '',
-      tab: '内容(Content)'
+      tab: '内容(Content)',
+      clientHeight: this.$window.height() - $('.tab-group').height()-66
     }
   }
-
-
-  handleTabChange(tab) {
-    // this.props.onSelectTab(tab)
-    this.setState(tab)
-  }
-
   componentDidMount() {
     this.updateLayoutBinded = this.updateLayout.bind(this)
     $(window).on('resize', this.updateLayoutBinded)
@@ -42,8 +34,13 @@ class Database extends React.PureComponent {
 
   updateLayout() {
     this.setState({
-      clientHeight: this.$window.height() - $('.tab-group').height()
+      clientHeight: this.$window.height() - $('.tab-group').height()-66
     })
+  }
+
+  handleTabChange(tab) {
+    // this.props.onSelectTab(tab)
+    this.setState(tab)
   }
 
   handleCreateKey(key) {
@@ -51,17 +48,21 @@ class Database extends React.PureComponent {
   }
 
   render() {
-    return (<SplitPane
-      className="pane-group"
-      split="vertical"
-      minSize={250}
-      defaultSize={260}
-      ref="node"
-      onChange={size => {
-        this.setState({sidebarWidth: size})
-      }}
-      >
-      <KeyBrowser
+    let {redis,config}=this.props
+    const content=(<Content
+        height={this.state.clientHeight}
+        keyName={this.state.key}
+        version={this.state.version}
+        metaVersion={this.state.metaVersion}
+        connectionKey={this.props.connectionKey}
+        redis={this.props.redis}
+        config={this.props.config}
+        db={this.state.db}
+        onDatabaseChange={db => this.setState({db})}
+        onSelectTab={this.handleTabChange.bind(this)}
+        tab={this.state.tab}
+        />)
+    const keybrow=(<KeyBrowser
         patterns={this.props.patterns}
         pattern={this.state.pattern}
         height={this.state.clientHeight}
@@ -75,27 +76,31 @@ class Database extends React.PureComponent {
         onKeyMetaChange={() => this.setState({metaVersion: this.state.metaVersion + 1})}
         onSelectTab={this.handleTabChange.bind(this)}
         tab={this.state.tab}
-        />
-      <Content
-        height={this.state.clientHeight}
-        keyName={this.state.key}
-        version={this.state.version}
-        metaVersion={this.state.metaVersion}
-        connectionKey={this.props.connectionKey}
-        redis={this.props.redis}
-        db={this.state.db}
-        onDatabaseChange={db => this.setState({db})}
-        onSelectTab={this.handleTabChange.bind(this)}
-        tab={this.state.tab}
-        />
-    </SplitPane>)
-  }
+        />)
+    return (config.toJS().curmodel!='sentinel' && this.props.redis.serverInfo.redis_mode!='sentinel')?(
+      <SplitPane
+      className="pane-group"
+      split="vertical"
+      minSize={250}
+      defaultSize={260}
+      ref="node"
+      onChange={size => {
+        this.setState({sidebarWidth: size})
+      }}
+      >
+      {keybrow}
+      {content}
+    </SplitPane>):(
+      <div className='pane-group'>{content}</div>
+    )
+  } 
 }
 
 function mapStateToProps(state, {instance}) {
   return {
     patterns: state.patterns,
     redis: instance.get('redis'),
+    config: instance.get('config'),
     connectionKey: instance.get('connectionKey')
   }
 }

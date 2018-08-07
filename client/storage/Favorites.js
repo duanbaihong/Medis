@@ -9,7 +9,6 @@ export function get() {
 
 export function set(favorites) {
   localStorage.setItem('favorites', JSON.stringify(favorites))
-
   ipcRenderer.send('dispatch', 'reloadFavorites')
   return favorites
 }

@@ -98,9 +98,12 @@ class HashContent extends BaseContent {
       }
     })
   }
-
+  componentWillUnmount() {
+    this._isMounted=false;
+  }
   componentDidMount() {
     super.componentDidMount()
+    this._isMounted=true;
     $.contextMenu({
       context: ReactDOM.findDOMNode(this.refs.table),
       selector: '.' + this.randomClass,

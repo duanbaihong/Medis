@@ -1,6 +1,8 @@
 'use strict';
 
 const {app, BrowserWindow} = require('electron');
+const url = require('url');
+const path = require('path');
 const EventEmitter = require('events');
 
 class WindowManager extends EventEmitter {
@@ -23,19 +25,29 @@ class WindowManager extends EventEmitter {
       backgroundColor: '#ececec'
     };
     if (type === 'main') {
-      option.width = 960;
+      option.width = 1020;
       option.height = 600;
       option.show = false;
-      option.minWidth = 840;
-      option.minHeight = 400;
+      option.minWidth = 940;
+      option.autoHideMenuBar=true;
+      option.icon='../../icns/Icon1024.png'
+      // option.webPreferences = {
+      //   nodeIntegrationInWorker: true
+      // };
     } else if (type === 'patternManager') {
-      option.width = 600;
+      option.width = 700;
       option.height = 300;
       option.title = '管理过滤正则';
       option.show=false;
       option.alwaysOnTop = true;
       option.resizable = true;
       option.modal = true;
+      option.autoHideMenuBar=true;
+      option.parent= 'top';
+      option.icon='../../icns/Icon1024.png',
+      option.webPreferences = {
+        nodeIntegrationInWorker: true
+      };
       option.fullscreen = false;
       option.minimizable = false;
       option.maximizable = false;
@@ -45,7 +57,14 @@ class WindowManager extends EventEmitter {
       return false
     }
     const newWindow = new BrowserWindow(option);
-    newWindow.loadURL(`file://${__dirname}/windows/${type}.html${arg ? '?arg=' + arg : ''}`);
+    var loadurl=url.format({
+        pathname: path.join(__dirname, `/windows/${type}.html`),
+        protocol: 'file:',
+        slashes: true,
+        search: (arg ? '?arg=' + arg : '')
+        })
+    console.log(loadurl);
+    newWindow.loadURL(loadurl);
     this._register(newWindow);
     if (!option.show) {
       newWindow.once('ready-to-show', () => {
