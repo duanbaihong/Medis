@@ -167,6 +167,7 @@ class Config extends React.Component {
           {name: 'second-repl-offset'},
           {name: 'second-repl-offset'},
           {name: 'slave-expires-tracked-keys'},
+          {name: 'slave-lazy-flush', type: 'boolean'},
         ]
       },
       {
@@ -183,7 +184,8 @@ class Config extends React.Component {
           {name: 'maxclients'},
           {name: 'maxmemory'},
           {name: 'maxmemory-policy', type: ['noeviction', 'volatile-lru', 'allkeys-lru', 'volatile-random', 'allkeys-random', 'volatile-ttl']},
-          {name: 'maxmemory-samples', type: 'number'}
+          {name: 'maxmemory-samples', type: 'number'},
+          {name: 'client-query-buffer-limit', type: 'number'}
         ]
       },
       {
@@ -219,6 +221,7 @@ class Config extends React.Component {
           {name: 'aof-rewrite-buffer-length',type: 'number'},
           {name: 'aof-pending-bio-fsync',type: 'number'},
           {name: 'aof-delayed-fsync',type: 'number'},
+          {name: 'aof-use-rdb-preamble', type: 'boolean'},
         ]
       },
       {
@@ -249,6 +252,7 @@ class Config extends React.Component {
           {name: 'cluster-stats-messages-update-sent'},
           {name: 'cluster-stats-messages-fail-sent'},
           {name: 'cluster-stats-messages-fail-received'},
+          {name: 'cluster-slave-no-failover', type: 'boolean'},
         ]
       },
       {

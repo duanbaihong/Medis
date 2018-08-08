@@ -146,7 +146,7 @@ class Favorite extends React.PureComponent {
           if(instancesBar.css('display') !== 'none'){
               instancesBarHeight=26
           }
-          menu.css({'top':btnMenu.offset().top-menu.height()-2-instancesBarHeight,'left':btnMenu.offset().left-menu.width()+btnMenu.width()})
+          menu.css({'top':btnMenu.offset().top-menu.height()-instancesBarHeight,'left':btnMenu.offset().left-menu.width()+btnMenu.width()})
         }}></div>
           <div 
           ref="export"

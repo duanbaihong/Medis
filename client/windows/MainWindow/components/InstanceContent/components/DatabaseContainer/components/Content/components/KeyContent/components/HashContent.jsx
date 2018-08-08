@@ -171,7 +171,7 @@ class HashContent extends BaseContent {
           <Column
             header={
               <AddButton
-                title="key" onClick={() => {
+                title="成员" onClick={() => {
                   showModal({
                     button: '插入成员',
                     form: {
