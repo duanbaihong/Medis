@@ -157,10 +157,10 @@ class Config extends React.PureComponent {
     const tagHtml=tags.map(style=>(
         <span 
           key={style}
-          className={'favorite-circle '+style+((style==this.getProp('tag') && this.getProp('tag')!='favorite-closetag')?' favorite-circle-choise':'')} 
+          className={'favorite-circle '+(style=='favorite-closetag'?"icon icon-arrows-ccw ":"")+style+((style==this.getProp('tag') && this.getProp('tag')!='favorite-closetag')?' favorite-circle-choise':'')} 
           onClick={()=>{
             this.setProp('tag',style=='favorite-closetag'?'':style)
-          }}>{style=='favorite-closetag'?'X':''}</span>
+          }} ></span>
       ))
     const portHtml=(
         <div className="nt-form-row">
@@ -171,7 +171,8 @@ class Config extends React.PureComponent {
             placeholder={this.getProp('curmodel')=='sentinel'?"26379":"6379"}/>
         </div>)
     const cluster_host=(
-           <div className="nt-form-row" style={{height:"68px"}}>
+          <div className={this.getProp('curmodel')==='cluster' ? 'connect_address_hidden connect_address_shown' : 'connect_address_hidden'}>
+           <div className="nt-form-row">
             <label htmlFor='host'>{modelEn[this.getProp('curmodel')] || "标准"}地址:</label>
             <textarea type="text" 
               readOnly={true}
@@ -186,7 +187,8 @@ class Config extends React.PureComponent {
               placeholder='host1:port1,host2:port2,.....' >
             </textarea>
             <button onClick={this.addMulihost.bind(this)} className="icon icon-plus add-host"></button>
-          </div>)
+          </div>
+        </div>)
     const default_host=(
         <div className="nt-form-row">
           <label htmlFor='host'>{modelEn[this.getProp('curmodel')] || "标准"}地址:</label>
@@ -222,13 +224,15 @@ class Config extends React.PureComponent {
               集群模式
           </span>
         </div>
-        <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none'}}>
-          <label htmlFor="name">连接名称:</label>
-          <input type="text" id="name" value={this.getProp('name')} onChange={this.handleChange.bind(this, 'name')} placeholder="Bookmark name"/>
-        </div>
-        <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none',paddingLeft: '10px'}}>
-          <label></label>
-          {tagHtml}
+        <div className={this.props.favorite ? 'connect_name_hidden connect_name_shown' : 'connect_name_hidden'}>
+          <div className="nt-form-row">
+            <label htmlFor="name">连接名称:</label>
+            <input type="text" id="name" value={this.getProp('name')} onChange={this.handleChange.bind(this, 'name')} placeholder="Bookmark name"/>
+          </div>
+          <div className="nt-form-row" style={{paddingLeft: '10px'}}>
+            <label></label>
+            {tagHtml}
+          </div>
         </div>
         {this.getProp('curmodel')==='cluster'?cluster_host:default_host}
         {(this.getProp('curmodel')!='cluster' || (!this.props.favorite && this.getProp('curmodel')=='' ))?portHtml:''}
@@ -240,7 +244,7 @@ class Config extends React.PureComponent {
           <label htmlFor="ssl">启用SSL:</label>
           <input type="checkbox" id="ssl" onChange={this.handleChange.bind(this, 'ssl')} checked={this.getProp('ssl')}/>
         </div>
-        <div style={{display: this.getProp('ssl') ? 'block' : 'none'}}>
+        <div className={this.getProp('ssl')?'connect_ssl_hidden connect_ssl_shown':"connect_ssl_hidden"}>
           {this.renderCertInput('私钥Key', 'tlskey')}
           {this.renderCertInput('证书Certificate', 'tlscert')}
           {this.renderCertInput('根证书CA', 'tlsca')}
@@ -249,7 +253,7 @@ class Config extends React.PureComponent {
           <label htmlFor="ssh">SSH隧道:</label>
           <input type="checkbox" id="ssh" onChange={this.handleChange.bind(this, 'ssh')} checked={this.getProp('ssh')}/>
         </div>
-        <div style={{display: this.getProp('ssh') ? 'block' : 'none'}}>
+        <div className={this.getProp('ssh')?'connect_cert_hidden connect_cert_shown':"connect_cert_hidden"} >
           <div className="nt-form-row">
             <label htmlFor="sshHost">SSH主机地址:</label>
             <input type="text" id="sshHost" placeholder="SSH主机地址" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} />

@@ -107,6 +107,46 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius:5px;
     border-right: 1px solid #AEB0B5;
-  }
-  
+  } 
 }
+.connect_ssl_hidden{
+  height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  transition: all .4s ease-in-out;
+  }
+.connect_ssl_shown{
+  opacity: 1;
+  height: 100px;
+ } 
+.connect_cert_hidden{
+  height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  transition: all .5s ease-in-out;
+  }
+.connect_cert_shown{
+  opacity: 1;
+  height: 131px;
+ }
+.connect_name_hidden{
+  height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  transition: all .3s ease-in-out;
+  }
+.connect_name_shown{
+  opacity: 1;
+  height: 61px;
+ } 
+
+.connect_address_hidden{
+  height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  transition: all .4s ease-in-out;
+  }
+.connect_address_shown{
+  opacity: 1;
+  height: 68px;
+ } 

@@ -655,16 +655,22 @@ textarea {
     display: inline-block;
     margin-right: 5px;
     border: 1px solid #B6BABF;
+    box-shadow: 0 0 0 0px #fff;
+    transition: all ease-out 200ms;
 }
 .favorite-circle:hover{
-    border: 2px solid #9A9C9E;
+    border: 1px solid #9A9C9E;
     box-shadow: 0 0 4px #E6E9E9 inset;
     cursor: pointer; 
+    box-shadow: 0 0 3px 2px #fff;
+    transform: scale(1.1,1.1);
 }
 .favorite-circle-choise{
-    border: 2px solid #9A9C9E;
+    border: 1px solid #9A9C9E;
     box-shadow: 0 0 4px #E6E9E9 inset;
     cursor: pointer; 
+    box-shadow: 0 0 3px 1px #fff;
+    transform: scale(1.1,1.1);
 }
 .favorite-closetag{
     text-align: center;

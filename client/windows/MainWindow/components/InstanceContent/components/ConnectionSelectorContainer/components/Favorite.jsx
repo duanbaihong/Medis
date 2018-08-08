@@ -108,11 +108,13 @@ class Favorite extends React.PureComponent {
       </nav>
       <footer className="toolbar toolbar-footer">      
         <button
+          className="icon icon-plus"
           onClick={() => {
             this.props.createFavorite({'curmodel':'standalone'})
           }}
-          >+</button>
+          ></button>
         <button
+          className="icon icon-minus"
           onClick={
           () => {
             const key = this.state.activeKey
@@ -130,7 +132,7 @@ class Favorite extends React.PureComponent {
             })
           }
         }
-          >-</button>
+          ></button>
         <button className='pull-right' onMouseLeave={()=>{
           if(this.state.exportKeyUp){
             this.setState({exportKeyUp: false})

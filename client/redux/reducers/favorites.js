@@ -10,7 +10,7 @@ import {Favorites} from '../../storage'
 import {Map, fromJS} from 'immutable'
 
 function FavoriteFactory(data) {
-  return Map(Object.assign({name: 'New Favorite'}, data))
+  return Map(Object.assign({name: '快速连接'}, data))
 }
 
 export const favorites = handleActions(fromJS(Favorites.get()), {
