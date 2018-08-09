@@ -22,36 +22,29 @@ class WindowManager extends EventEmitter {
       type = 'main';
     }
     const option = {
-      backgroundColor: '#ececec'
+      backgroundColor: '#ececec',
+      icon: '../../icns/Icon1024.png',
+      show: false,
+      autoHideMenuBar: true,
+      webPreferences: {
+        nodeIntegrationInWorker: true
+      }
     };
     if (type === 'main') {
       option.width = 1020;
       option.height = 600;
-      option.show = false;
       option.minWidth = 940;
-      option.autoHideMenuBar=true;
-      option.icon='../../icns/Icon1024.png'
-      option.webPreferences = {
-        nodeIntegrationInWorker: true
-      };
     } else if (type === 'patternManager') {
       option.width = 700;
       option.height = 300;
       option.title = '管理过滤正则';
-      option.show=false;
       option.alwaysOnTop = true;
       option.resizable = true;
       option.modal = true;
-      option.autoHideMenuBar=true;
       option.parent= 'top';
-      option.icon='../../icns/Icon1024.png',
-      option.webPreferences = {
-        nodeIntegrationInWorker: true
-      };
       option.fullscreen = false;
       option.minimizable = false;
       option.maximizable = false;
-      // option.frame: false;
     }
     if(this.windows.size>1){
       return false

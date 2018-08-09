@@ -23,7 +23,7 @@ export const disconnect = createAction('DISCONNECT', () => ({getState, next}) =>
 export const connectToRedis = createAction('CONNECT', config => ({getState, dispatch, next}) => {
   let sshErrorThrown = false
   let redisErrorThrown = false
-  let redisErrorMessage
+  let redisErrorMessage = ""
   let server
   let conn
   if(config.host == ""){
@@ -55,7 +55,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     }).on('error', err => {
       sshErrorThrown = true;
       dispatch(disconnect());
-      alert(`SSH 错误: ${err.message}`);
+      redisErrorMessage=`SSH 错误: ${err.message}`
     })
     try {
       const connectionConfig = {
@@ -77,7 +77,8 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       }
     } catch (err) {
       dispatch(disconnect());
-      alert(`SSH 错误: ${err.message}`);
+      redisErrorMessage=`SSH 错误: ${err.message}`
+      // alert(`SSH 错误: ${err.message}`);
     }
   } else {
     handleRedis(config);
@@ -122,16 +123,14 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       numberOfKeys: 2,
       lua: 'local dump = redis.call("dump", KEYS[1]) local pttl = 0 if ARGV[1] == "TTL" then pttl = redis.call("pttl", KEYS[1]) end return redis.call("restore", KEYS[2], pttl, dump)'
     });
-    redis.once('connect', function () {
+    redis.once('connect', function (err) {
       if(!redis.hasOwnProperty('serverInfo')){
           redis.serverInfo={}
         }
       redis.info(function(err,info) {
-        if (err) {
-          return callback(err);
-        }
         if (typeof info !== 'string') {
-          return callback(info);
+          // redis.disconnect()
+          return false;
         }
 
         var lines = info.split('\r\n');
@@ -144,10 +143,10 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
         redis.ping((err, res) => {
           if (err) {
             if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
-              err.message = 'Redis 错误：访问被拒绝。请检查密码是否正确。';
+              redisErrorMessage = 'Redis 错误：访问被拒绝。请检查密码是否正确。';
             }
             if (err.message !== 'Connection is closed.') {
-              alert(err.message);
+              alert(redisErrorMessage);
               redis.disconnect();
             }
             return;
@@ -166,9 +165,9 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       })      
     });
     redis.once('error', function (error) {
-      redisErrorMessage = error;
+      redisErrorMessage += error;
     });
-    redis.once('end', function (syselft=true) {
+    redis.once('end', function () {
       dispatch(disconnect());
       if(sshconn){
         sshconn.end();
@@ -176,21 +175,23 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if(netserver){
         netserver.close();
       }
-      let msg
-      if (!sshErrorThrown && syselft) {
-        let msg = 'Redis 错误: 连接失败Connection failed. ';
-        if (redisErrorMessage) {
-          msg += `(${redisErrorMessage})`;
-        }
-      }
+      console.log(redisErrorMessage,sshErrorThrown)
       Notification.requestPermission(function(permission) {
-        var redisNotification=new Notification('Medis退出连接',{
-          body: '退出连接['+config.host+':'+config.port+']成功'+(msg?'.退出原因：'+msg:'')+'!',
-          icon: '../../icns/Icon1024.png',
-          silent: true
-        })
+        if(redisErrorMessage){
+          var redisNotification=new Notification('Medis连接失败',{
+            body: `连接[${config.host}:${config.port}]失败！失败原因：\n${redisErrorMessage}!`,
+            icon: '../../icns/Icon1024.png',
+            silent: true
+          })
+        }else{
+            var redisNotification=new Notification('Medis退出连接',{
+            body: `退出连接[${config.host}:${config.port}]成功!`,
+            icon: '../../icns/Icon1024.png',
+            silent: true
+          })
+        }
       }); 
-      console.log('退出连接['+config.host+':'+config.port+']成功'+(msg?'.退出原因：'+msg:'')+'!')
+      console.log('退出连接['+config.host+':'+config.port+']'+(redisErrorMessage?'.退出原因：'+redisErrorMessage:'')+'!')
     });
   }
 })
