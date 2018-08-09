@@ -105,7 +105,8 @@ class Config extends React.Component {
           {name: 'tcp-keepalive', type: 'number'},
           {name: 'timeout', type: 'number'},
           {name: 'databases', type: 'number'},
-          {name: 'atomicvar-api'}
+          {name: 'atomicvar-api'},  
+          {name: 'supervised',type: 'boolean'}
         ]
       },
       {
@@ -167,7 +168,7 @@ class Config extends React.Component {
           {name: 'second-repl-offset'},
           {name: 'second-repl-offset'},
           {name: 'slave-expires-tracked-keys'},
-          {name: 'slave-lazy-flush', type: 'boolean'},
+          {name: 'slave-lazy-flush', type: 'boolean'}
         ]
       },
       {
@@ -221,7 +222,8 @@ class Config extends React.Component {
           {name: 'aof-rewrite-buffer-length',type: 'number'},
           {name: 'aof-pending-bio-fsync',type: 'number'},
           {name: 'aof-delayed-fsync',type: 'number'},
-          {name: 'aof-use-rdb-preamble', type: 'boolean'},
+          {name: 'aof-rewrite-incremental-fsync', type: 'boolean'},
+          {name: 'aof-use-rdb-preamble', type: 'boolean'}
         ]
       },
       {
@@ -252,7 +254,8 @@ class Config extends React.Component {
           {name: 'cluster-stats-messages-update-sent'},
           {name: 'cluster-stats-messages-fail-sent'},
           {name: 'cluster-stats-messages-fail-received'},
-          {name: 'cluster-slave-no-failover', type: 'boolean'},
+          {name: 'cluster-announce-ip',type:'number'},
+          {name: 'cluster-slave-no-failover', type: 'boolean'}
         ]
       },
       {
@@ -319,6 +322,7 @@ class Config extends React.Component {
           {name: 'used-memory-dataset'},
           {name: 'used-memory-overhead'},
           {name: 'used-memory-startup'},
+          {name: 'activedefrag',  type: 'boolean'}
         ]
       },
       {
@@ -397,8 +401,10 @@ class Config extends React.Component {
           {name: 'activerehashing', type: 'boolean'},
           {name: 'client-output-buffer-limit'},
           {name: 'hz', type: 'number'},
-          {name: 'aof-rewrite-incremental-fsync', type: 'boolean'},
-          {name: 'list-compress-depth'}
+          {name: 'list-compress-depth'},
+          {name: 'lazyfree-lazy-server-del', type: 'boolean'},
+          {name: 'lazyfree-lazy-expire', type: 'boolean'},
+          {name: 'lazyfree-lazy-eviction', type: 'boolean'}
         ]
       }
     ]

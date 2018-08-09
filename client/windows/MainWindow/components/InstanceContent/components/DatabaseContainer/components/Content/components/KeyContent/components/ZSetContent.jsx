@@ -180,7 +180,7 @@ class ZSetContent extends BaseContent {
           <Column
             header={
               <SortHeaderCell
-                title="score"
+                title="序号"
                 onOrderChange={desc => this.setState({
                   desc,
                   selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
@@ -228,23 +228,23 @@ class ZSetContent extends BaseContent {
           <Column
             header={
               <AddButton
-                title="member" onClick={() => {
+                title="成员" onClick={() => {
                   showModal({
                     button: '插入成员',
                     form: {
                       type: 'object',
                       properties: {
-                        'Value:': {
+                        '值:': {
                           type: 'string'
                         },
-                        'Score:': {
+                        '序号:': {
                           type: 'number'
                         }
                       }
                     }
                   }).then(res => {
-                    const data = res['Value:']
-                    const score = res['Score:']
+                    const data = res['值:']
+                    const score = res['序号:']
                     return this.props.redis.zscore(this.state.keyName, data).then(rank => {
                       if (rank !== null) {
                         const error = 'Member already exists'
@@ -273,7 +273,7 @@ class ZSetContent extends BaseContent {
               const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
               if (!member) {
                 this.load(rowIndex)
-                return 'Loading...'
+                return '加载中...'
               }
               return <div className="overflow-wrapper"><span>{member[0]}</span></div>
             }}

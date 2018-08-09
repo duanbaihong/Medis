@@ -26,26 +26,8 @@ app.on('activate', function (e, hasVisibleWindows) {
     windowManager.create();
   }
 });
-// var childrenMenu=new remote.Menu()
-// childrenMenu.append(new remote.MenuItem({
-//   label: "test",
-//   click(){
-//     console.log('test')
-//   }
-// },{
-//   type: 'separator'
-// },{
-//   label: 'MenuItem2',
-//   type: 'checkbox', 
-//   checked: true
-// }))
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
+
 app.on('ready', function () {
-    Menu.setApplicationMenu(menu);
-    // window.addEventListener('contextmenu', (e) => {
-    // e.preventDefault()
-    // childrenMenu.popup(remote.getCurrentWindow())
-    // }, false)
+  Menu.setApplicationMenu(menu);
   windowManager.create();
 });

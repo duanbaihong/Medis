@@ -184,13 +184,13 @@ class SetContent extends BaseContent {
                     form: {
                       type: 'object',
                       properties: {
-                        'Value:': {
+                        '值:': {
                           type: 'string'
                         }
                       }
                     }
                   }).then(res => {
-                    const data = res['Value:']
+                    const data = res['值:']
                     return this.props.redis.sismember(this.state.keyName, data).then(exists => {
                       if (exists) {
                         const error = '成员已经存在。'

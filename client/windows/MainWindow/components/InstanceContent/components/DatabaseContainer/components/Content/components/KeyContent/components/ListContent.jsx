@@ -200,12 +200,12 @@ class ListContent extends BaseContent {
                       properties: {
                         '插入到:': {
                           type: 'string',
-                          enum: ['head', 'tail']
+                          enum: ['前', '后']
                         }
                       }
                     }
                   }).then(res => {
-                    return res['插入到:'] === 'head' ? 'lpush' : 'rpush'
+                    return res['插入到:'] === '前' ? 'lpush' : 'rpush'
                   }).then(method => {
                     const data = '新成员'
                     this.props.redis[method](this.state.keyName, data).then(() => {

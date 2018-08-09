@@ -22,6 +22,11 @@ class Database extends React.PureComponent {
       clientHeight: this.$window.height() - $('.tab-group').height()-66
     }
   }
+  componentWillMount() {
+    if (this.props.config.toJS().curmodel=='sentinel'){
+      this.setState({tab:"终端(Terminal)"})
+    }
+  }
   componentDidMount() {
     this.updateLayoutBinded = this.updateLayout.bind(this)
     $(window).on('resize', this.updateLayoutBinded)

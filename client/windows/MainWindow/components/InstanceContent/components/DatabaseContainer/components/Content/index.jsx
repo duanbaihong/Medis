@@ -82,6 +82,7 @@ class Content extends React.PureComponent {
       <TabBar
         onSelectTab={this.props.onSelectTab}
         redis={this.props.redis}
+        config={this.props.config}
         tab={this.props.tab}
         />
         {contentValue}
