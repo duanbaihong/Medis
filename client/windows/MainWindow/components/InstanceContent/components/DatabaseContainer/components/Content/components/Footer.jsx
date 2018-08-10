@@ -73,6 +73,7 @@ class Footer extends React.PureComponent {
   }
 
   render() {
+    let {redis}=this.props;
     const desc = ['size', 'encoding', 'ttl']
     .map(key => ({key, value: this.state[key]}))
     .filter(item => typeof item.value === 'string')
@@ -85,6 +86,7 @@ class Footer extends React.PureComponent {
           style={{margin: '0 5px'}}
           >{value}</span>)
       }
+      <span>当前模式:{redis.serverInfo.redis_mode}</span>
     </footer>)
   }
 }

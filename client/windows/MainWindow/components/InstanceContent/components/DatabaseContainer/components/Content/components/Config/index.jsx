@@ -255,7 +255,9 @@ class Config extends React.Component {
           {name: 'cluster-stats-messages-fail-sent'},
           {name: 'cluster-stats-messages-fail-received'},
           {name: 'cluster-announce-ip',type:'number'},
-          {name: 'cluster-slave-no-failover', type: 'boolean'}
+          {name: 'cluster-slave-no-failover', type: 'boolean'},
+          {name: 'cluster-announce-port',type:'number'},
+          {name: 'cluster-announce-bus-port',type:'number'},
         ]
       },
       {
@@ -415,9 +417,12 @@ class Config extends React.Component {
     }
     this.load()
   }
-  redismodel(model){
-    let redis=this.props.redis
-    if(model=='sentinel' || redis.serverInfo.redis_mode=='sentinel'){
+  redismodel(){
+    let {redis}=this.props
+    let cnf=this.props.config.toJS()
+    // let model=(cnf.curmodel != undefined?cnf.curmodel:'')
+    let model=redis.serverInfo.redis_mode
+    if(model=='sentinel' && redis.serverInfo.redis_mode=='sentinel'){
       return redis.sentinel('masters');
     }else if(redis.serverInfo.redis_mode=='cluster' && model != ''){
       return redis.cluster('info');
@@ -426,19 +431,17 @@ class Config extends React.Component {
     }
   }
   load(reload=false) {
-    let redis=this.props.redis
+    let {redis}=this.props
     const configs = {}
     ///////
-    let cnf=this.props.config.toJS()
-    let model=(cnf.curmodel != undefined?cnf.curmodel:'')
     let configtmp={}
-    this.redismodel(model).then(config1 =>{
-      let redismode=redis.serverInfo.redis_mode
-      let fI=(redismode=='cluster'?1:2)
-      config1=(redismode=='sentinel'?config1[0]:(redismode=='cluster'?config1.split('\n'):config1))
+    this.redismodel().then(config1 =>{
+      let model=redis.serverInfo.redis_mode;
+      let fI=(model=='cluster'?1:2)
+      config1=(model=='sentinel'?config1[0]:(model=='cluster'?config1.split('\n'):config1))
       for (let i = 0; i < config1.length - 1; i += fI) {
-        if (redismode!= 'sentinel' && config1[i] == 'port') continue;
-        if(redismode == 'cluster'){
+        if (model!= 'sentinel' && config1[i] == 'port') continue;
+        if(model == 'cluster'){
           var sVal=config1[i].replace(/_/g,"-").split(":")
           if (sVal[0]== undefined) continue;
           configs[sVal[0]] = sVal[1]
@@ -468,7 +471,6 @@ class Config extends React.Component {
           }
         })})
       }
-
       this.setState({
         groups,
         unsavedConfigs: {},

@@ -11,7 +11,7 @@ packager({
   electronVersion: pkg.electronVersion,
   icon: path.join(__dirname, '..', 'icns', 'MyIcon'),
   out: path.join(__dirname, '..', 'out'),
-  platform: 'linux',
+  platform: process.platform,
   appBundleId: `dbh.duanbaihong.${pkg.name}`,
   appCategoryType: 'public.app-category.developer-tools',
   osxSign: {
@@ -27,8 +27,9 @@ packager({
   const app = path.join(res[0], `${pkg.productName}`)
   switch(process.platform){
     case "darwin":
-      console.log('flating...', app+".app")
-      flat({ app+".app" }, function done (err) {
+      app=path.join(app,'.app');
+      console.log('flating...', app)
+      flat({ app}, function done (err) {
         if (err) {
           throw err
         }

@@ -38,21 +38,22 @@ class App extends React.Component {
         }</div>
         <footer>
           <button
+            className="icon icon-plus"
             onClick={() => {
               const index = patterns.size
               this.props.createPattern(connectionKey)
               this.setState({index})
             }}
-            >+</button>
+            ></button>
           <button
-            className={activePattern ? '' : 'is-disabled'}
+            className={"icon icon-minus "+(activePattern ? '' : 'is-disabled')}
             onClick={() => {
               if (activePattern) {
                 this.props.removePattern(connectionKey, this.state.index)
                 this.setState({index: this.state.index > 0 ? this.state.index - 1 : 0})
               }
             }}
-            >-</button>
+            ></button>
         </footer>
       </div>
       <div

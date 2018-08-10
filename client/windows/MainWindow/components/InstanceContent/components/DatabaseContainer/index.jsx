@@ -23,7 +23,19 @@ class Database extends React.PureComponent {
     }
   }
   componentWillMount() {
-    if (this.props.config.toJS().curmodel=='sentinel'){
+    let {redis,config}=this.props;
+    if(config.toJS().curmodel!=redis.serverInfo.redis_mode){
+      showModal({
+        title: '连接警告?',
+        button: ['是','否'],
+        content: `你选择连接模式${config.toJS().curmodel}与当前连接实例模式${redis.serverInfo.redis_mode}不一致！你是否要继续？`
+      }).then(() => {
+
+      }).catch((e)=>{
+        redis.emit('end',false);
+      })
+    }
+    if (config.toJS().curmodel=='sentinel'){
       this.setState({tab:"终端(Terminal)"})
     }
   }

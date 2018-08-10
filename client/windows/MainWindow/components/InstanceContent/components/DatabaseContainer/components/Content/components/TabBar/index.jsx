@@ -19,9 +19,15 @@ class Content extends React.PureComponent {
 
   }
   render() {
+    let {config} = this.props;
     return (<div className="TabBar">
       {
-        this.tabs.map(tab => {
+        this.tabs.filter(value=>{
+          if ( config.toJS().curmodel=='sentinel' && value[0]=='内容(Content)'){
+            return false
+          }
+          return true;
+        }).map(tab => {
           return (<div
             className={'item' + (tab[0] === this.props.tab ? ' is-active' : '')}
             key={tab[1]}

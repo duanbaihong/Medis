@@ -246,7 +246,7 @@ h5 {
 }
 .btn {
     display: inline-block;
-    padding: 3px 8px;
+    padding: 2px 6px;
     margin-bottom: 0;
     line-height: 1.4;
     white-space: nowrap;
@@ -648,15 +648,14 @@ textarea {
     color:#FFFFFF;
 }
 .favorite-circle{
-    transition: all .3s;
     height: 17px;
     width: 17px;
+    transition: all .4s ease-out;
     border-radius: 17px;
     display: inline-block;
     margin-right: 5px;
     border: 1px solid #B6BABF;
-    box-shadow: 0 0 0 0px #fff;
-    transition: all ease-out 200ms;
+    /*box-shadow: 0 0 0 0px #fff;*/
 }
 .favorite-circle:hover{
     border: 1px solid #9A9C9E;

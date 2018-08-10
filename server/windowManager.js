@@ -35,11 +35,11 @@ class WindowManager extends EventEmitter {
       option.height = 600;
       option.minWidth = 940;
     } else if (type === 'patternManager') {
-      option.width = 700;
-      option.height = 300;
+      option.width = 600;
+      option.height = 270;
       option.title = '管理过滤正则';
       option.alwaysOnTop = true;
-      option.resizable = true;
+      option.resizable = false;
       option.modal = true;
       option.parent= 'top';
       option.fullscreen = false;
