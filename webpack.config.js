@@ -3,6 +3,7 @@
 const path = require('path')
 
 module.exports = {
+  mode: 'production',
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
     patternManager: './client/windows/PatternManagerWindow/entry.jsx'
@@ -15,20 +16,42 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx$/,
       exclude: /node_modules/,
-      loader: 'jsx-loader?harmony!babel?stage=0&ignore=buffer'
+      use:[
+        {
+          loader: 'jsx-loader',
+          options: {
+            harmony: true
+          }
+        },{
+          loader: "babel-loader",
+          options: {
+            ignore: "buffer",
+            // plugins: ["transform-runtime"],
+            presets: ["react","stage-0","es2015"],
+          }
+        }
+      ]
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel?stage=0&ignore=buffer'
+      use:[
+        {
+          loader: 'babel-loader',
+          options: {
+            ignore: "buffer",
+            // plugins: ["transform-runtime"],
+            presets: ["react","stage-0","es2015"],
+          }
+        }]
     }, {
       test: /\.scss$/,
-      loader: 'style!css!sass'
+      loader: 'style-loader!css-loader!sass-loader'
     }, {
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style-loader!css-loader'
     }, {
       test: /\.(png|jpg)$/,
       loader: "url-loader"
@@ -54,6 +77,9 @@ module.exports = {
       Redux: path.resolve(__dirname, 'client/redux/'),
       Utils: path.resolve(__dirname, 'client/utils/'),
     },
-    extensions: ['', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx']
+  },
+  performance: {
+    hints: process.env.NODE_ENV === 'production' ? "warning" : false
   }
 }

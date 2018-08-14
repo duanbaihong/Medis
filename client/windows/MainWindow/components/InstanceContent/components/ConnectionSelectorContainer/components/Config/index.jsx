@@ -84,6 +84,8 @@ class Config extends React.PureComponent {
   addMulihost(){
     showModal({
       button: '添加',
+      title: "集群节点添加",
+      description: "集群节点添加",
       form: {
         type: 'object',
         properties: {
@@ -94,29 +96,31 @@ class Config extends React.PureComponent {
           },
           port: {
             type: 'number',
-            minLength: 2,
+            minimum: 10,
+            maximum: 65535,
             default: (this.getProp('curmodel')=='sentinel'?'26379':'6379')
           }
-        }
+        },
+        required: ["host","port"]
       }
     }).then(res=>{
-      console.log(res)
       let hostreg=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
       let portreg=/\d{2,6}/
       
       if(this.getProp('host').match(res.host+":"+res.port)){
         alert("主机重复。")
-        return false;
+        console.log(this.props)
       }
       if(hostreg.test(res.host) && portreg.test(res.port)){
         this.setProp('host',(this.getProp('host')!=''?this.getProp('host')+','+res.host+":"+res.port:res.host+":"+res.port))
-        //////        
-
+        //////
       }else{
         alert('主机或端口设置不正确！');
         return false;
       }
-    }).catch(() => {})
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
   save() {

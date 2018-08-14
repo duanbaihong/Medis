@@ -7,16 +7,16 @@ const config = require('./webpack.config');
 const plugins = [];
 
 plugins.push(
-  new webpack.optimize.UglifyJsPlugin({
-    compressor: {
-      warnings: false
-    }
-  }),
-  new webpack.optimize.DedupePlugin(),
+  // new webpack.optimize.UglifyJsPlugin({
+  //   compress: {
+  //     warnings: false
+  //   }
+  // }),
+  new webpack.optimize.CommonsChunkPlugin(),
   new webpack.DefinePlugin({
     'process.env': { NODE_ENV: '"production"' }
   }),
-  new webpack.NoErrorsPlugin()
+  // new webpack.NoErrorsPlugin()
 );
 
 config.plugins = plugins;

@@ -22,8 +22,9 @@ class InstanceContent extends PureComponent {
       })
     }
   }
-  modalSubmit(result) {
-    this.promise.resolve(result)
+  async modalSubmit(result) {
+    let err=await this.promise.resolve(result)
+    console.log(err) 
     this.setState({modal: null})
     if (this.activeElement) {
       this.activeElement.focus()
@@ -39,7 +40,7 @@ class InstanceContent extends PureComponent {
   }
 
   componentWillUnmount() {
-    delete window.showModal
+    delete window.showModal;
   }
 
   render() {
