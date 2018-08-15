@@ -24,12 +24,11 @@ packager({
     throw err;
   }
 
-  const app = path.join(res[0], `${pkg.productName}`)
   switch(process.platform){
     case "darwin":
-      app=path.join(app,'.app');
+      const app = path.join(res[0], `${pkg.productName}.app`)
       console.log('flating...', app)
-      flat({ app}, function done (err) {
+      flat({app}, function done (err) {
         if (err) {
           throw err
         }
@@ -41,7 +40,8 @@ packager({
     case "freebsd":
     case "openbsd":
     case "sunos":
-      console.log("package complated! please to ["+app+"]")
+      const application = path.join(res[0], `${pkg.productName}`)
+      console.log("package complated! please to ["+application+"]")
       break;
     case "win32":
 
