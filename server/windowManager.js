@@ -27,7 +27,7 @@ class WindowManager extends EventEmitter {
       show: false,
       autoHideMenuBar: true,
       webPreferences: {
-        nodeIntegrationInWorker: true
+        nodeIntegration: true
       }
     };
     if (type === 'main') {
@@ -35,8 +35,8 @@ class WindowManager extends EventEmitter {
       option.height = 600;
       option.minWidth = 940;
     } else if (type === 'patternManager') {
-      option.width = 600;
-      option.height = 270;
+      option.width = 585;
+      option.height = 265;
       option.title = '管理过滤正则';
       option.alwaysOnTop = true;
       option.resizable = false;

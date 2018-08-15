@@ -28,9 +28,17 @@ module.exports = {
         },{
           loader: "babel-loader",
           options: {
-            ignore: "buffer",
-            // plugins: ["transform-runtime"],
-            presets: ["react","stage-0","es2015"],
+            ignore: ["buffer"],
+            presets: ["es2015","react",'stage-0'],
+            plugins: [
+              ["transform-runtime", 
+              {
+                "helpers": false,
+                "polyfill": false,
+                "regenerator": true,
+                "moduleName": "babel-runtime"
+              }
+            ]]
           }
         }
       ]
@@ -41,9 +49,17 @@ module.exports = {
         {
           loader: 'babel-loader',
           options: {
-            ignore: "buffer",
-            // plugins: ["transform-runtime"],
-            presets: ["react","stage-0","es2015"],
+            ignore: ["buffer"],
+            presets: ["es2015","react",'stage-0'],
+            plugins: [[
+              "transform-runtime", 
+              {
+                "helpers": false,
+                "polyfill": false,
+                "regenerator": true,
+                "moduleName": "babel-runtime"
+              }
+            ]]
           }
         }]
     }, {

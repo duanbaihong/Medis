@@ -12,10 +12,11 @@ plugins.push(
   //     warnings: false
   //   }
   // }),
-  new webpack.optimize.CommonsChunkPlugin(),
+  // new webpack.optimize.CommonsChunkPlugin(),
   new webpack.DefinePlugin({
     'process.env': { NODE_ENV: '"production"' }
   }),
+  new webpack.NoEmitOnErrorsPlugin(),
   // new webpack.NoErrorsPlugin()
 );
 

@@ -102,22 +102,25 @@ class Config extends React.PureComponent {
           }
         },
         required: ["host","port"]
+      },
+      submit: (res) =>{
+        let hostreg=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
+        let portreg=/\d{2,6}/
+        
+        if(this.getProp('host').match(res.host+":"+res.port)){
+          alert("主机重复。")
+          return false;
+        }
+        if(hostreg.test(res.host) && portreg.test(res.port)){
+          this.setProp('host',(this.getProp('host')!=''?this.getProp('host')+','+res.host+":"+res.port:res.host+":"+res.port))
+          return true;
+        }else{
+          alert('主机或端口设置不正确！');
+          return false;
+        }
       }
     }).then(res=>{
-      let hostreg=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
-      let portreg=/\d{2,6}/
       
-      if(this.getProp('host').match(res.host+":"+res.port)){
-        alert("主机重复。")
-        console.log(this.props)
-      }
-      if(hostreg.test(res.host) && portreg.test(res.port)){
-        this.setProp('host',(this.getProp('host')!=''?this.getProp('host')+','+res.host+":"+res.port:res.host+":"+res.port))
-        //////
-      }else{
-        alert('主机或端口设置不正确！');
-        return false;
-      }
     }).catch((err) => {
       console.log(err)
     })
@@ -211,13 +214,13 @@ class Config extends React.PureComponent {
         <div className="connectModel">
           <span className={(this.getProp('curmodel')==='standalone' || (!this.props.favorite && this.getProp('curmodel')=='' ))?'active':''}
               onClick={()=>{
-                this.setProp('curmodel','standalone')
+                this.setProp({'curmodel':'standalone',host:'',port:''})
               }}>
               标准模式
           </span>
           <span className={this.getProp('curmodel')==='sentinel'?'active':''}
               onClick={()=>{
-                this.setProp('curmodel','sentinel')
+                this.setProp({'curmodel':'sentinel',host:'',port:''})
               }}>
               哨兵模式
           </span>

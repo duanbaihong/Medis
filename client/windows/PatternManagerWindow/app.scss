@@ -3,15 +3,12 @@
   border: 1px solid #c5c5c5;
   width: 210px;
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 15px;
+  left: 15px;
   height: 236px;
-
+  display: flex;
+  flex-direction: column;
   footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 208px;
     height: 19px;
     background: #fafafa;
     border-top: 1px solid #b4b4b4;
@@ -54,8 +51,8 @@
 
 .form {
   position: absolute !important;
-  right: 20px;
-  top: 20px;
+  right: 15px;
+  top: 15px;
   width: 328px;
   height: 236px;
 }

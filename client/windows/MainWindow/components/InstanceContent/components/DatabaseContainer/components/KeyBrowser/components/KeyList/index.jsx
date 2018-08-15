@@ -338,7 +338,7 @@ class KeyList extends React.Component {
     case 'list':
       return redis.lpush(key, '新成员')
     case 'hash':
-      return redis.hset(key, 'New Key', 'New Value')
+      return redis.hset(key, '新成员', '新值')
     case 'set':
       return redis.sadd(key, '新成员')
     case 'zset':

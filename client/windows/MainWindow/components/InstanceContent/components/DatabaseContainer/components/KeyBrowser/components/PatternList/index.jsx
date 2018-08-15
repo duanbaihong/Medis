@@ -51,7 +51,7 @@ class PatternList extends React.Component {
         />
       <div 
         className={'js-pattern-dropdown pattern-dropdown' + (this.state.patternDropdown ? ' is-active' : '')}
-        // style={{maxHeight: this.props.height}}
+        style={{maxHeight: this.props.height-1}}
         >
         <ul>
           {

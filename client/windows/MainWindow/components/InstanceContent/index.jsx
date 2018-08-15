@@ -22,12 +22,22 @@ class InstanceContent extends PureComponent {
       })
     }
   }
-  async modalSubmit(result) {
-    let err=await this.promise.resolve(result)
-    console.log(err) 
-    this.setState({modal: null})
-    if (this.activeElement) {
-      this.activeElement.focus()
+  modalSubmit(result) {
+    if(this.state.modal.submit){
+      let err= this.state.modal.submit(result);
+      console.log()
+      if(err){
+        this.setState({modal: null})
+        if (this.activeElement) {
+          this.activeElement.focus()
+        }
+      }
+    }else{
+      this.promise.resolve(result);
+      this.setState({modal: null})
+      if (this.activeElement) {
+        this.activeElement.focus()
+      }
     }
   }
 

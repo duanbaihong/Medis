@@ -663,6 +663,7 @@ textarea {
     cursor: pointer; 
     box-shadow: 0 0 3px 2px #fff;
     transform: scale(1.1,1.1);
+    transform: rotate(360deg);
 }
 .favorite-circle-choise{
     border: 1px solid #9A9C9E;

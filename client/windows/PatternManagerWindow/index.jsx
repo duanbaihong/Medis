@@ -23,7 +23,7 @@ class App extends React.Component {
     const activePattern = patterns.get(this.state.index)
     return (<div className="window">
       <div className="patternList">
-        <div>{
+        <div style={{height:"100%","overflow":"hidden","overflow-y":"auto"}}>{
           patterns.map((pattern, index) => {
             return (<a
               key={pattern.get('key')}
@@ -94,9 +94,6 @@ class App extends React.Component {
                 })
               }); 
               this.props.reloadPatterns()
-              // console.info(this.state.name)
-              // console.info(this.state.value)
-              // console.info(this.state.index)
             }}
             >保存规则</button>
         </div>

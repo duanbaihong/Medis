@@ -4,13 +4,13 @@
   .item {
     display: inline-block;
     padding: 12px;
-
+    transition: all .3s ease-in-out;
     .icon {
       margin-right: 5px;
     }
 
     &.is-active {
-      background: #D6D6D6;
+      background: #D4D1D1;
     }
   }
   .item:hover{
@@ -20,6 +20,7 @@
   .exitredis {
     display: inline-block;
     padding: 12px;
+    transition: all .3s ease-in-out;
     .icon {
       margin-right: 5px;
     }
