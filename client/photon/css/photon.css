@@ -152,7 +152,7 @@ h5 {
     bottom: 0;
     display: flex;
     flex-direction: column;
-    background-color: #ececec
+    background-color: #ececec;
 }
 .window-content {
     position: relative;
@@ -1624,12 +1624,8 @@ td:last-child, th:last-child {
 }
 .instanceItem{
     border-radius: 10px;
-    margin: 0px 2px;
+    margin: 0px 1px;
     opacity: .7;
-/*    white-space: nowrap;
-    overflow: hidden;
-    padding-left: 16px;
-    text-overflow: ellipsis;*/
 }
 .tab-item .icon-close-tab {
     position: absolute;
@@ -1667,4 +1663,25 @@ td:last-child, th:last-child {
     height: 2px;
     margin: 3px 6px;
     overflow: hidden;
+}
+
+/*滚动条样式 */
+::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 6px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+    transition: width .3s ease-out;
+}
+::-webkit-scrollbar:hover {/*滚动条整体样式*/
+    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
+    background: #8E8E8E;
+}
+::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    background: #EDEDED;
 }

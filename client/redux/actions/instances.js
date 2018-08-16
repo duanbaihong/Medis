@@ -19,10 +19,14 @@ export const moveInstance = createAction('MOVE_INSTANCE', (from, to) => ({getSta
 
 export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}) => {
   const {activeInstanceKey, instances} = getState()
+  console.log("Key "+key)
   if (!key) {
     key = activeInstanceKey
   }
+  console.log("Key "+key)
+  console.log("activeInstanceKey"+activeInstanceKey)
   const targetIndex = instances.findIndex(instance => instance.get('key') === key);
+  console.log("targetIndex"+activeInstanceKey)
   const instance=instances.get(targetIndex)
   if (instance.get('redis')){
     instance.get('redis').emit('end',false);

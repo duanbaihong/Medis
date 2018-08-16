@@ -112,13 +112,6 @@ class Tabs extends React.Component {
     this.props.onTabAddButtonClick(e);
   }
 
-  getCloseButton(tab) {
-    if (tab.props.disableClose) {
-      return '';
-    }
-    return (<CloseIcon onClick={this.handleCloseButtonClick.bind(this, tab.key)}>&times;</CloseIcon>);
-  }
-
   render() {
     const tabs = _.map(this.state.tabs, (tab) => {
       const tabTitle = tab.props.title;
@@ -154,7 +147,7 @@ class Tabs extends React.Component {
 
     return <div className="tab-group">
       {tabs}
-      <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick.bind(this)}>
+      <div className='tab-item tab-item-btn' style={{padding:"0px"}} onClick={this.handleAddButtonClick.bind(this)}>
         {this.props.tabAddButton}
       </div>
     </div>;
@@ -162,7 +155,7 @@ class Tabs extends React.Component {
 }
 
 Tabs.defaultProps = {
-  tabAddButton: (<span title='新连接'>{'+'}</span>),
+  tabAddButton: (<span title='新连接' style={{fontSize:"14px"}} className="icon icon-plus"></span>),
   onTabSelect: () => {},
   onTabClose: () => {},
   onTabAddButtonClick: () => {},
@@ -171,7 +164,6 @@ Tabs.defaultProps = {
 
 Tabs.propTypes = {
   tabs: PropTypes.arrayOf(PropTypes.element),
-
   selectedTab: PropTypes.string,
   tabAddButton: PropTypes.element,
   onTabSelect: PropTypes.func,

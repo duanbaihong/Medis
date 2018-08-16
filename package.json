@@ -59,7 +59,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "fixed-data-table-contextmenu": "^1.6.5",
-    "ioredis": "^3.2.2",
+    "ioredis": "^4.0.0",
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
     "redis-commands": "^1.0.1",
