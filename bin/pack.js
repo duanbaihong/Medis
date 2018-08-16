@@ -2,7 +2,7 @@ const packager = require('electron-packager')
 const path = require('path')
 const pkg = require('../package')
 const flat = require('electron-osx-sign').flat
-
+const shell = require('child_process')
 packager({
   dir: path.join(__dirname, '..'),
   appCopyright: '© 2018, Duanbaihu',
@@ -41,6 +41,9 @@ packager({
     case "openbsd":
     case "sunos":
       const application = path.join(res[0], `${pkg.productName}`)
+      shell.execFile("nautilus",[ application ],null,function(err,stdout,stderr) {
+        console.log(err)
+      });
       console.log("package complated! please to ["+application+"]")
       break;
     case "win32":

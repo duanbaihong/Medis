@@ -11,7 +11,7 @@
     "build": "webpack --mode='production' --progress --color ",
     "watch": "npm run build -- --watch",
     "electron": "electron . ",
-    "debug": "electron --debug=8000 .",
+    "debug": "electron --debug=5858 .",
     "lint": "xo client/**/*.{js,jsx}",
     "pack": "npm run build -- -p --config webpack.production.config.js && node bin/pack.js",
     "release": "NODE_ENV=production ./bin/release"

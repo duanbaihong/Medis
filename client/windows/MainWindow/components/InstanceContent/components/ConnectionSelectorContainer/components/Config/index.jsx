@@ -187,7 +187,7 @@ class Config extends React.PureComponent {
               id='host' 
               ref="host"
               title="主机地址"
-              rows={3}
+              rows={4}
               style={{paddingRight:"30px"}}
               value={this.getProp('host')} 
               onChange={this.handleChange.bind(this, 'host')} 

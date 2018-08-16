@@ -34,6 +34,8 @@
   z-index: 999;
   background: #fff;
   margin-top: 6px;
+  display: flex;
+  flex-direction: column;
   left: 0;
   width: 100%;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.21);
@@ -56,22 +58,39 @@
 
   li {
     display: block;
-    padding: 8px 12px;
+    padding: 6px 12px;
     font-family: Consolas, monospace;
     border-top: 1px solid #f5f5f4;
+    transition: all .4s ease-in-out;
 
     &:hover {
-      background: #116cd6;
+      background: #498DF9;
       color: #fff;
     }
 
     &:last-child {
       font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
     }
+    &:first-child {
+      border-top:none;
+    };
   }
 }
 .manage-pattern-button {
   color: #116cd6;
+  box-sizing: content-box;
+  height: 34px;
+  padding-left:15px;
+  transition: all .4s ease-in-out;
+  cursor: pointer;
+  line-height: 34px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.21);
+  border-bottom: 1px solid #D7D7D7;
+
+  &:hover {
+    background: #498DF9;
+    color: #fff;
+  }
 
   span.icon {
     margin-right: 5px;

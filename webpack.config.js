@@ -30,15 +30,15 @@ module.exports = {
           options: {
             ignore: ["buffer"],
             presets: ["es2015","react",'stage-0'],
-            plugins: [
-              ["transform-runtime", 
-              {
-                "helpers": false,
-                "polyfill": false,
-                "regenerator": true,
-                "moduleName": "babel-runtime"
-              }
-            ]]
+            // plugins: [
+            //   ["transform-runtime", 
+            //   {
+            //     "helpers": false,
+            //     "polyfill": false,
+            //     "regenerator": true,
+            //     "moduleName": "babel-runtime"
+            //   }
+            // ]]
           }
         }
       ]
@@ -51,15 +51,15 @@ module.exports = {
           options: {
             ignore: ["buffer"],
             presets: ["es2015","react",'stage-0'],
-            plugins: [[
-              "transform-runtime", 
-              {
-                "helpers": false,
-                "polyfill": false,
-                "regenerator": true,
-                "moduleName": "babel-runtime"
-              }
-            ]]
+            // plugins: [[
+            //   "transform-runtime", 
+            //   {
+            //     "helpers": false,
+            //     "polyfill": false,
+            //     "regenerator": true,
+            //     "moduleName": "babel-runtime"
+            //   }
+            // ]]
           }
         }]
     }, {
