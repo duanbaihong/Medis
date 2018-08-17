@@ -31,9 +31,9 @@ class Status extends React.Component {
   // 格式化字节
   byteFilter(bytes) {
     if(bytes>1024*1024*1024){
-      return Math.round(bytes/(1024*1024*1024),2)+"GB"
+      return (bytes/(1024*1024*1024)).toFixed(2)+"GB"
     }else if(bytes>1024*1024){
-      return Math.round(bytes/(1024*1024),2)+"MB"
+      return (bytes/(1024*1024)).toFixed(2)+"MB"
     }else if(bytes>1024){
       return Math.round(bytes/(1024),2)+"KB"
     }else{

@@ -3,8 +3,8 @@
 const path = require('path')
 
 module.exports = {
-  // mode: 'development',
-  mode: 'production',
+  mode: 'development',
+  // mode: 'production',
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
     patternManager: './client/windows/PatternManagerWindow/entry.jsx'

@@ -9,7 +9,7 @@ class Tabs extends React.Component {
   constructor(props) {
     super(props);
 
-    const defaultState = this._tabStateFromProps(this.props);
+    const defaultState={tabs:this.props.tabs};
     defaultState.selectedTab = this.props.selectedTab ? this.props.selectedTab :
                                                         this.props.tabs ? this.props.tabs[0].key : '';
     this.state = defaultState;
@@ -19,15 +19,6 @@ class Tabs extends React.Component {
     this.startPositions = [];
   }
 
-  _tabStateFromProps(props) {
-    const tabs = [];
-    let idx = 0;
-    React.Children.forEach(props.tabs, (tab) => {
-      tabs[idx++] = tab;
-    });
-
-    return { tabs };
-  }
 
   _getIndexOfTabByKey(key) {
     return _.findIndex(this.state.tabs, (tab) => {
@@ -50,7 +41,7 @@ class Tabs extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const newState = this._tabStateFromProps(nextProps);
+    const newState={tabs: nextProps.tabs};
     if (nextProps.selectedTab !== 'undefined') {
       newState.selectedTab = nextProps.selectedTab;
     }
@@ -115,43 +106,43 @@ class Tabs extends React.Component {
 
   render() {
     const tabs = _.map(this.state.tabs, (tab) => {
-      const tabTitle = tab.props.title;
-      const tabStyle=tab.props.instanceStyle;
-      let  tabCss
-      if(tabStyle!= "" && typeof(tabStyle) === 'object' && tabStyle['tag'] != undefined){
-          tabCss=tabStyle.tag
-      }
-      return (
-        <Draggable
-          key={'draggable_tabs_' + tab.key }
-          axis='x'
-          cancel='.rdTabCloseIcon'
-          start={{ x: 0, y: 0 }}
-          moveOnStartChange={true}
-          zIndex={1000}
-          bounds='parent'
-          onDrag={this.handleDrag.bind(this, tab.key)}
-          onStop={this.handleDragStop.bind(this, tab.key)}>
-          <div
-              onClick={this.handleTabClick.bind(this, tab.key)}
-              className={'tab-item '+(this.state.selectedTab === tab.key ? 'active' : '') }
-              ref={tab.key}>
-              <div className={"instanceItem "+tabCss}>
-                {tabTitle}
-              </div>
-            <span className="icon icon-cancel icon-close-tab"
-              onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
-          </div>
-        </Draggable>
-      );
-    });
+    const tabTitle = tab.title;
+    const tabStyle=tab.hasOwnProperty('config')?tab.config:"";
+    let  tabCss
+    if(tabStyle!= "" && typeof(tabStyle) === 'object' && tabStyle['tag'] != undefined){
+        tabCss=tabStyle.tag
+    }
+    return (
+      <Draggable
+        key={'draggable_tabs_' + tab.key }
+        axis='x'
+        cancel='.rdTabCloseIcon'
+        start={{ x: 0, y: 0 }}
+        moveOnStartChange={true}
+        zIndex={1000}
+        bounds='parent'
+        onDrag={this.handleDrag.bind(this, tab.key)}
+        onStop={this.handleDragStop.bind(this, tab.key)}>
+        <div
+            onClick={this.handleTabClick.bind(this, tab.key)}
+            className={'tab-item '+(this.state.selectedTab === tab.key ? 'active' : '') }
+            ref={tab.key}>
+            <div className={"instanceItem "+tabCss}>
+              {tabTitle}
+            </div>
+          <span className="icon icon-cancel icon-close-tab"
+            onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
+        </div>
+      </Draggable>
+    );
+  });
 
-    return <div className="tab-group">
-      {tabs}
-      <div className='tab-item tab-item-btn' style={{padding:"0px"}} onClick={this.handleAddButtonClick.bind(this)}>
-        {this.props.tabAddButton}
-      </div>
-    </div>;
+  return <div className="tab-group">
+    {tabs}
+    <div className='tab-item tab-item-btn' style={{padding:"0px"}} onClick={this.handleAddButtonClick.bind(this)}>
+      {this.props.tabAddButton}
+    </div>
+  </div>;
   }
 }
 

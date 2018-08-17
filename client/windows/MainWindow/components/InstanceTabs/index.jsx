@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import {Tab, Tabs} from './components/draggable-tab'
+import {Tabs} from './components/draggable-tab'
 
 class InstanceTabs extends React.Component {
   constructor() {
@@ -37,9 +37,7 @@ class InstanceTabs extends React.Component {
         }}
         onTabPositionChange={onMoveInstance}
         selectedTab={activeInstanceKey}
-        tabs={instances.map(instance => <Tab key={instance.get('key')} 
-                            instanceStyle={instance.has('config')?instance.get('config').toJS():''}  
-                            title={instance.get('title')}/>).toJS()}
+        tabs={instances.toJS()} 
         />
     </div>)
   }
