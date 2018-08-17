@@ -4,20 +4,19 @@ import {createAction} from 'Utils';
 import {Client} from 'ssh2';
 import net from 'net';
 import Redis from 'ioredis';
-// import Cluster from 'ioredis';
 import _ from 'lodash';
 
-function getIndex(getState) {
+function getIndex(getState,targetInstanceKey) {
   const {activeInstanceKey, instances} = getState()
-  return instances.findIndex(instance => instance.get('key') === activeInstanceKey)
+  return instances.findIndex(instance => instance.get('key') === (targetInstanceKey?targetInstanceKey:activeInstanceKey))
 }
  
 export const updateConnectStatus = createAction('UPDATE_CONNECT_STATUS', status => ({getState, next}) => {
   next({status, index: getIndex(getState)})
 })
 
-export const disconnect = createAction('DISCONNECT', () => ({getState, next}) => {
-  next({index: getIndex(getState)})
+export const disconnect = createAction('DISCONNECT', (targetInstanceKey) => ({getState, next}) => {
+  next({index: getIndex(getState,targetInstanceKey)})
 })
 
 export const connectToRedis = createAction('CONNECT', config => ({getState, dispatch, next}) => {
@@ -167,9 +166,9 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     redis.once('error', function (error) {
       redisErrorMessage += error;
     });
-    redis.once('end', function () {
+    redis.once('end', targetInstanceKey => {
       redis.quit();
-      dispatch(disconnect());
+      dispatch(disconnect(targetInstanceKey));
       if(sshconn){
         sshconn.end();
       }

@@ -3,6 +3,7 @@
 const path = require('path')
 
 module.exports = {
+  // mode: 'development',
   mode: 'production',
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
@@ -30,15 +31,15 @@ module.exports = {
           options: {
             ignore: ["buffer"],
             presets: ["es2015","react",'stage-0'],
-            // plugins: [
-            //   ["transform-runtime", 
-            //   {
-            //     "helpers": false,
-            //     "polyfill": false,
-            //     "regenerator": true,
-            //     "moduleName": "babel-runtime"
-            //   }
-            // ]]
+            plugins: [
+              ["transform-runtime", 
+              {
+                "helpers": false,
+                "polyfill": false,
+                "regenerator": true,
+                "moduleName": "babel-runtime"
+              }
+            ]]
           }
         }
       ]
@@ -51,15 +52,15 @@ module.exports = {
           options: {
             ignore: ["buffer"],
             presets: ["es2015","react",'stage-0'],
-            // plugins: [[
-            //   "transform-runtime", 
-            //   {
-            //     "helpers": false,
-            //     "polyfill": false,
-            //     "regenerator": true,
-            //     "moduleName": "babel-runtime"
-            //   }
-            // ]]
+            plugins: [[
+              "transform-runtime", 
+              {
+                "helpers": false,
+                "polyfill": false,
+                "regenerator": true,
+                "moduleName": "babel-runtime"
+              }
+            ]]
           }
         }]
     }, {

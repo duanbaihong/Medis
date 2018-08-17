@@ -23,7 +23,6 @@ class Status extends React.Component {
   //   // })
   // }
   getServerInfo() {
-    console.log(this.props.redis.serverInfo)
     let curSec=this.props.redis.serverInfo.uptime_in_seconds
     let useMem=this.props.redis.serverInfo.used_memory
     let curClients=this.props.redis.serverInfo.connected_clients
@@ -67,7 +66,6 @@ class Status extends React.Component {
   }
   componentDidMount() {
     this.stoptime=setInterval(this.getServerInfo.bind(this),1000)
-    // console.log(this.props.redis.serverInfo)
   }
   componentWillUnmount() {
     // delete this.$window

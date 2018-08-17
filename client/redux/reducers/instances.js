@@ -22,7 +22,7 @@ export const instances = handleActions(List([InstanceFactory({key: defaultInstan
     const instance = state.get(fromIndex)
     return state.splice(fromIndex, 1).splice(toIndex, 0, instance)
   },
-  [delInstance](state, {targetIndex}) {
+  [delInstance](state, {targetIndex,instance}) {
     return state.remove(targetIndex)
   },
   [updateConnectStatus](state, {index, status}) {

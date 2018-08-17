@@ -25,7 +25,6 @@ class InstanceContent extends PureComponent {
   modalSubmit(result) {
     if(this.state.modal.submit){
       let err= this.state.modal.submit(result);
-      console.log()
       if(err){
         this.setState({modal: null})
         if (this.activeElement) {

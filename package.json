@@ -8,7 +8,7 @@
   "author": "duanbaihong <duanbaihong@qq.com> (http://duanbaihong.com)",
   "main": "server/main.js",
   "scripts": {
-    "build": "webpack --mode='production' --progress --color ",
+    "build": "webpack --progress --color ",
     "watch": "npm run build -- --watch",
     "electron": "electron . ",
     "debug": "electron --debug=5858 .",

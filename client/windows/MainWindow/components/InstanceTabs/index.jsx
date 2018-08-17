@@ -37,7 +37,9 @@ class InstanceTabs extends React.Component {
         }}
         onTabPositionChange={onMoveInstance}
         selectedTab={activeInstanceKey}
-        tabs={instances.map(instance => <Tab key={instance.get('key')} instanceStyle={instance.has('config')?instance.get('config').toJS():''}  title={instance.get('title')}/>).toJS()}
+        tabs={instances.map(instance => <Tab key={instance.get('key')} 
+                            instanceStyle={instance.has('config')?instance.get('config').toJS():''}  
+                            title={instance.get('title')}/>).toJS()}
         />
     </div>)
   }

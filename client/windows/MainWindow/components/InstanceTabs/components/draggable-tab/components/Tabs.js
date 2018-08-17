@@ -102,9 +102,10 @@ class Tabs extends React.Component {
     this.props.onTabSelect(key);
   }
 
-  handleCloseButtonClick(key, e) {
+  async handleCloseButtonClick(key, e) {
     e.preventDefault();
     e.stopPropagation();
+    await this.handleTabClick.bind(this,key)
     this.props.onTabClose(key);
   }
 

@@ -19,24 +19,15 @@ export const moveInstance = createAction('MOVE_INSTANCE', (from, to) => ({getSta
 
 export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}) => {
   const {activeInstanceKey, instances} = getState()
-  console.log("Key "+key)
   if (!key) {
     key = activeInstanceKey
   }
-  console.log("Key "+key)
-  console.log("activeInstanceKey"+activeInstanceKey)
   const targetIndex = instances.findIndex(instance => instance.get('key') === key);
-  console.log("targetIndex"+activeInstanceKey)
   const instance=instances.get(targetIndex)
   if (instance.get('redis')){
-    instance.get('redis').emit('end',false);
-    Notification.requestPermission(function(permission) {
-        let redisNotification=new Notification('Medis退出成功',{
-          body: '退出Redis实例'+instance.get('key')+'['+targetIndex+']成功!'
-        })
-      }); 
+    instance.get('redis').emit('end',instance.get('key'));
   }
-  const ret = {activeInstanceKey, targetIndex}
+  const ret = {activeInstanceKey, targetIndex,instance}
   if (key === activeInstanceKey) {
     const item = instances.get(targetIndex + 1) || (targetIndex > 0 && instances.get(targetIndex - 1))
     // console.log('still', item, targetIndex, instances.size)

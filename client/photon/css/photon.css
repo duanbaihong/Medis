@@ -1617,9 +1617,10 @@ td:last-child, th:last-child {
     background-image: linear-gradient(to bottom, #d4d2d4 0, #cccacc 100%)
 }
 .tab-item .icon-close-tab:hover, .tab-item:after {
-    background-color: rgba(0, 0, 0, .08);
+    background-color: rgba(0, 0, 0, .2);
 }
 .tab-item .icon-close-tab:hover{
+    color:#E0E0E0;
     cursor: pointer;
 }
 .instanceItem{
@@ -1629,17 +1630,17 @@ td:last-child, th:last-child {
 }
 .tab-item .icon-close-tab {
     position: absolute;
-    top: 49%;
-    left: 5px;
-    width: 15px;
-    height: 15px;
+    top: 11px;
+    left: 4px;
+    width: 18px;
+    height: 18px;
     font-size: 15px;
-    line-height: 15px;
+    line-height: 18px;
     text-align: center;
     color: #666;
     opacity: 0;
     transition: opacity .1s linear, background-color .1s linear;
-    border-radius: 3px;
+    border-radius: 10px;
     transform: translateY(-50%);
     z-index: 10
 }
