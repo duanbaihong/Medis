@@ -68,7 +68,7 @@ class Content extends React.PureComponent {
 
   render() {
     const contentValue=(<KeyContent
-        style={{display: this.props.tab === '内容(Content)' ? 'flex' : 'none'}}
+        style={{display: this.props.tab === '内容(Content)' ? 'block' : 'none'}}
         keyName={this.props.keyName}
         height={this.props.height}
         keyType={this.state.keyType}
