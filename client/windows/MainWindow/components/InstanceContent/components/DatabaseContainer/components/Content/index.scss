@@ -28,6 +28,13 @@
 
 
 /*contentwrapper 动画效果 */
+.contentwrapper-appear {
+    opacity: 0;
+}
+.contentwrapper-appear.contentwrapper-appear-active {
+    opacity: 1;
+    transition: opacity .5s ease-in-out;
+}
 .contentwrapper-enter {
     /*transform: translateX(-100%);*/
     opacity: 0;
@@ -36,16 +43,5 @@
 .contentwrapper-enter.contentwrapper-enter-active {
     /*transform: translateX(0);*/
     opacity: 1;
-    transition: opacity 500ms ease-in-out;
-}
-
-.contentwrapper-leave {
-    /*transform: translateX(0);*/
-    display: none;
-    opacity: 1;
-}
-
-.contentwrapper-leave.contentwrapper-leave-active {
-    opacity: 0;
     transition: opacity 500ms ease-in-out;
 }

@@ -5,7 +5,7 @@ import ConnectionSelectorContainer from './components/ConnectionSelectorContaine
 import DatabaseContainer from './components/DatabaseContainer'
 import Modal from './components/Modal'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-
+require('./index.scss');
 class InstanceContent extends PureComponent {
   constructor() {
     super()
@@ -59,11 +59,20 @@ class InstanceContent extends PureComponent {
         key={instance.get('key')}
         style={{display: instance.get('key') === activeInstanceKey ? 'block' : 'none'}}
         >
-        {
-         (instance.get('redis')
-            ? <DatabaseContainer instance={instance} />
-            : <ConnectionSelectorContainer instance={instance}/>)
-      }
+        <ReactCSSTransitionGroup
+          transitionName="loginContainer"
+          component="div"
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={500}
+          transitionLeave={false}
+          >
+          {
+           (instance.get('redis')
+              ? <DatabaseContainer key="DatabaseContainer" instance={instance} />
+              : <ConnectionSelectorContainer key="ConnectionSelectorContainer" instance={instance}/>)
+          }
+        </ReactCSSTransitionGroup>
       </div>
     ))
 

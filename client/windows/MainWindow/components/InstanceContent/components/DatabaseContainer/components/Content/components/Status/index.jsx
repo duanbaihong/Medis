@@ -105,10 +105,24 @@ class Status extends React.Component {
   render() {
     return ( 
       <div ref='divwidth' className="redisStatus" >
-        <div style={{textAlign: "center",fontSize: "20px"}}>运行时间：{this.state.runTime}</div>
-        <div style={{textAlign: "center",fontSize: "20px"}}>使用内存：{this.state.useMem}</div>
-        <div style={{textAlign: "center",fontSize: "20px"}}>当前连接数：{this.state.curClients}</div>
-        <SimplePieChart />
+        
+        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5,float:"left"}}>
+          <div style={{textAlign: "center",fontSize: "20px"}}>运行时间：{this.state.runTime}</div>
+          <div style={{textAlign: "center",fontSize: "20px"}}>使用内存：{this.state.useMem}</div>
+          <div style={{textAlign: "center",fontSize: "20px"}}>当前连接数：{this.state.curClients}</div>
+        </div>
+        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+          <SimplePieChart />
+        </div>
+        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+          <SimplePieChart />
+        </div>
+        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+          <SimplePieChart />
+        </div>
+        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+          <SimplePieChart />
+        </div>
       </div>)
   }
 }

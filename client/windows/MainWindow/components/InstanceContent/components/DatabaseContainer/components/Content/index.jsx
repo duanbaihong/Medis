@@ -118,9 +118,11 @@ class Content extends React.PureComponent {
         transitionName="contentwrapper"
         component="div"
         style={{flex:1,display:"flex"}}
-        // transitionAppear={true}
+        transitionAppear={true}
+        transitionAppearTimeout={500}
         transitionEnterTimeout={500}
-        transitionLeaveTimeout={500} 
+        transitionLeave={false}
+        // transitionLeaveTimeout={500} 
         >
         {contentValue}
       </ReactCSSTransitionGroup>

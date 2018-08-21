@@ -1,0 +1,18 @@
+/*loginContainer 动画效果 */
+.loginContainer-appear {
+    opacity: 0;
+}
+.loginContainer-appear.loginContainer-appear-active {
+    opacity: 1;
+    transition: opacity .5s ease-in-out;
+}
+.loginContainer-enter {
+    /*transform: translateX(-100%);*/
+    opacity: 0;
+}
+
+.loginContainer-enter.loginContainer-enter-active {
+    /*transform: translateX(0);*/
+    opacity: 1;
+    transition: opacity 500ms ease-in-out;
+}
