@@ -7,6 +7,8 @@ import Terminal from './components/Terminal'
 import Config from './components/Config'
 import Status from './components/Status'
 import Footer from './components/Footer'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+
 require('./index.scss')
 class Content extends React.PureComponent {
   constructor(props) {
@@ -29,7 +31,7 @@ class Content extends React.PureComponent {
       })
     }
   }
-  setRedisInfo(redis){
+  getRedisInfo(redis){
     if(this._isMounted){
       redis.info(function(err,info) {
         if (err) {
@@ -51,7 +53,7 @@ class Content extends React.PureComponent {
   componentDidMount() {
     this.init(this.props.keyName);
     this._isMounted=true;
-    this.intervalObj=setInterval(this.setRedisInfo.bind(this),1000,this.props.redis)
+    this.intervalObj=setInterval(this.getRedisInfo.bind(this),1000,this.props.redis)
   }
   componentWillUnmount(){
     this._isMounted=false;
@@ -67,17 +69,44 @@ class Content extends React.PureComponent {
   }
 
   render() {
-    const contentValue=(<KeyContent
-        style={{display: this.props.tab === '内容(Content)' ? 'block' : 'none'}}
-        keyName={this.props.keyName}
-        height={this.props.height}
-        keyType={this.state.keyType}
-        redis={this.props.redis}
-        config={this.props.config}
-        onKeyContentChange={() => {
-          this.setState({version: this.state.version + 1})
-        }}
+    let contentValue=""
+    switch(this.props.tab){
+      case "内容(Content)":
+        contentValue=(<KeyContent
+          key="keycontent"
+          keyName={this.props.keyName}
+          height={this.props.height}
+          keyType={this.state.keyType}
+          redis={this.props.redis}
+          config={this.props.config}
+          onKeyContentChange={() => {
+            this.setState({version: this.state.version + 1})
+          }} />)
+        break;
+      case "终端(Terminal)":
+        contentValue=(<Terminal
+          key="contentTerminal"
+          redis={this.props.redis}
+          config={this.props.config}
+          connectionKey={this.props.connectionKey}
+          onDatabaseChange={this.props.onDatabaseChange}
+          />)
+        break;
+      case "系统配置(Config)":
+        contentValue=(<Config
+          key="contentconfig"
+          redis={this.props.redis}
+          config={this.props.config}
+          connectionKey={this.props.connectionKey}
+          />)
+        break;
+      case "状态(Status)":
+        contentValue=(<Status
+          key="contentstatus"
+          redis={this.props.redis}
         />)
+        break;
+    }
     return (<div className="pane sidebar" >
       <TabBar
         onSelectTab={this.props.onSelectTab}
@@ -85,24 +114,16 @@ class Content extends React.PureComponent {
         config={this.props.config}
         tab={this.props.tab}
         />
+      <ReactCSSTransitionGroup
+        transitionName="contentwrapper"
+        component="div"
+        style={{flex:1,display:"flex"}}
+        // transitionAppear={true}
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500} 
+        >
         {contentValue}
-      <Terminal
-        style={{display: this.props.tab === '终端(Terminal)'? 'block' : 'none'}}
-        redis={this.props.redis}
-        config={this.props.config}
-        connectionKey={this.props.connectionKey}
-        onDatabaseChange={this.props.onDatabaseChange}
-        />
-      <Config
-        style={{display: this.props.tab === '系统配置(Config)' ? 'block' : 'none'}}
-        redis={this.props.redis}
-        config={this.props.config}
-        connectionKey={this.props.connectionKey}
-        />
-      <Status
-        style={{display: this.props.tab === '状态(Status)' ? 'block' : 'none'}}
-        redis={this.props.redis}
-      />
+      </ReactCSSTransitionGroup>
       <Footer
         keyName={this.props.keyName}
         keyType={this.state.keyType}

@@ -155,7 +155,7 @@ Tabs.defaultProps = {
 };
 
 Tabs.propTypes = {
-  tabs: PropTypes.arrayOf(PropTypes.element),
+  tabs: PropTypes.arrayOf(PropTypes.object),
   selectedTab: PropTypes.string,
   tabAddButton: PropTypes.element,
   onTabSelect: PropTypes.func,

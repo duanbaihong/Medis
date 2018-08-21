@@ -134,17 +134,15 @@ class Terminal extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.style.display === 'none' && nextProps.style.display === 'block') {
       this.terminal.focus()
     }
-  }
 
   componentWillUnmount() {
     this.props.redis.removeAllListeners('select', this.onSelectBinded)
   }
 
   render() {
-    return (<div ref="terminal" style={this.props.style} className="Terminal"/>)
+    return (<div ref="terminal" className="Terminal"/>)
   }
 }
 

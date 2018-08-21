@@ -34,8 +34,7 @@ class KeyContent extends PureComponent {
       </div>)
       break
     }
-    // return <div style="display:flex;" className="BaseContent">{ view }</div>
-    return <div style={this.props.style} className="BaseContent">{ view }</div>
+    return <div className="BaseContent">{ view }</div>
   }
 }
 

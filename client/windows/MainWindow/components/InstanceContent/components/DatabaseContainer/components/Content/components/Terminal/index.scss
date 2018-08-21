@@ -1,7 +1,6 @@
 .Terminal {
-  overflow: auto;
-  flex:1 1 0%;
   width: 100%;
+  overflow-y: auto;
   * {
     -webkit-user-select: text;
   }

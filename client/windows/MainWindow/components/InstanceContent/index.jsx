@@ -71,6 +71,7 @@ class InstanceContent extends PureComponent {
       <div className="main">
         <ReactCSSTransitionGroup
           transitionName="modal"
+          component="div"
           transitionEnterTimeout={250}
           transitionLeaveTimeout={250}
           >

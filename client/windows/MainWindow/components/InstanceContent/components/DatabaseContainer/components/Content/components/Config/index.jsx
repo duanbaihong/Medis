@@ -176,7 +176,7 @@ class Config extends React.Component {
         configs: [
           {name: 'requirepass'},
           {name: 'rename-command'},
-          {name: 'protected-mode'}
+          {name: 'protected-mode',type: 'boolean'}
         ]
       },
       {
@@ -200,11 +200,11 @@ class Config extends React.Component {
           {name: 'no-appendfsync-on-rewrite', type: 'boolean'},
           {name: 'auto-aof-rewrite-percentage', type: 'number'},
           {name: 'auto-aof-rewrite-min-size'},
-          {name: 'aof-load-truncated', type: 'number'},
+          {name: 'aof-load-truncated', type: 'boolean'},
           {name: 'rdb-changes-since-last-save',type: 'number'},
           {name: 'rdb-bgsave-in-progress',type: 'number'},
           {name: 'rdb-last-save-time',type: 'number'},
-          {name: 'rdb-last-bgsave-status'},
+          {name: 'rdb-last-bgsave-status',type: 'boolean'},
           {name: 'rdb-last-bgsave-time-sec',type: 'number'},
           {name: 'rdb-current-bgsave-time-sec',type: 'number'},
           {name: 'rdb-last-cow-size',type: 'number'},
@@ -213,8 +213,8 @@ class Config extends React.Component {
           {name: 'aof-rewrite-scheduled',type: 'number'},
           {name: 'aof-last-rewrite-time-sec',type: 'number'},
           {name: 'aof-current-rewrite-time-sec',type: 'number'},
-          {name: 'aof-last-bgrewrite-status'},
-          {name: 'aof-last-write-status'},
+          {name: 'aof-last-bgrewrite-status',type: 'boolean'},
+          {name: 'aof-last-write-status',type: 'boolean'},
           {name: 'aof-current-size',type: 'number'},
           {name: 'aof-base-size',type: 'number'},
           {name: 'aof-pending-rewrite',type: 'number'},
@@ -606,7 +606,7 @@ class Config extends React.Component {
   }
 
   render() {
-    return (<div style={this.props.style} className="Config">
+    return (<div key="contentConfig" className="Config">
       <div className="wrapper">
         <form>
           {

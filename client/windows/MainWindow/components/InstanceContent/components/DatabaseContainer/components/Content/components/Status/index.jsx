@@ -12,21 +12,51 @@ class Status extends React.Component {
     this.state = {
       runTime: 0,
       useMem: 0,
-      curClients: 0
+      curClients: 0,
+      historyClients:[],
+      timeLine: []
     }
     this.stoptime
   }
-  // updateWidth(){
-  //   // this.$window.on('resize',()=>{
-  //   //   this.state.width=$(this.refs.divwidth).width()-50;
-  //   //   console.log($(this.refs.divwidth).width())
-  //   // })
-  // }
+  componentWillMount() {
+    let storeData=localStorage.getItem('redisStatusData')
+    if(storeData){
+      try{
+        this.setState(JSON.parse(storeData))
+      }
+      catch(err){
+        console.log(err)
+      }
+    }
+  }
   getServerInfo() {
+    console.log(this.state)
     let curSec=this.props.redis.serverInfo.uptime_in_seconds
     let useMem=this.props.redis.serverInfo.used_memory
     let curClients=this.props.redis.serverInfo.connected_clients
-    this.setState({runTime: this.timeFilter(curSec),useMem: this.byteFilter(useMem),curClients: curClients})
+    let tmpClientsList=this.state.historyClients;
+    let tmpTimeLine=this.state.timeLine
+    let tmpTime=new Date();
+    tmpClientsList.push(curClients)
+    tmpTimeLine.push(`${tmpTime.getHours()}:${tmpTime.getMinutes()}:${tmpTime.getSeconds()}`)
+    // 保存两个小时的数据
+    if(tmpClientsList.length>=7200){
+      tmpClientsList.splice(0,1)
+      tmpTimeLine.splice(0,1)
+    }
+    
+    localStorage.setItem('redisStatusData',JSON.stringify({
+      historyClients: tmpClientsList,
+      timeLine: tmpTimeLine
+    }))
+    this.setState({
+      runTime: this.timeFilter(curSec),
+      useMem: this.byteFilter(useMem),
+      curClients: curClients,
+      historyClients: tmpClientsList,
+      timeLine: tmpTimeLine
+    })
+    // console.log(this.state)
   }
   // 格式化字节
   byteFilter(bytes) {
@@ -74,7 +104,7 @@ class Status extends React.Component {
   
   render() {
     return ( 
-      <div style={this.props.style}  ref='divwidth' className="redisStatus" >
+      <div ref='divwidth' className="redisStatus" >
         <div style={{textAlign: "center",fontSize: "20px"}}>运行时间：{this.state.runTime}</div>
         <div style={{textAlign: "center",fontSize: "20px"}}>使用内存：{this.state.useMem}</div>
         <div style={{textAlign: "center",fontSize: "20px"}}>当前连接数：{this.state.curClients}</div>

@@ -1,5 +1,4 @@
 .Editor {
-  position: relative;
   min-width: 0;
   textarea {
     border: none;
@@ -14,10 +13,10 @@
     flex-direction: column;
     font-family: Consolas, monospace;
   }
-
+  .CodeMirror-vscrollbar {
+    overflow-y: auto;
+  }
   .ReactCodeMirror {
-    position: relative;
-    flex: 1;
     display: flex;
     width: 100%;
     overflow-y: auto;
