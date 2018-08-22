@@ -49,3 +49,10 @@
     }*/
   }
 }
+.nameformat {
+  display: block;
+  width: 172px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

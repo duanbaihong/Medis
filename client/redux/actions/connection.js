@@ -40,6 +40,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     const conn = new Client();
     conn.on('ready', () => {
       const server = net.createServer(function (sock) {
+        console.log(config)
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
             sock.end()
@@ -54,7 +55,15 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     }).on('error', err => {
       sshErrorThrown = true;
       dispatch(disconnect());
-      redisErrorMessage=`SSH 错误: ${err.message}`
+      redisErrorMessage=`SSH连接失败，请确认地址/端口/密码是否正确.失败内容: ${err.message}`
+      showModal({
+        title: 'SSH连接失败',
+        content: redisErrorMessage
+      }).then(() => {
+        return ;
+      }).catch(()=>{
+        return ;
+      })
     })
     try {
       const connectionConfig = {
@@ -76,8 +85,16 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       }
     } catch (err) {
       dispatch(disconnect());
-      redisErrorMessage=`SSH 错误: ${err.message}`
+      redisErrorMessage=`SSH连接失败，请确认地址/端口/密码是否正确.失败内容: ${err.message}`
       // alert(`SSH 错误: ${err.message}`);
+      showModal({
+        title: 'SSH连接失败',
+        content: redisErrorMessage
+      }).then(() => {
+        return ;
+      }).catch(()=>{
+        return ;
+      })
     }
   } else {
     handleRedis(config);

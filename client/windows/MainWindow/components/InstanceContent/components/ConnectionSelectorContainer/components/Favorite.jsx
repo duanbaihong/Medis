@@ -100,7 +100,7 @@ class Favorite extends React.PureComponent {
               >
               <div className={(favorite.get('tag') && favorite.get('tag')!='')?'nav-item-cir '+favorite.get('tag'):'nav-item-cir' }>
                 <span className="icon icon-database"/>
-                <span>{favorite.get('name')}</span>
+                <span className="nameformat">{favorite.get('name')}</span>
               </div>
             </a>)
           })

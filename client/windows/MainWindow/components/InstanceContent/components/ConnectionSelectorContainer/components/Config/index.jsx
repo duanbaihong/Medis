@@ -159,6 +159,13 @@ class Config extends React.PureComponent {
     </div>)
   }
   render() {
+    let sshloginClass
+    if (this.getProp('ssh')){
+      sshloginClass="connect_cert_shown"
+      if(this.getProp('sshKey') && this.getProp('sshKey').indexOf('ENCRYPTED') > -1){
+        sshloginClass="connect_certkey_shown"
+      }
+    }
     const modelEn={standalone: '标准',sentinel: '哨兵',cluster:'集群'}
     const tags=['favorite-closetag','favorite-red','favorite-orage','favorite-green','favorite-blue','favorite-violet','favorite-gray','favorite-pink','favorite-purple']
     const tagHtml=tags.map(style=>(
@@ -260,7 +267,7 @@ class Config extends React.PureComponent {
           <label htmlFor="ssh">SSH隧道:</label>
           <input type="checkbox" id="ssh" onChange={this.handleChange.bind(this, 'ssh')} checked={this.getProp('ssh')}/>
         </div>
-        <div className={this.getProp('ssh')?'connect_cert_hidden connect_cert_shown':"connect_cert_hidden"} >
+        <div className={`connect_cert_hidden ${sshloginClass}`} >
           <div className="nt-form-row">
             <label htmlFor="sshHost">SSH主机地址:</label>
             <input type="text" id="sshHost" placeholder="SSH主机地址" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} />
