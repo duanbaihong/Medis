@@ -98,20 +98,19 @@ class Status extends React.Component {
     this.stoptime=setInterval(this.getServerInfo.bind(this),1000)
   }
   componentWillUnmount() {
-    // delete this.$window
    clearInterval(this.stoptime);
   }
   
   render() {
     return ( 
-      <div ref='divwidth' className="redisStatus" >
+      <div ref='divwidth' className="redisStatus container" >
         
-        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5,float:"left"}}>
+        <div className={"col-lg-4 col-md-5"} style={{height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5,float:"left"}}>
           <div style={{textAlign: "center",fontSize: "20px"}}>运行时间：{this.state.runTime}</div>
           <div style={{textAlign: "center",fontSize: "20px"}}>使用内存：{this.state.useMem}</div>
           <div style={{textAlign: "center",fontSize: "20px"}}>当前连接数：{this.state.curClients}</div>
         </div>
-        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+        <div className={"col-lg-8 col-md-7 "}  style={{height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
           <SimplePieChart />
         </div>
         <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
