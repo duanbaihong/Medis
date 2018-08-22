@@ -3,13 +3,17 @@ const path = require('path')
 const pkg = require('../package')
 const flat = require('electron-osx-sign').flat
 const shell = require('child_process')
+var iconName="medis128.ico"
+if(process.platform==="darwin"){
+	iconName="Medis.icns"
+}
 packager({
   dir: path.join(__dirname, '..'),
   appCopyright: '© 2018, Duanbaihu',
   asar: true,
   overwrite: true,
   electronVersion: pkg.electronVersion,
-  icon: path.join(__dirname, '..', 'icns', 'medis128'),
+  icon: path.join(__dirname, '..', 'icns', `${iconName}`),
   out: path.join(__dirname, '..', 'out'),
   platform: process.platform,
   ignore: '(node_modules|.gitignore|LICENSE|README.md|.DS_Store|bin|webpack.config.js|webpack.production.config.js|client/windows|client/redux|client/storage|out|.git|.vscode)',
