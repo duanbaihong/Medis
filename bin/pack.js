@@ -9,9 +9,10 @@ packager({
   asar: true,
   overwrite: true,
   electronVersion: pkg.electronVersion,
-  icon: path.join(__dirname, '..', 'icns', 'MyIcon'),
+  icon: path.join(__dirname, '..', 'icns', 'medis128'),
   out: path.join(__dirname, '..', 'out'),
   platform: process.platform,
+  ignore: '(node_modules|.gitignore|LICENSE|README.md|.DS_Store|bin|webpack.config.js|webpack.production.config.js|client/windows|client/redux|client/storage|out|.git|.vscode)',
   appBundleId: `dbh.duanbaihong.${pkg.name}`,
   appCategoryType: 'public.app-category.developer-tools',
   osxSign: {
@@ -23,6 +24,7 @@ packager({
   if (err) {
     throw err;
   }
+
 
   switch(process.platform){
     case "darwin":
