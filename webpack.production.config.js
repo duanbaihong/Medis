@@ -21,5 +21,5 @@ plugins.push(
 );
 
 config.plugins = plugins;
-
+config.mode = 'production';
 module.exports = config;

@@ -41,7 +41,7 @@ class Config extends React.PureComponent {
       const leaving = !this.props.favorite || !nextProps.favorite ||
         (this.props.favorite.get('key') !== nextProps.favorite.get('key'))
       if (leaving) {
-        this.setState({changed: false, data: new Immutable.Map()})
+        this.setState({changed: false, data: new Immutable.Map({'curmodel': this.getProp('curmodel')?this.getProp('curmodel'):'standalone'})})
       }
     }
   }
