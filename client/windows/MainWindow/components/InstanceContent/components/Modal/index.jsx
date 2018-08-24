@@ -104,11 +104,13 @@ export default class Modal extends React.Component {
           <div className="Modal__form" ref="form"/>
         </div>
         <div className="nt-button-group nt-button-group--pull-right">
+          {this.props.button && 
           <button
             ref="submit"
             className={'nt-button' + (this.props.form ? '' : ' nt-button--primary')}
             onClick={this.handleCancel.bind(this)}
             >{isArray(this.props.button)?this.props.button[1]:"取消"}</button>
+          }
           <button
             ref="cancel"
             className={'nt-button' + (!this.props.form ? '' : ' nt-button--primary')}
