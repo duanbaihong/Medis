@@ -13,6 +13,16 @@ class InstanceContent extends PureComponent {
   }
 
   componentDidMount() {
+    let {instances} = this.props
+    $(window).on('beforeunload', function (event) {
+      instances.map(instance=>{
+        let isConRedis=instance.get('redis')
+        if(isConRedis){
+          isConRedis.emit('end',false)
+          console.log("刷新页面，自动退出redis",isConRedis)
+        }
+      })
+    });
     window.showModal = modal => {
       this.activeElement = document.activeElement
       this.setState({modal})

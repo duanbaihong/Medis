@@ -334,7 +334,7 @@ class Config extends React.PureComponent {
           ref="connectButton" 
           className="nt-button nt-button--primary" 
           onClick={this.connect.bind(this)}>
-            {this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接1')}
+            {this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接')}
           </button>
       </div>
     </div>)

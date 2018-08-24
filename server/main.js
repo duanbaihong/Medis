@@ -4,8 +4,9 @@
 const {app, Menu, ipcMain, remote} = require('electron')
 const windowManager = require('./windowManager')
 const menu = require('./menu')
-
-
+const path =require('path')
+require('electron-reload')(path.join(__dirname,'..','dist'))
+console.log(path.join(__dirname,'..','dist'))
 ipcMain.on('create patternManager', function (event, arg) {
   windowManager.create('patternManager', arg);
 });
