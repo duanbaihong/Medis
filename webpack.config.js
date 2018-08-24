@@ -5,6 +5,8 @@ const path = require('path')
 module.exports = {
   mode: 'development',
   // mode: 'production',
+  devtool: 'source-map',
+  target: 'electron-renderer',
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
     patternManager: './client/windows/PatternManagerWindow/entry.jsx'
@@ -24,12 +26,15 @@ module.exports = {
         {
           loader: 'jsx-loader',
           options: {
-            harmony: true
+            harmony: true,
+            sourceMap: true,
           }
-        },{
+        },
+        {
           loader: "babel-loader",
           options: {
             ignore: ["buffer"],
+            sourceMap: true,
             presets: ["es2015","react",'stage-0'],
             plugins: [
               ["transform-runtime", 
@@ -51,6 +56,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             ignore: ["buffer"],
+            sourceMap: true,
             presets: ["es2015","react",'stage-0'],
             plugins: [[
               "transform-runtime", 

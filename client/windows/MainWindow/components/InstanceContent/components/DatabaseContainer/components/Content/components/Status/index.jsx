@@ -111,7 +111,7 @@ class Status extends React.Component {
           <div style={{textAlign: "center",fontSize: "20px"}}>当前连接数：{this.state.curClients}</div>
         </div>
         <div className={"col-lg-8 col-md-7 "}  style={{height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
-          <SimplePieChart />
+          <SimplePieChart chartType="connectline" />
         </div>
         <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
           <SimplePieChart />
@@ -120,7 +120,7 @@ class Status extends React.Component {
           <SimplePieChart />
         </div>
         <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
-          <SimplePieChart />
+          <SimplePieChart chartType="memuseline" className="" />
         </div>
       </div>)
   }

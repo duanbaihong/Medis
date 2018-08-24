@@ -8,6 +8,14 @@ import store from 'Redux/store'
 import * as actions from 'Redux/actions'
 
 require('../../styles/global.scss')
+// const config = require('../../../webpack.production.config');
+// if (config.mode === 'development') {
+//     const electronHot = require('electron-hot-loader');
+//     electronHot.install();
+//     electronHot.watchJsx(['../../client/**/\*.jsx']);
+//     electronHot.watchCss(['../../client/**/\*.css','../../client/**/\*.scss']);
+// }
+
 
 ipcRenderer.on('action', (evt, action) => {
   if ($('.Modal').length && action.indexOf('Instance') !== -1) {
