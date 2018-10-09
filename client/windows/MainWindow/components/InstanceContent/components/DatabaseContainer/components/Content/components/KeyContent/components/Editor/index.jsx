@@ -214,7 +214,6 @@ class Editor extends React.PureComponent {
         <label className="wrap-selector" ref="wrapSelector">
           <input
             type="checkbox"
-            style={{float:"left"}}
             checked={this.state.wrapping}
             onChange={evt => this.setState({wrapping: evt.target.checked})}
             />

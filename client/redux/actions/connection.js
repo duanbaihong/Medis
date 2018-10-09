@@ -40,7 +40,6 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     const conn = new Client();
     conn.on('ready', () => {
       const server = net.createServer(function (sock) {
-        console.log(config)
         conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, (err, stream) => {
           if (err) {
             sock.end()

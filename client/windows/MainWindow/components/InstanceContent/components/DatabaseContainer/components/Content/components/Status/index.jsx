@@ -2,6 +2,7 @@
 
 import React from 'react'
 import SimplePieChart from './Graphics'
+import theme from './Graphics/graphiceTheme'
 // import commands from 'redis-commands'
 require('./status.scss')
 
@@ -30,7 +31,6 @@ class Status extends React.Component {
     }
   }
   getServerInfo() {
-    console.log(this.state)
     let curSec=this.props.redis.serverInfo.uptime_in_seconds
     let useMem=this.props.redis.serverInfo.used_memory
     let curClients=this.props.redis.serverInfo.connected_clients
@@ -94,6 +94,122 @@ class Status extends React.Component {
     } 
     return timeFormat;
   }
+  //
+  getOptions = (arg) =>{
+    switch(arg){
+      case "connectline":
+        return {
+                title: {
+                    text: '异步数据加载示例'
+                },
+                tooltip: {},
+                legend: {
+                    data:['销量']
+                },
+                xAxis: {
+                },
+                yAxis: {},
+                series: [{
+                    name: '销量',
+                    type: 'line',
+                    data: this.state.historyClients
+                }]
+            }
+        break;
+      case "memuseline":
+        return {
+              title : {
+                  text: '某站来源',
+                  subtext: '纯属虚构',
+                  x:'center'
+              },
+              tooltip : {
+                  trigger: 'item',
+                  formatter: "{a} <br/>{b} : {c} ({d}%)"
+              },
+              legend: {
+                  orient : 'vertical',
+                  x : 'left',
+                  data:['直接访问','邮件营销']
+              },
+              toolbox: {
+                  show : false,
+                  feature : {
+                      dataView : {show: true, readOnly: false},
+                      magicType : {
+                          show: false, 
+                          type: ['pie'],
+                          option: {
+                              funnel: {
+                                  x: '25%',
+                                  width: '50%',
+                                  funnelAlign: 'left',
+                                  max: 1548
+                              }
+                          }
+                      },
+                  }
+              },
+              calculable : false,
+              series : [
+                  {
+                      name:'访问来源',
+                      type:'pie',
+                      radius : '55%',
+                      center: ['50%', '60%'],
+                      data:[
+                          {value:335, name:'直接访问'},
+                          {value:310, name:'邮件营销'}
+                      ]
+                  }
+              ]
+          };
+        break;
+      default:
+        return {
+          title : {
+            text: '内存使用率',
+            x:'right'
+          },
+          tooltip : {
+            trigger: 'item',
+            padding:1,
+            textStyle: {
+                "fontSize": 11
+              },
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+            padding: 5,
+            textStyle: {
+                "fontSize": 11
+              },
+            data: [{name:'使用内存',icon:'pin'},{name:'空闲内存',icon:'pin'}]
+          },
+          series : [
+            {
+            name: '占比情况(%)',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+              {value:335, name:'使用内存'},
+              {value:310, name:'空闲内存'},
+            ],
+            itemStyle: {
+              emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.4)'
+              }
+            }
+            }
+          ]
+        };
+    }
+  }  
   componentDidMount() {
     this.stoptime=setInterval(this.getServerInfo.bind(this),1000)
   }
@@ -111,16 +227,16 @@ class Status extends React.Component {
           <div style={{textAlign: "center",fontSize: "20px"}}>当前连接数：{this.state.curClients}</div>
         </div>
         <div className={"col-lg-8 col-md-7 "}  style={{height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
-          <SimplePieChart chartType="connectline" />
+          <SimplePieChart options={this.getOptions('connectline')} />
         </div>
-        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
-          <SimplePieChart />
+        <div className={"col-lg-12 col-md-12"} style={{height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+          <SimplePieChart options={this.getOptions('')} />
         </div>
-        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
-          <SimplePieChart />
+        <div  className={"col-lg-6 col-md-6"} style={{height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+          <SimplePieChart options={this.getOptions('')} />
         </div>
-        <div style={{width:300,height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
-          <SimplePieChart chartType="memuseline" className="" />
+        <div  className={"col-lg-6 col-md-6"} style={{height:200,display:"inline-block",borderRadius:5,padding:5,background:"aliceblue",margin:5}}>
+          <SimplePieChart options={this.getOptions('memuseline')}  />
         </div>
       </div>)
   }

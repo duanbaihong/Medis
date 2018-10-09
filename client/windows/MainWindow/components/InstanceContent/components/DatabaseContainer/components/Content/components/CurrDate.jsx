@@ -21,7 +21,7 @@ class CurrDate extends React.Component{
     if(this._isMounted){
       this.setState({
           Y: now.getFullYear(),
-          M: now.getMonth()<10?"0"+(now.getMonth()+1):now.getMonth()+1,
+          M: now.getMonth()+1<10?"0"+(now.getMonth()+1):now.getMonth()+1,
           D: now.getDate()<10?"0"+now.getDate():now.getDate(),
           H: now.getHours()<10?"0"+now.getHours():now.getHours(),
           m: now.getMinutes()<10?"0"+now.getMinutes():now.getMinutes(),
