@@ -159,7 +159,7 @@ class Config extends React.PureComponent {
     </div>)
   }
   render() {
-    let sshloginClass
+    let sshloginClass=""
     if (this.getProp('ssh')){
       sshloginClass="connect_cert_shown"
       if(this.getProp('sshKey') && this.getProp('sshKey').indexOf('ENCRYPTED') > -1){

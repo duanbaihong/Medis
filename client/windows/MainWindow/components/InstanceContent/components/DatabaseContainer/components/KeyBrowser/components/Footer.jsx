@@ -90,23 +90,12 @@ class Footer extends React.Component {
       }
     }
     return (<footer className="toolbar toolbar-footer">
-      <span style={{marginLeft: 6}}>键值数: {keys}</span>
+      <span style={{marginLeft: 6,marginTop: -1,float: 'left'}}>键值数: <span className='keysValue'>{keys}</span></span>
       <div style={{float: 'right'}}>
         <span>DB:</span>
         <select
           onChange={this.handleChange.bind(this)}
-          value={this.props.db} className="form-control" style={{
-            width: 40,
-            height: 19,
-            minHeight: 19,
-            marginTop: 1,
-            padding:0,
-            marginRight: 2,
-            marginLeft: 3,
-            fontSize: 13,
-            float: 'right'
-          }}
-                                                         >
+          value={this.props.db} className="form-control" className='selectDatabase' >
           {
           (max => {
             const items = []

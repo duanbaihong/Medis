@@ -47,3 +47,38 @@
     text-overflow: clip;
   }
 }
+.selectDatabase {
+  width: 40px;
+  height: 19px;
+  margin-top: 1px;
+  padding: 1px 4%;
+  margin-right: 2px;
+  margin-left: 3px;
+  font-size: 12px;
+  float: right;
+  font-family: fantasy;
+  box-shadow: initial;
+  border: 1px solid #f19e02;
+  border-radius: 3px;
+  background-color: #fbecb3;
+  transition: all .3s;
+}
+.selectDatabase:focus{
+  box-shadow: inset 0px 0px 0px 1px #fff;
+}
+.keysValue {
+  margin-top: 0px;
+  padding: 1px 5px;
+  margin-right: 2px;
+  margin-left: 3px;
+  font-size: 12px;
+  font-family: sans-serif;
+  box-shadow: initial;
+  border: 1px solid #ff9793;
+  border-radius: 3px;
+  background-color: #f5d0cf;
+  transition: all .3s;
+}
+.keysValue:hover{
+  box-shadow: inset 0px 0px 0px 1px #fff;
+}
