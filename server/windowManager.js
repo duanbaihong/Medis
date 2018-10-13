@@ -36,7 +36,11 @@ class WindowManager extends EventEmitter {
       option.minWidth = 940;
     } else if (type === 'patternManager') {
       option.width = 585;
-      option.height = 265;
+      if(process.platform === 'darwin'){
+        option.height = 290;
+      }else{
+        option.height = 265;
+      }
       option.title = '管理过滤正则';
       option.alwaysOnTop = true;
       option.resizable = false;

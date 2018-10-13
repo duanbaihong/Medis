@@ -3,7 +3,6 @@
 import React,{PureComponent} from 'react'
 import ReactEcharts from 'echarts-for-react';
 
-
 class SimplePieChart extends PureComponent {
   constructor(props) {
     super(props);
