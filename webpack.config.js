@@ -35,7 +35,7 @@ module.exports = {
           options: {
             ignore: ["buffer"],
             sourceMap: true,
-            presets: ["es2015","react",'stage-0'],
+            presets: ["env","react",'stage-0'],
             plugins: [
               ["transform-runtime", 
               {
@@ -57,7 +57,7 @@ module.exports = {
           options: {
             ignore: ["buffer"],
             sourceMap: true,
-            presets: ["es2015","react",'stage-0'],
+            presets: ["env","react",'stage-0'],
             plugins: [[
               "transform-runtime", 
               {
