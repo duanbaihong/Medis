@@ -72,8 +72,8 @@ class Status extends React.Component {
   }
   timeFilter(secdons){
     let timeFormat="";
-    let month= parseInt((secdons /(3600*24))/30,10);
-    let day=parseInt(secdons /(3600*24),10);
+    let month= parseInt((secdons /(3600*24*30)),10);
+    let day=parseInt((secdons % (3600*24*30)) / (3600*24),10);
     let hour=parseInt((secdons % (3600*24))/3600,10);
     let minute=parseInt(((secdons % (3600*24))% 3600 )/60,10);
     let seconds=secdons % 60;

@@ -69,6 +69,7 @@ class MainWindow extends PureComponent {
           />
         <InstanceContent
           instances={instances}
+          onDelInstance={delInstance}
           activeInstanceKey={activeInstance.get('key')}
           />
       </div>

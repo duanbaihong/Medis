@@ -5,7 +5,6 @@ import {connect} from 'react-redux'
 import SplitPane from 'react-split-pane'
 import KeyBrowser from './components/KeyBrowser'
 import Content from './components/Content'
-// import Beforeunload from 
 require('./index.scss')
 
 class Database extends React.PureComponent {
@@ -102,6 +101,7 @@ class Database extends React.PureComponent {
       minSize={250}
       defaultSize={260}
       ref="node"
+      maxSize={450}
       onChange={size => {
         this.setState({sidebarWidth: size})
       }}

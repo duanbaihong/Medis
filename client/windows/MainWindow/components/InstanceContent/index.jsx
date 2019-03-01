@@ -15,15 +15,6 @@ class InstanceContent extends PureComponent {
   // listener = 
   componentDidMount() {
     let {instances} = this.props
-    window.onbeforeunload=(event) => {
-      this.props.instances.map(instance=>{
-        let isConRedis=instance.get('redis')
-        if(isConRedis){
-          isConRedis.emit('end',false)
-        }
-      });
-      // return confirm("确定离开此页面吗？");
-    }
     window.showModal = modal => {
       this.activeElement = document.activeElement
       this.setState({modal})
@@ -31,6 +22,33 @@ class InstanceContent extends PureComponent {
       return new Promise((resolve, reject) => {
         this.promise = {resolve, reject}
       })
+    }
+    window.onbeforeunload=(event,) => {
+      let displayDiagMsg=false;
+      const {onDelInstance,instances}=this.props;
+      instances.map(instance=>{
+        let havConn=instance.get('redis')
+        if(havConn){
+          displayDiagMsg=true
+        }
+      })
+      if(displayDiagMsg){
+        showModal({
+          title: '是否断开所有连接,并退出实例？',
+          button: ['是','否'],
+          content: `是否断开所有连接,并退出实例？`
+        }).then(() => {
+          instances.map(instance=>{
+            if(instance.get('key') != 'FIRST_INSTANCE'){
+              onDelInstance(instance.get('key'))
+            }
+          })
+          // window.$(window).trigger('unload');
+        }).catch((e)=>{
+          
+        });
+        return false
+      }
     }
   }
   modalSubmit(result) {
