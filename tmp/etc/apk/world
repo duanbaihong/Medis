@@ -1,0 +1,7 @@
+alpine-baselayout
+alpine-keys
+apk-tools
+busybox
+dumb-init
+libc-utils
+su-exec

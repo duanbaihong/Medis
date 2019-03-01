@@ -17,7 +17,6 @@ class MainWindow extends PureComponent {
   componentWillUnmount() {
     $(window).off('keydown.redis')
   }
-  mapDispatchToProps
   onHotKey(e) {
     const {instances, selectInstance} = this.props
     if (!e.ctrlKey && e.metaKey) {

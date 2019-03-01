@@ -195,7 +195,6 @@ class Config extends React.PureComponent {
               ref="host"
               title="主机地址"
               rows={4}
-              style={{paddingRight:"30px"}}
               value={this.getProp('host')} 
               onChange={this.handleChange.bind(this, 'host')} 
               placeholder='host1:port1,host2:port2,.....' >
