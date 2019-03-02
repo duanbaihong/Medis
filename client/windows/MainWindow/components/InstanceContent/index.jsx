@@ -23,7 +23,7 @@ class InstanceContent extends PureComponent {
         this.promise = {resolve, reject}
       })
     }
-    window.onbeforeunload=(event,) => {
+    window.onbeforeunload=(event) => {
       let displayDiagMsg=false;
       const {onDelInstance,instances}=this.props;
       instances.map(instance=>{
@@ -38,11 +38,29 @@ class InstanceContent extends PureComponent {
           button: ['是','否'],
           content: `是否断开所有连接,并退出实例？`
         }).then(() => {
-          instances.map(instance=>{
-            if(instance.get('key') != 'FIRST_INSTANCE'){
-              onDelInstance(instance.get('key'))
-            }
-          })
+          var n= window.event.screenX-window.screenLeft;   
+          var b=n>document.documentElement.scrollWidth-20;
+          console.log(b);
+          console.log(window.event.clientY);
+          if(b && window.event.clientY < 0 || window.event.altKey)   
+          {   
+              // alert("是关闭而非刷新");   
+              instances.map((instance) => {
+                onDelInstance(instance.get('key'))
+              })
+          }else{
+             // alert("是刷新而非关闭");   
+            instances.forEach((instance,index) => {
+              if(index==0){
+                let havConn=instance.get('redis')
+                if(havConn){
+                  havConn.emit('end',instance.get('key'))
+                }
+              }else{
+                 onDelInstance(instance.get('key'))
+               }
+            })
+          }   
           // window.$(window).trigger('unload');
         }).catch((e)=>{
           

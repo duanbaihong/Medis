@@ -9,11 +9,11 @@
   "main": "server/main.js",
   "scripts": {
     "build": "webpack --progress --color ",
-    "watch": "npm run build -- --watch",
+    "watch": "yarn build -- --watch",
     "electron": "electron . ",
     "debug": "electron --debug=5858 .",
     "lint": "xo client/**/*.{js,jsx}",
-    "pack": "npm run build -- -p --config webpack.production.config.js && node bin/pack.js",
+    "pack": "yarn build -- -p --config webpack.production.config.js && node bin/pack.js",
     "release": "NODE_ENV=production ./bin/release"
   },
   "xo": {
@@ -57,8 +57,6 @@
     "url": "git://github.com/duanbaihong/Medis.git"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "fixed-data-table-contextmenu": "^1.6.5",
     "ioredis": "^4.6.2",
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
@@ -66,6 +64,8 @@
     "ssh2": "^0.8.2"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "fixed-data-table-contextmenu": "^1.6.5",
     "ajv": "^6.5.2",
     "ajv-keywords": "^3.2.0",
     "asar": "^1.0.0",
