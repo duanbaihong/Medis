@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js run pack
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js run ppp
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -29,7 +29,8 @@ npm manifest:
       "electron": "electron . ",
       "debug": "electron --debug=5858 .",
       "lint": "xo client/**/*.{js,jsx}",
-      "pack": "yarn build -- -p --config webpack.production.config.js && node bin/pack.js",
+      "pack": "yarn build  -p --config webpack.production.config.js && node bin/pack.js",
+      "ppp": "node bin/pack.js",
       "release": "NODE_ENV=production ./bin/release"
     },
     "xo": {
@@ -9613,7 +9614,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c yarn build -- -p --config webpack.production.config.js && node bin/pack.js
+  Arguments: -c node bin/pack.js
   Directory: /Users/dbh/Desktop/code/Medis
   Output:
   

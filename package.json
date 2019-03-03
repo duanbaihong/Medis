@@ -13,7 +13,8 @@
     "electron": "electron . ",
     "debug": "electron --debug=5858 .",
     "lint": "xo client/**/*.{js,jsx}",
-    "pack": "yarn build -- -p --config webpack.production.config.js && node bin/pack.js",
+    "pack": "yarn build  -p --config webpack.production.config.js && node bin/pack.js",
+    "ppp": "node bin/pack.js",
     "release": "NODE_ENV=production ./bin/release"
   },
   "xo": {
@@ -57,15 +58,15 @@
     "url": "git://github.com/duanbaihong/Medis.git"
   },
   "dependencies": {
+    "fixed-data-table-contextmenu": "^1.6.5",
+    "lodash": "^3.10.1",
+    "babel-polyfill": "^6.26.0",
     "ioredis": "^4.6.2",
     "jquery": "^2.1.4",
-    "lodash": "^3.10.1",
     "redis-commands": "^1.0.1",
     "ssh2": "^0.8.2"
   },
   "devDependencies": {
-    "babel-polyfill": "^6.26.0",
-    "fixed-data-table-contextmenu": "^1.6.5",
     "ajv": "^6.5.2",
     "ajv-keywords": "^3.2.0",
     "asar": "^1.0.0",
@@ -89,7 +90,7 @@
     "echarts-for-react": "^2.0.14",
     "electron": "^4.0.6",
     "electron-osx-sign": "^0.4.4",
-    "electron-packager": "^8.6.0",
+    "electron-packager": "^13.1.0",
     "electron-reload": "^1.2.5",
     "eslint-config-xo": "^0.18.1",
     "eslint-config-xo-react": "^0.11.1",

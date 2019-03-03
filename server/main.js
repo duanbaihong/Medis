@@ -24,9 +24,6 @@ app.on('window-all-closed', function () {
 app.on('before-quit', function(ev) {
   // body...
   // windowManager.current.webContents.send('action', 'exportFavorite');
-  let myNotification = new Notification('标题', {
-    body: '通知正文内容'
-  })
   var redisNotification=new Notification('Medis退出连接提示',{
             body: `已经退出连接[]!`,
             icon: '../../icns/Icon1024.png',
