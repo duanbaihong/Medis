@@ -29,8 +29,7 @@ packager({
   if (err) {
     throw err;
   }
-
-
+  console.log(process.platform)
   switch(process.platform){
     case "darwin":
       const app = path.join(res[0], `${pkg.productName}.app`)
@@ -48,9 +47,7 @@ packager({
     case "openbsd":
     case "sunos":
       const application = path.join(res[0], `${pkg.productName}`)
-      shell.execFile("nautilus",[ application ],null,function(err,stdout,stderr) {
-        console.log(err)
-      });
+      shell.exec("open"+ application);
       console.log("package complated! please to ["+application+"]")
       break;
     case "win32":

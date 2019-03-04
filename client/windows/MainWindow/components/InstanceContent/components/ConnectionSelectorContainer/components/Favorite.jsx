@@ -3,8 +3,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Sortable from 'sortablejs'
-import {remote,ipcRenderer} from 'electron'
-import fs from 'fs'
+// import {remote,ipcRenderer} from 'electron'
+// import fs from 'fs'
 require('./Favorite.scss')
 
 class Favorite extends React.PureComponent {
@@ -38,8 +38,27 @@ class Favorite extends React.PureComponent {
       }
     })
   }
+
   componentDidMount() {
     this._bindSortable()
+    $.contextMenu({
+      selector: '.nav-group-item',
+      zIndex: 9999,
+      callback: (key, opt) => {
+        setTimeout(() => {
+          console.log(key)
+        }, 0)
+      },
+      items: {
+        copy: {name: '复制收藏'},
+        delete: {name: '删除收藏'},
+        sep1: '---------',
+        import: {name: '导入配置'},
+        export: {name: '导出配置'},
+        sep2: '---------',
+        setting: {name: '参数设置'}
+      }
+    })
   }
 
   componentDidUpdate() {
@@ -47,10 +66,19 @@ class Favorite extends React.PureComponent {
   }
 
   onClick(index, evt) {
-    evt.preventDefault()
     this.selectIndex(index)
   }
-
+  showContextMenu(index,evt) {
+    this.selectIndex(index)
+    let mouseBtnType=evt.button;
+    if(mouseBtnType==2){
+      $(".nav-group-item").contextMenu({
+        x: evt.pageX,
+        y: evt.pageY+2,
+        zIndex: 99999
+      })
+    }
+  }
   onDoubleClick(index, evt) {
     evt.preventDefault()
     this.selectIndex(index, true)
@@ -70,11 +98,12 @@ class Favorite extends React.PureComponent {
     }
   }
 
-  exportFaviote(){
-    ipcRenderer.send('dispatch', 'exportFavorite')
+  exportFavorite(){
+    this.props.exportFavorite()
   }
-  importFaviote(){
-    ipcRenderer.send('dispatch', 'importFavorite')
+  importFavorite(){
+    this.props.importFavorite()
+    // ipcRenderer.send('dispatch', 'importFavorite')
   }
   render() {
     return (<div style={{flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden'}}>
@@ -90,12 +119,14 @@ class Favorite extends React.PureComponent {
         </a>
         <div className='favoriteline'></div>
         <h5 className="nav-group-title">收藏</h5>
-        <div ref="sortable" key={this.sortableKey}>{
+        <div ref="sortable" key={this.sortableKey} tabIndex="0" style={{outline: 'none'}}>
+        {
           this.props.favorites.map((favorite, index) => {
             return (<a
               key={favorite.get('key')}
               className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
               onClick={this.onClick.bind(this, index)}
+              onMouseDown={this.showContextMenu.bind(this,index)}
               onDoubleClick={this.onDoubleClick.bind(this, index)}
               >
               <div className={(favorite.get('tag') && favorite.get('tag')!='')?'nav-item-cir '+favorite.get('tag'):'nav-item-cir' }>
@@ -152,10 +183,10 @@ class Favorite extends React.PureComponent {
           ref="export"
           className={'js-pattern-dropdown pattern-dropup'+(this.state.exportKeyUp?" is-active":"")} >
             <ul>
-              <li><a onClick={this.exportFaviote.bind(this)}><span className="icon icon-export"></span>
+              <li><a onClick={this.exportFavorite.bind(this)}><span className="icon icon-export"></span>
               导出收藏</a></li>
               <li><hr/></li>
-              <li><a onClick={this.importFaviote.bind(this)}><span className="icon icon-download"></span>
+              <li><a onClick={this.importFavorite.bind(this)}><span className="icon icon-download"></span>
               导入收藏</a></li>
               <li><hr/></li>
               <li><a onClick={()=>{

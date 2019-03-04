@@ -117,7 +117,9 @@ class InstanceContent extends PureComponent {
           {
            (instance.get('redis')
               ? <DatabaseContainer key="DatabaseContainer" instance={instance} />
-              : <ConnectionSelectorContainer key="ConnectionSelectorContainer" instance={instance}/>)
+              : <ConnectionSelectorContainer 
+                key="ConnectionSelectorContainer" 
+                instance={instance}/>)
           }
         </ReactCSSTransitionGroup>
       </div>

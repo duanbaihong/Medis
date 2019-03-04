@@ -29,6 +29,8 @@ class ConnectionSelector extends PureComponent {
           updateFavorite={this.props.updateFavorite}
           createFavorite={this.props.createFavorite}
           removeFavorite={this.props.removeFavorite}
+          exportFavorite={this.props.exportFavorite}
+          importFavorite={this.props.importFavorite}
           reorderFavorites={this.props.reorderFavorites}
           />
       </aside>

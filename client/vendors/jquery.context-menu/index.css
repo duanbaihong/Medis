@@ -103,7 +103,7 @@
 .context-menu-list {
   position: absolute;
   display: inline-block;
-  min-width: 180px;
+  min-width: 150px;
   max-width: 360px;
   padding: 4px 0;
   margin: 5px;

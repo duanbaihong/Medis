@@ -207,11 +207,7 @@ class KeyList extends React.Component {
       }
     }).catch(() => {})
   }
-  componentWillUnmount() {
-    this._isMounted=false;
-  }
   componentDidMount() {
-    this._isMounted=true;
     $(ReactDOM.findDOMNode(this)).on('keydown', e => {
       if (typeof this.index === 'number' && typeof this.state.editableKey !== 'string') {
         if (e.keyCode === 8) {
@@ -350,7 +346,7 @@ class KeyList extends React.Component {
     this.handleSelect(row)
     $(ReactDOM.findDOMNode(this)).contextMenu({
       x: e.pageX,
-      y: e.pageY+2,
+      y: e.pageY+1,
       zIndex: 99999
     })
   }

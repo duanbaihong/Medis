@@ -20,7 +20,7 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.jsx$/,
+      test: /\.jsx$|\.js$/,
       exclude: /node_modules/,
       use:[
         {
@@ -48,27 +48,6 @@ module.exports = {
           }
         }
       ]
-    }, {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use:[
-        {
-          loader: 'babel-loader',
-          options: {
-            ignore: ["buffer"],
-            sourceMap: true,
-            presets: ["env","react",'stage-0'],
-            plugins: [[
-              "transform-runtime", 
-              {
-                "helpers": false,
-                "polyfill": false,
-                "regenerator": true,
-                "moduleName": "babel-runtime"
-              }
-            ]]
-          }
-        }]
     }, {
       test: /\.scss$/,
       loader: 'style-loader!css-loader!sass-loader'
