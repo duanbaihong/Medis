@@ -63,7 +63,6 @@
     "ioredis": "^4.6.2",
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
-    "react-contextmenu": "^2.10.0",
     "redis-commands": "^1.0.1",
     "ssh2": "^0.8.2"
   },

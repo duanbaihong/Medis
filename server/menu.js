@@ -1,6 +1,7 @@
 'use strict';
 
 const {app, Menu} = require('electron');
+// const path = require('path')
 const windowManager = require('./windowManager');
 
 const menuTemplate = [{
@@ -187,7 +188,12 @@ if (process.platform == 'darwin') {
     }]
   });
 }
-
+const contextMenu = Menu.buildFromTemplate([
+    { label: '新建连接',click: () => { mainWindow.destroy(); app.quit(); } },
+    { label: 'Item2', type: 'radio' },
+    { label: 'Item3', type: 'radio', checked: true },
+    { label: 'Item4', type: 'radio' }
+  ])
 const menu = Menu.buildFromTemplate(menuTemplate);
 
 // if (process.env.NODE_ENV !== 'debug') {
@@ -205,4 +211,4 @@ windowManager.on('focus', function () {
   menu.items[baseIndex + 0].submenu.items[4].enabled = true;
 });
 
-module.exports = menu;
+module.exports = {menu: menu,contextMenu: contextMenu};

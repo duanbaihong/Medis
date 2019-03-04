@@ -41,17 +41,26 @@ class Favorite extends React.PureComponent {
 
   componentDidMount() {
     this._bindSortable()
-    $.contextMenu({
-      selector: '.nav-group-item',
+    let contMenu=$.contextMenu({
+      selector: '.favorite .favorite_item',
       zIndex: 9999,
       callback: (key, opt) => {
         setTimeout(() => {
-          console.log(key)
+          switch(key){
+            case 'import':
+              this.props.importFavorite()
+              break;
+            case 'export':
+              this.props.exportFavorite()
+              break;
+            default:
+              console.log(key)
+          }
         }, 0)
       },
       items: {
-        copy: {name: '复制收藏'},
-        delete: {name: '删除收藏'},
+        copy: {name: '复制收藏',icon:'icon icon-export'},
+        delete: {name: '删除收藏',icon: "edit"},
         sep1: '---------',
         import: {name: '导入配置'},
         export: {name: '导出配置'},
@@ -59,6 +68,7 @@ class Favorite extends React.PureComponent {
         setting: {name: '参数设置'}
       }
     })
+  console.log(contMenu)
   }
 
   componentDidUpdate() {
@@ -72,7 +82,7 @@ class Favorite extends React.PureComponent {
     this.selectIndex(index)
     let mouseBtnType=evt.button;
     if(mouseBtnType==2){
-      $(".nav-group-item").contextMenu({
+      $(".favorite .favorite_item").contextMenu({
         x: evt.pageX,
         y: evt.pageY+2,
         zIndex: 99999
@@ -97,16 +107,8 @@ class Favorite extends React.PureComponent {
       this.props.onSelect(activeKey)
     }
   }
-
-  exportFavorite(){
-    this.props.exportFavorite()
-  }
-  importFavorite(){
-    this.props.importFavorite()
-    // ipcRenderer.send('dispatch', 'importFavorite')
-  }
   render() {
-    return (<div style={{flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden'}}>
+    return (<div className='favorite'>
       <nav className="nav-group">
         <h5 className="nav-group-title"/>
         <a
@@ -119,7 +121,7 @@ class Favorite extends React.PureComponent {
         </a>
         <div className='favoriteline'></div>
         <h5 className="nav-group-title">收藏</h5>
-        <div ref="sortable" key={this.sortableKey} tabIndex="0" style={{outline: 'none'}}>
+        <div ref="sortable" key={this.sortableKey} tabIndex="0" className='favorite_item'>
         {
           this.props.favorites.map((favorite, index) => {
             return (<a
@@ -183,10 +185,10 @@ class Favorite extends React.PureComponent {
           ref="export"
           className={'js-pattern-dropdown pattern-dropup'+(this.state.exportKeyUp?" is-active":"")} >
             <ul>
-              <li><a onClick={this.exportFavorite.bind(this)}><span className="icon icon-export"></span>
+              <li><a onClick={this.props.exportFavorite}><span className="icon icon-export"></span>
               导出收藏</a></li>
               <li><hr/></li>
-              <li><a onClick={this.importFavorite.bind(this)}><span className="icon icon-download"></span>
+              <li><a onClick={this.props.importFavorite}><span className="icon icon-download"></span>
               导入收藏</a></li>
               <li><hr/></li>
               <li><a onClick={()=>{

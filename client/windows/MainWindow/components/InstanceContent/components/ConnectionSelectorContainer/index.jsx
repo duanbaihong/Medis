@@ -5,8 +5,15 @@ import {Provider, connect} from 'react-redux'
 import Favorite from './components/Favorite'
 import Config from './components/Config'
 import store from 'Redux/store'
-import {connectToRedis,disconnect} from 'Redux/actions'
-import {removeFavorite, updateFavorite, createFavorite, reorderFavorites, exportFavorite, importFavorite} from 'Redux/actions'
+import {connectToRedis,
+        disconnect } from 'Redux/actions'
+import {removeFavorite, 
+        updateFavorite, 
+        createFavorite, 
+        reorderFavorites, 
+        exportFavorite, 
+        importFavorite
+      } from 'Redux/actions'
 
 class ConnectionSelector extends PureComponent {
   constructor() {
@@ -19,7 +26,8 @@ class ConnectionSelector extends PureComponent {
   }
 
   render() {
-    const selectedFavorite = this.state.key && this.props.favorites.find(item => item.get('key') === this.state.key)
+    const selectedFavorite = this.state.key && 
+          this.props.favorites.find(item => item.get('key') === this.state.key)
     return (<div className="pane-group">
       <aside className="pane pane-sm sidebar">
         <Favorite

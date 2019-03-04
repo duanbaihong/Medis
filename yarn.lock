@@ -6151,14 +6151,6 @@ react-codemirror@^0.3.0:
     codemirror "^5.18.2"
     lodash.debounce "^4.0.8"
 
-react-contextmenu@^2.10.0:
-  version "2.10.0"
-  resolved "http://registry.npm.taobao.org/react-contextmenu/download/react-contextmenu-2.10.0.tgz#3a5338a552964db85c300072f719bc1f6b969838"
-  integrity sha1-OlM4pVKWTbhcMABy9xm8H2uWmDg=
-  dependencies:
-    classnames "^2.2.5"
-    object-assign "^4.1.0"
-
 react-document-title@^2.0.1:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/react-document-title/download/react-document-title-2.0.3.tgz#bbf922a0d71412fc948245e4283b2412df70f2b9"
@@ -7036,7 +7028,6 @@ ssh2-streams@~0.4.2:
 ssh2@^0.8.2:
   version "0.8.2"
   resolved "http://registry.npm.taobao.org/ssh2/download/ssh2-0.8.2.tgz#f7a172458d3a7a13d520438264f90de8a3ee72af"
-  integrity sha1-96FyRY06ehPVIEOCZPkN6KPucq8=
   dependencies:
     ssh2-streams "~0.4.2"
 
