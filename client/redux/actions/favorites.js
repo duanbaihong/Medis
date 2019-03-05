@@ -50,8 +50,8 @@ export const importFavorite = createAction('IMPORT_FAVORITES', () => {
       const file = files[0]
       try{
         const content = fs.readFileSync(file, 'utf8')
-        var objData=JSON.parse(content)
-          Favorites.set(objData)
+        let objData=JSON.parse(content)
+        Favorites.set(objData)
       }catch(e){
       	console.log(e)
         alert("导入数据失败，请检查文件是否准确！")

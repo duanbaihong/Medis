@@ -15,20 +15,20 @@
  * Date: 2015-11-16T21:31:33.969Z
  */
 @font-face {
-  font-family: "context-menu-icons";
-  font-style: normal; 
-  font-weight: normal;
-
-  src: url("font/context-menu-icons.eot?4kdwx");
-  src: url("font/context-menu-icons.eot?4kdwx#iefix") format("embedded-opentype"), url("font/context-menu-icons.woff2?4kdwx") format("woff2"), url("font/context-menu-icons.woff?4kdwx") format("woff"), url("font/context-menu-icons.ttf?4kdwx") format("truetype");
+    font-family: photon-entypo;
+    src: url(../../photon/fonts/photon-entypo.eot);
+    src: url(../../photon/fonts/photon-entypo.eot?#iefix) format("eot"), url(../../photon/fonts/photon-entypo.woff) format("woff"), url(../../photon/fonts/photon-entypo.ttf) format("truetype");
+    font-weight: 400;
+    font-style: normal
 }
 
-.context-menu-icon-add:before, .context-menu-icon-copy:before, .context-menu-icon-cut:before, .context-menu-icon-delete:before, .context-menu-icon-edit:before, .context-menu-icon-paste:before, .context-menu-icon-quit:before {
+.context-menu-icon-add:before, .context-menu-icon-copy:before, .context-menu-icon-cut:before, .context-menu-icon-delete:before, .context-menu-icon-edit:before, .context-menu-icon-paste:before, .context-menu-icon-quit:before, .context-menu-icon-export:before,
+ .context-menu-icon-import:before, .context-menu-icon-setting:before , .context-menu-icon-reload:before, .context-menu-icon-clipboard:before, .context-menu-icon-rename:before {
   position: absolute;
-  top: 50%;
-  left: 0;
+  top: 49%;
+  left: 2px;
   width: 28px; 
-  font-family: "context-menu-icons";
+  font-family: "photon-entypo";
   font-size: 16px;
   font-style: normal;
   font-weight: normal;
@@ -45,7 +45,7 @@
 }
 
 .context-menu-icon-add:before {
-  content: "";
+  content: '\e8a6';
 }
 
 .context-menu-icon-add.context-menu-hover:before {
@@ -53,10 +53,34 @@
 }
 
 .context-menu-icon-copy:before {
-  content: "";
+  content: '\e822';
 }
 
 .context-menu-icon-copy.context-menu-hover:before {
+  color: #fff;
+}
+
+.context-menu-icon-reload:before {
+  content: '\e839';
+}
+
+.context-menu-icon-reload.context-menu-hover:before {
+  color: #fff;
+}
+
+.context-menu-icon-rename:before {
+  content: '\e836';
+}
+
+.context-menu-icon-rename.context-menu-hover:before {
+  color: #fff;
+}
+
+.context-menu-icon-clipboard:before {
+  content: '\e8d1';
+}
+
+.context-menu-icon-clipboard.context-menu-hover:before {
   color: #fff;
 }
 
@@ -69,20 +93,45 @@
 }
 
 .context-menu-icon-delete:before {
-  content: "";
+  content: '\e85a';
 }
-
+ 
 .context-menu-icon-delete.context-menu-hover:before {
   color: #fff;
 }
 
 .context-menu-icon-edit:before {
-  content: "";
+  content: '\e835';
 }
 
 .context-menu-icon-edit.context-menu-hover:before {
   color: #fff;
 }
+
+.context-menu-icon-export:before {
+  content: '\e835';
+}
+
+.context-menu-icon-export.context-menu-hover:before {
+  color: #fff;
+}
+
+.context-menu-icon-import:before {
+  content: '\e82d';
+}
+
+.context-menu-icon-import.context-menu-hover:before {
+  color: #fff;
+}
+
+.context-menu-icon-setting:before {
+  content: '\e855';
+}
+
+.context-menu-icon-setting.context-menu-hover:before {
+  color: #fff;
+}
+
 
 .context-menu-icon-paste:before {
   content: "";
@@ -103,7 +152,7 @@
 .context-menu-list {
   position: absolute;
   display: inline-block;
-  min-width: 150px;
+  min-width: 100px;
   max-width: 360px;
   padding: 4px 0;
   margin: 5px;
@@ -150,7 +199,7 @@
 }
 
 .context-menu-item.context-menu-disabled {
-  color: #626262; 
+  color: #d0d0d0; 
   background-color: #fff;
 }
 
@@ -158,6 +207,9 @@
 .context-menu-item.context-menu-disabled.context-menu-hover {
   cursor: default; 
   background-color: #eee;
+}
+.context-menu-item.context-menu-disabled:before {
+    color: #b6b6b6;
 }
 
 .context-menu-submenu:after {

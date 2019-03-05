@@ -2,6 +2,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Immutable from 'immutable'
 import Sortable from 'sortablejs'
 // import {remote,ipcRenderer} from 'electron'
 // import fs from 'fs'
@@ -12,7 +13,8 @@ class Favorite extends React.PureComponent {
     super(props)
     this.state = {
       activeKey: null,
-      exportKeyUp: false
+      exportKeyUp: false,
+      data: new Immutable.Map()
     }
     this._updateSortableKey()
   }
@@ -25,7 +27,7 @@ class Favorite extends React.PureComponent {
     const {reorderFavorites} = this.props
 
     this.sortable = Sortable.create(this.refs.sortable, {
-      animation: 100,
+      animation: 200,
       onStart: evt => {
         this.nextSibling = evt.item.nextElementSibling
       },
@@ -38,37 +40,60 @@ class Favorite extends React.PureComponent {
       }
     })
   }
-
   componentDidMount() {
     this._bindSortable()
-    let contMenu=$.contextMenu({
-      selector: '.favorite .favorite_item',
+    $.contextMenu({
+      selector:'.'+this.props.instance.get('key')+' .favorite .favorite_item',
+      appendTo: '.'+this.props.instance.get('key'),
       zIndex: 9999,
       callback: (key, opt) => {
-        setTimeout(() => {
-          switch(key){
-            case 'import':
-              this.props.importFavorite()
-              break;
-            case 'export':
-              this.props.exportFavorite()
-              break;
-            default:
-              console.log(key)
-          }
-        }, 0)
+        switch(key){
+          case 'import':
+            this.props.importFavorite()
+            break;
+          case 'export':
+            this.props.exportFavorite()
+            break;
+          case 'delete':
+            this.delFavoriteItem()
+            break;
+          case 'copy':
+            this.onDuplicate();
+            break;
+          default:
+            console.log(key)
+        }
       },
       items: {
-        copy: {name: '复制收藏',icon:'icon icon-export'},
-        delete: {name: '删除收藏',icon: "edit"},
+        copy: {name: '复制收藏',icon: 'add',
+        disabled: ()=>{
+          if(this.state.activeKey) {
+            return false
+          }else{
+            return true;
+          }
+        }},
+        delete: {name: '删除收藏',icon: "delete",
+        disabled: ()=>{
+          if(this.state.activeKey) {
+            return false
+          }else{
+            return true;
+          }
+        }},
         sep1: '---------',
-        import: {name: '导入配置'},
-        export: {name: '导出配置'},
+        import: {name: '导入配置',icon:'import'},
+        export: {name: '导出配置',icon:'export',disabled: ()=>{
+          if(this.props.favorites.size>0) {
+            return false
+          }else{
+            return true;
+          }
+        }},
         sep2: '---------',
-        setting: {name: '参数设置'}
+        setting: {name: '参数设置',icon: 'setting'}
       }
     })
-  console.log(contMenu)
   }
 
   componentDidUpdate() {
@@ -76,24 +101,30 @@ class Favorite extends React.PureComponent {
   }
 
   onClick(index, evt) {
+    evt.preventDefault()
     this.selectIndex(index)
-  }
-  showContextMenu(index,evt) {
-    this.selectIndex(index)
-    let mouseBtnType=evt.button;
-    if(mouseBtnType==2){
-      $(".favorite .favorite_item").contextMenu({
-        x: evt.pageX,
-        y: evt.pageY+2,
-        zIndex: 99999
-      })
-    }
   }
   onDoubleClick(index, evt) {
     evt.preventDefault()
     this.selectIndex(index, true)
   }
 
+  delFavoriteItem(){
+    const key = this.state.activeKey
+    if (!key) {
+      return
+    }
+    showModal({
+      title: '删除项目在收藏夹?',
+      button: '删除',
+      content: '你确定要删除收藏夹中的此项目? 删除后将不能恢复！'
+    }).then(() => {
+      const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'))
+      console.log(index+"  key:"+key)
+      this.props.removeFavorite(key)
+      this.selectIndex(index - 1,false)
+    })
+  }
   selectIndex(index, connect) {
     this.select(index === -1 ? null : this.props.favorites.get(index), connect)
   }
@@ -101,10 +132,21 @@ class Favorite extends React.PureComponent {
   select(favorite, connect) {
     const activeKey = favorite ? favorite.get('key') : null
     this.setState({activeKey})
+    this.props.onSelect(connect,activeKey)
     if (connect) {
       this.props.onRequireConnecting(activeKey)
+
+    }
+  }
+  onDuplicate(){
+    if (this.props.favorite) {
+      const data = Object.assign(this.props.favorite.toJS(), this.state.data.toJS())
+      delete data.key
+      this.props.createFavorite(data)
     } else {
-      this.props.onSelect(activeKey)
+      const data = this.state.data.toJS()
+      data.name = '快速连接'
+      this.props.createFavorite(data)
     }
   }
   render() {
@@ -121,14 +163,16 @@ class Favorite extends React.PureComponent {
         </a>
         <div className='favoriteline'></div>
         <h5 className="nav-group-title">收藏</h5>
-        <div ref="sortable" key={this.sortableKey} tabIndex="0" className='favorite_item'>
+        <div ref="sortable" 
+          key={this.sortableKey} 
+          tabIndex="0" 
+          className='favorite_item'>
         {
           this.props.favorites.map((favorite, index) => {
             return (<a
               key={favorite.get('key')}
               className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
               onClick={this.onClick.bind(this, index)}
-              onMouseDown={this.showContextMenu.bind(this,index)}
               onDoubleClick={this.onDoubleClick.bind(this, index)}
               >
               <div className={(favorite.get('tag') && favorite.get('tag')!='')?'nav-item-cir '+favorite.get('tag'):'nav-item-cir' }>
@@ -148,24 +192,7 @@ class Favorite extends React.PureComponent {
           ></button>
         <button
           className="icon icon-minus"
-          onClick={
-          () => {
-            const key = this.state.activeKey
-            if (!key) {
-              return
-            }
-            showModal({
-              title: '删除项目在收藏夹?',
-              button: '删除',
-              content: '你确定要删除收藏夹中的此项目? 删除后将不能恢复！'
-            }).then(() => {
-              const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'))
-              this.props.removeFavorite(key)
-              this.selectIndex(index - 1)
-            })
-          }
-        }
-          ></button>
+          onClick={this.delFavoriteItem.bind(this)}></button>
         <button className='pull-right' onMouseLeave={()=>{
           if(this.state.exportKeyUp){
             this.setState({exportKeyUp: false})
@@ -185,16 +212,27 @@ class Favorite extends React.PureComponent {
           ref="export"
           className={'js-pattern-dropdown pattern-dropup'+(this.state.exportKeyUp?" is-active":"")} >
             <ul>
-              <li><a onClick={this.props.exportFavorite}><span className="icon icon-export"></span>
-              导出收藏</a></li>
+              <li>
+                <a className={this.props.favorites.size>0?'':'disabled'} 
+                   onClick={this.props.favorites.size>0?this.props.exportFavorite:''}>
+                  <span className="icon icon-export"></span>
+                  导出收藏
+                </a>
+              </li>
               <li><hr/></li>
-              <li><a onClick={this.props.importFavorite}><span className="icon icon-download"></span>
-              导入收藏</a></li>
+              <li>
+                <a onClick={this.props.importFavorite}>
+                  <span className="icon icon-download"></span>
+                  导入收藏
+                </a>
+              </li>
               <li><hr/></li>
-              <li><a onClick={()=>{
-                
-              }}><span className="icon icon-cog"></span>
-              参数设置</a></li>
+              <li>
+                <a onClick={()=>{}}>
+                  <span className="icon icon-cog"></span>
+                  参数设置
+                </a>
+              </li>
             </ul>
           </div>
         </button>

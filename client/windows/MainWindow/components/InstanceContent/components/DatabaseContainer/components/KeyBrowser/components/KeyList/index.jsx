@@ -314,14 +314,14 @@ class KeyList extends React.Component {
         ReactDOM.findDOMNode(this).focus()
       },
       items: {
-        copy: {name: '拷贝到粘贴板'},
-        reload: {name: '重载'},
+        copy: {name: '拷贝到粘贴板',icon: 'clipboard'},
+        reload: {name: '重载',icon: 'reload'},
         sep1: '---------',
         ttl: {name: '设置失效时间...'},
-        rename: {name: '重命名键...'},
-        duplicate: {name: '复制键...'},
+        rename: {name: '重命名键...',icon: 'rename'},
+        duplicate: {name: '复制键...',icon: 'copy'},
         sep2: '---------',
-        delete: {name: '删除键'}
+        delete: {name: '删除键',icon:'delete'}
       }
     })
   }

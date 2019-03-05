@@ -40,6 +40,14 @@
       background: #116cd6;
       color: #fff;
     }
+    a.disabled{
+      color:#b6b6b6;
+      background: #fff;
+    }
+    a.disabled:hover {
+      background: #b6b6b6;
+      color: #fff;
+    }
     hr {
       margin: 2px 1px;
     }

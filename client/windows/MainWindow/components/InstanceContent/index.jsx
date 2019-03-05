@@ -40,8 +40,6 @@ class InstanceContent extends PureComponent {
         }).then(() => {
           var n= window.event.screenX-window.screenLeft;   
           var b=n>document.documentElement.scrollWidth-20;
-          console.log(b);
-          console.log(window.event.clientY);
           if(b && window.event.clientY < 0 || window.event.altKey)   
           {   
               // alert("是关闭而非刷新");   
@@ -104,6 +102,7 @@ class InstanceContent extends PureComponent {
     const contents = instances.map(instance => (
       <div
         key={instance.get('key')}
+        className={instance.get('key')}
         style={{display: instance.get('key') === activeInstanceKey ? 'block' : 'none'}}
         >
         <ReactCSSTransitionGroup

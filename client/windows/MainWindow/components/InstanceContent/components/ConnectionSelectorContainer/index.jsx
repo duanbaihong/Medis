@@ -22,9 +22,9 @@ class ConnectionSelector extends PureComponent {
   }
 
   handleSelectFavorite(connect, key) {
+    console.log("connect:"+connect+"key:"+key)
     this.setState({connect, key})
   }
-
   render() {
     const selectedFavorite = this.state.key && 
           this.props.favorites.find(item => item.get('key') === this.state.key)
@@ -40,6 +40,8 @@ class ConnectionSelector extends PureComponent {
           exportFavorite={this.props.exportFavorite}
           importFavorite={this.props.importFavorite}
           reorderFavorites={this.props.reorderFavorites}
+          favorite={selectedFavorite}
+          instance={this.props.instance}
           />
       </aside>
       <div className="pane">
