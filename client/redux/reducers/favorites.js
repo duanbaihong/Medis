@@ -4,6 +4,7 @@ import {
   removeFavorite,
   updateFavorite,
   reorderFavorites,
+  importFavorites,
   reloadFavorites
 } from 'Redux/actions'
 import {Favorites} from '../../storage'
@@ -29,5 +30,12 @@ export const favorites = handleActions(fromJS(Favorites.get()), {
   },
   [reloadFavorites](state, data) {
     return fromJS(data)
+  },
+  [importFavorites](state, {data}) {
+
+    console.log(data)
+    console.log(state.mergeDeep(data))
+    return state.mergeDeep(data)
+    // state.merge(data)
   }
 })

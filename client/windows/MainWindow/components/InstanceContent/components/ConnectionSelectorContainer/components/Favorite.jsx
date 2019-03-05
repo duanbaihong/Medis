@@ -4,8 +4,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Immutable from 'immutable'
 import Sortable from 'sortablejs'
-// import {remote,ipcRenderer} from 'electron'
-// import fs from 'fs'
+
+import {remote} from 'electron';
+// import {fromJS} from 'immutable'
+import fs from 'fs'
+
 require('./Favorite.scss')
 
 class Favorite extends React.PureComponent {
@@ -57,10 +60,10 @@ class Favorite extends React.PureComponent {
           callback: (key, opt) => {
             switch(key){
               case 'import':
-                this.props.importFavorite()
+                this.importFavorite()
                 break;
               case 'export':
-                this.props.exportFavorite()
+                this.exportFavorite()
                 break;
               case 'delete':
                 this.delFavoriteItem()
@@ -156,6 +159,60 @@ class Favorite extends React.PureComponent {
       this.props.createFavorite(data)
     }
   }
+  exportFavorite(){
+    const win = remote.getCurrentWindow()
+    const files = remote.dialog.showSaveDialog(win, {
+      title: "导出收藏",
+      defaultPath: "~/Desktop/",
+      filters:[{name: 'JSON Files', extensions: ['json']}]
+    })
+    let favoriteData=JSON.stringify(this.props.favorites.toJS(),null,'\t')
+    if (files && files.length) {
+      try{
+        fs.writeFileSync(files, favoriteData)
+        Notification.requestPermission(function (permission) {
+          var redisNotification=new Notification('导出收藏成功！',{
+            body: '导出收藏成功！导出文件为:'+files,
+            icon: '../../icns/Icon1024.png',
+            silent: true
+          })
+        })
+      } catch(e){
+        console.log(e)
+        alert("导出收藏失败！"+e)
+      }
+    }
+  }
+  importFavorite(){
+    const win = remote.getCurrentWindow()
+    const files = remote.dialog.showOpenDialog(win, {
+      properties: ['openFile'],
+      title: "导入收藏",
+      defaultPath: "~/Desktop/",
+      filters:[{name: 'JSON Files', extensions: ['json']}]
+    })
+    if (files && files.length) {
+      const file = files[0]
+      try{
+        const content = fs.readFileSync(file, 'utf8')
+        let objData=JSON.parse(content)
+        // let oldData=this.props.favorites.toJS()
+        // console.log( Object.assign([], ha, hb));
+        this.props.importFavorites(Object.assign([],objData))
+      }catch(e){
+        console.log(e)
+        alert("导入数据失败，请检查文件是否准确！")
+        return false
+      }
+      Notification.requestPermission(function (permission) {
+        var redisNotification=new Notification('导入收藏成功！',{
+            body: '从文件['+file+']导入收藏成功！',
+            icon: '../../icns/Icon1024.png',
+            silent: true
+          })
+      })
+    }
+  }
   render() {
     return (<div className='favorite'>
       <nav className="nav-group">
@@ -220,14 +277,14 @@ class Favorite extends React.PureComponent {
             <ul>
               <li>
                 <a className={this.props.favorites.size>0?'':'disabled'} 
-                   onClick={this.props.favorites.size>0?this.props.exportFavorite:''}>
+                   onClick={this.props.favorites.size>0?this.exportFavorite.bind(this):''}>
                   <span className="icon icon-export"></span>
                   导出收藏
                 </a>
               </li>
               <li><hr/></li>
               <li>
-                <a onClick={this.props.importFavorite}>
+                <a onClick={this.importFavorite.bind(this)}>
                   <span className="icon icon-download"></span>
                   导入收藏
                 </a>

@@ -10,9 +10,8 @@ import {connectToRedis,
 import {removeFavorite, 
         updateFavorite, 
         createFavorite, 
-        reorderFavorites, 
-        exportFavorite, 
-        importFavorite
+        reorderFavorites,
+        importFavorites
       } from 'Redux/actions'
 
 class ConnectionSelector extends PureComponent {
@@ -33,11 +32,9 @@ class ConnectionSelector extends PureComponent {
           favorites={this.props.favorites}
           onSelect={this.handleSelectFavorite.bind(this, false)}
           onRequireConnecting={this.handleSelectFavorite.bind(this, true)}
-          updateFavorite={this.props.updateFavorite}
           createFavorite={this.props.createFavorite}
           removeFavorite={this.props.removeFavorite}
-          exportFavorite={this.props.exportFavorite}
-          importFavorite={this.props.importFavorite}
+          importFavorites={this.props.importFavorites}
           reorderFavorites={this.props.reorderFavorites}
           favorite={selectedFavorite}
           instance={this.props.instance}
@@ -71,8 +68,7 @@ const mapDispatchToProps = {
   connectToRedis,
   reorderFavorites,
   removeFavorite,
-  exportFavorite,
-  importFavorite
+  importFavorites
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectionSelector)
