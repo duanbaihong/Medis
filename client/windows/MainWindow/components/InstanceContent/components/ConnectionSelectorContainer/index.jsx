@@ -22,7 +22,6 @@ class ConnectionSelector extends PureComponent {
   }
 
   handleSelectFavorite(connect, key) {
-    console.log("connect:"+connect+"key:"+key)
     this.setState({connect, key})
   }
   render() {

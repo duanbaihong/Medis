@@ -46,52 +46,62 @@ class Favorite extends React.PureComponent {
       selector:'.'+this.props.instance.get('key')+' .favorite .favorite_item',
       appendTo: '.'+this.props.instance.get('key'),
       zIndex: 9999,
-      callback: (key, opt) => {
-        switch(key){
-          case 'import':
-            this.props.importFavorite()
-            break;
-          case 'export':
-            this.props.exportFavorite()
-            break;
-          case 'delete':
-            this.delFavoriteItem()
-            break;
-          case 'copy':
-            this.onDuplicate();
-            break;
-          default:
-            console.log(key)
+      position: function(opt, x, y){
+        opt.$menu.css({
+          top: y-3-($("#instancesId").css('display')=='none'?0:$("#instancesId").height()),
+          left: x-2
+        });
+      }, 
+      build: ($triggerElement, e)=>{
+        return {
+          callback: (key, opt) => {
+            switch(key){
+              case 'import':
+                this.props.importFavorite()
+                break;
+              case 'export':
+                this.props.exportFavorite()
+                break;
+              case 'delete':
+                this.delFavoriteItem()
+                break;
+              case 'copy':
+                this.onDuplicate();
+                break;
+              default:
+                console.log(key)
+            }
+          },
+          items: {
+            copy: {name: '复制收藏',icon: 'add',
+            disabled: ()=>{
+              if(this.state.activeKey) {
+                return false
+              }else{
+                return true;
+              }
+            }},
+            delete: {name: '删除收藏',icon: "delete",
+            disabled: ()=>{
+              if(this.state.activeKey) {
+                return false
+              }else{
+                return true;
+              }
+            }},
+            sep1: '---------',
+            import: {name: '导入配置',icon:'import'},
+            export: {name: '导出配置',icon:'export',disabled: ()=>{
+              if(this.props.favorites.size>0) {
+                return false
+              }else{
+                return true;
+              }
+            }},
+            sep2: '---------',
+            setting: {name: '参数设置',icon: 'setting'}
+          }
         }
-      },
-      items: {
-        copy: {name: '复制收藏',icon: 'add',
-        disabled: ()=>{
-          if(this.state.activeKey) {
-            return false
-          }else{
-            return true;
-          }
-        }},
-        delete: {name: '删除收藏',icon: "delete",
-        disabled: ()=>{
-          if(this.state.activeKey) {
-            return false
-          }else{
-            return true;
-          }
-        }},
-        sep1: '---------',
-        import: {name: '导入配置',icon:'import'},
-        export: {name: '导出配置',icon:'export',disabled: ()=>{
-          if(this.props.favorites.size>0) {
-            return false
-          }else{
-            return true;
-          }
-        }},
-        sep2: '---------',
-        setting: {name: '参数设置',icon: 'setting'}
       }
     })
   }
@@ -99,10 +109,9 @@ class Favorite extends React.PureComponent {
   componentDidUpdate() {
     this._bindSortable()
   }
-
   onClick(index, evt) {
     evt.preventDefault()
-    this.selectIndex(index)
+    this.selectIndex(index,false)
   }
   onDoubleClick(index, evt) {
     evt.preventDefault()
@@ -120,7 +129,6 @@ class Favorite extends React.PureComponent {
       content: '你确定要删除收藏夹中的此项目? 删除后将不能恢复！'
     }).then(() => {
       const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'))
-      console.log(index+"  key:"+key)
       this.props.removeFavorite(key)
       this.selectIndex(index - 1,false)
     })
@@ -132,10 +140,9 @@ class Favorite extends React.PureComponent {
   select(favorite, connect) {
     const activeKey = favorite ? favorite.get('key') : null
     this.setState({activeKey})
-    this.props.onSelect(connect,activeKey)
+    this.props.onSelect(activeKey)
     if (connect) {
       this.props.onRequireConnecting(activeKey)
-
     }
   }
   onDuplicate(){
@@ -153,11 +160,9 @@ class Favorite extends React.PureComponent {
     return (<div className='favorite'>
       <nav className="nav-group">
         <h5 className="nav-group-title"/>
-        <a
-          className={'nav-quick-item' + (this.state.activeKey ? '' : ' active')}
-          onClick={this.onClick.bind(this, -1)}
-          onDoubleClick={this.onDoubleClick.bind(this, -1)}
-          >
+        <a className={'nav-quick-item' + (this.state.activeKey ? '' : ' active')}
+           onClick={this.onClick.bind(this, -1)}
+           onDoubleClick={this.onDoubleClick.bind(this, -1)}>
           <span className="icon icon-flash"/>
           快速连接
         </a>
@@ -173,6 +178,7 @@ class Favorite extends React.PureComponent {
               key={favorite.get('key')}
               className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
               onClick={this.onClick.bind(this, index)}
+              onMouseDown={this.onClick.bind(this, index)}
               onDoubleClick={this.onDoubleClick.bind(this, index)}
               >
               <div className={(favorite.get('tag') && favorite.get('tag')!='')?'nav-item-cir '+favorite.get('tag'):'nav-item-cir' }>
@@ -242,6 +248,7 @@ class Favorite extends React.PureComponent {
 
   componentWillUnmount() {
     this.sortable.destroy()
+    $.contextMenu( 'destroy','.'+this.props.instance.get('key')+' .favorite .favorite_item');
   }
 }
 
