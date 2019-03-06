@@ -2,7 +2,7 @@
 
 import React from 'react'
 import store from 'Redux/store'
-import Immutable from 'immutable'
+import {Map} from 'immutable'
 import {remote} from 'electron'
 import fs from 'fs'
 
@@ -12,7 +12,7 @@ class Config extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      data: new Immutable.Map({'curmodel': 'standalone'})
+      data: new Map({'curmodel': 'standalone'})
     }
   }
 
@@ -41,7 +41,7 @@ class Config extends React.PureComponent {
       const leaving = !this.props.favorite || !nextProps.favorite ||
         (this.props.favorite.get('key') !== nextProps.favorite.get('key'))
       if (leaving) {
-        this.setState({changed: false, data: new Immutable.Map({'curmodel': this.getProp('curmodel')?this.getProp('curmodel'):'standalone'})})
+        this.setState({changed: false, data: new Map({'curmodel': this.getProp('curmodel')?this.getProp('curmodel'):'standalone'})})
       }
     }
   }
@@ -129,7 +129,7 @@ class Config extends React.PureComponent {
   save() {
     if (this.props.favorite && this.state.changed) {
       this.props.onSave(this.state.data.toJS())
-      this.setState({changed: false, data: new Immutable.Map()})
+      this.setState({changed: false, data: new Map()})
     }
   }
   renderCertInput(label, id) {

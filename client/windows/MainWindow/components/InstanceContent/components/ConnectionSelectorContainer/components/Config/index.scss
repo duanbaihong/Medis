@@ -75,8 +75,10 @@
   .btn-group{
     display: flex;
     .btn-large{
+      font-size: 13px;
       flex: 1 1 0%;
-      padding: 4px 13px;
+      padding: 3px 13px;
+      cursor: pointer;
       transition: background .25s ease-in-out;
     }
     .btn+.btn.active {

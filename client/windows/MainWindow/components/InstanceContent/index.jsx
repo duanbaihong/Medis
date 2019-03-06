@@ -59,7 +59,6 @@ class InstanceContent extends PureComponent {
                }
             })
           }   
-          // window.$(window).trigger('unload');
         }).catch((e)=>{
           
         });
