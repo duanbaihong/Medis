@@ -79,7 +79,7 @@
       flex: 1 1 0%;
       padding: 3px 13px;
       cursor: pointer;
-      transition: background .25s ease-in-out;
+      transition: background .2s ease-in-out,color .2s ease-in-out;
     }
     .btn+.btn.active {
       padding-left: 14px;

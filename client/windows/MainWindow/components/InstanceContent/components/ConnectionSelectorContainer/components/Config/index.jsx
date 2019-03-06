@@ -1,4 +1,4 @@
-'use strict'
+ 'use strict'
 
 import React from 'react'
 import store from 'Redux/store'
@@ -220,7 +220,7 @@ class Config extends React.PureComponent {
     return (<div className='configbox'>
       <div className="nt-box">
         <div className="connectModel">
-        <div class="btn-group">
+        <div className="btn-group">
          <button className={"btn btn-large btn-default "+(this.getProp('curmodel')==='standalone'?'active':'')}
            onClick={this.setConnModel.bind(this,'standalone')}>
            标准模式
