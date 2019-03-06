@@ -194,7 +194,11 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       }
     });
     redis.once('end', targetInstanceKey => {
-      redis.quit();
+      try{
+        redis.quit();
+      }catch(e){
+        console.warn(e)
+      }
       dispatch(disconnect(targetInstanceKey));
       if(sshconn){
         sshconn.end();

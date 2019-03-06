@@ -158,6 +158,9 @@ class Config extends React.PureComponent {
         />
     </div>)
   }
+  setConnModel(type){
+    this.setProp({'curmodel':type,host:'',port:''});
+  }
   render() {
     let sshloginClass=""
     if (this.getProp('ssh')){
@@ -214,28 +217,23 @@ class Config extends React.PureComponent {
             onChange={this.handleChange.bind(this, 'host')} 
             placeholder='localhost' />
         </div>)
-
     return (<div className='configbox'>
       <div className="nt-box">
         <div className="connectModel">
-          <span className={(this.getProp('curmodel')==='standalone' || (!this.props.favorite && this.getProp('curmodel')=='' ))?'active':''}
-              onClick={()=>{
-                this.setProp({'curmodel':'standalone',host:'',port:''})
-              }}>
-              标准模式
-          </span>
-          <span className={this.getProp('curmodel')==='sentinel'?'active':''}
-              onClick={()=>{
-                this.setProp({'curmodel':'sentinel',host:'',port:''})
-              }}>
-              哨兵模式
-          </span>
-          <span className={this.getProp('curmodel')==='cluster'?'active':''}
-              onClick={()=>{
-                this.setProp({curmodel:'cluster',host:'',port:''})
-              }}>
-              集群模式
-          </span>
+        <div class="btn-group">
+         <button className={"btn btn-large btn-default "+(this.getProp('curmodel')==='standalone'?'active':'')}
+           onClick={this.setConnModel.bind(this,'standalone')}>
+           标准模式
+         </button>
+         <button className={"btn btn-large btn-default "+(this.getProp('curmodel')==='sentinel'?'active':'')}
+           onClick={this.setConnModel.bind(this,'sentinel')}>
+           哨兵模式
+         </button>
+         <button className={"btn btn-large btn-default "+(this.getProp('curmodel')==='cluster'?'active':'')}
+           onClick={this.setConnModel.bind(this,'cluster')}>
+           集群模式
+         </button>
+       </div>
         </div>
         <div className={this.props.favorite ? 'connect_name_hidden connect_name_shown' : 'connect_name_hidden'}>
           <div className="nt-form-row">
