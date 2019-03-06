@@ -419,7 +419,7 @@ class Config extends React.Component {
   }
   redismodel(){
     let {redis}=this.props
-    let cnf=this.props.config.toJS()
+    let cnf=this.props.config
     // let model=(cnf.curmodel != undefined?cnf.curmodel:'')
     let model=redis.serverInfo.redis_mode
     if(model=='sentinel' && redis.serverInfo.redis_mode=='sentinel'){

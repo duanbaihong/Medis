@@ -113,7 +113,7 @@ class Favorite extends React.PureComponent {
     this._bindSortable()
   }
   onClick(index, evt) {
-    evt.preventDefault()
+    // evt.preventDefault()
     this.selectIndex(index,false)
   }
   onDoubleClick(index, evt) {
@@ -196,9 +196,7 @@ class Favorite extends React.PureComponent {
       try{
         const content = fs.readFileSync(file, 'utf8')
         let objData=JSON.parse(content)
-        // let oldData=this.props.favorites.toJS()
-        // console.log( Object.assign([], ha, hb));
-        this.props.importFavorites(Object.assign([],objData))
+        this.props.importFavorites(objData)
       }catch(e){
         console.log(e)
         alert("导入数据失败，请检查文件是否准确！")
@@ -212,6 +210,15 @@ class Favorite extends React.PureComponent {
           })
       })
     }
+  }
+  bottomMenu(e){
+    this.setState({exportKeyUp: !this.state.exportKeyUp})
+    var btnMenu=$(e.target).parent()
+    var menu=$(ReactDOM.findDOMNode(this.refs.export))
+    menu.css({
+      'top':btnMenu.offset().top-menu.height()-($("#instancesId").css('display')=='none'?0:$("#instancesId").height()),
+      'left':btnMenu.offset().left-menu.width()+btnMenu.width()
+    })
   }
   render() {
     return (<div className='favorite'>
@@ -260,17 +267,7 @@ class Favorite extends React.PureComponent {
           if(this.state.exportKeyUp){
             this.setState({exportKeyUp: false})
           }
-        }}><div className="icon icon-menu " onClick={(e)=>{
-          this.setState({exportKeyUp: !this.state.exportKeyUp})
-          var btnMenu=$(e.target).parent()
-          var menu=$(ReactDOM.findDOMNode(this.refs.export))
-          var instancesBar=$('#instancesId')
-          var instancesBarHeight=0
-          if(instancesBar.css('display') !== 'none'){
-              instancesBarHeight=26
-          }
-          menu.css({'top':btnMenu.offset().top-menu.height()-instancesBarHeight,'left':btnMenu.offset().left-menu.width()+btnMenu.width()})
-        }}></div>
+        }}><div className="icon icon-menu " onClick={this.bottomMenu.bind(this)}></div>
           <div 
           ref="export"
           className={'js-pattern-dropdown pattern-dropup'+(this.state.exportKeyUp?" is-active":"")} >

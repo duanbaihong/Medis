@@ -127,7 +127,7 @@ class SetContent extends BaseContent {
         ReactDOM.findDOMNode(this.refs.table).focus()
       },
       items: {
-        delete: {name: 'Delete'}
+        delete: {name: '删除', icon: 'delete'}
       }
     })
   }
@@ -140,7 +140,9 @@ class SetContent extends BaseContent {
       zIndex: 99999
     })
   }
-
+  componentWillUnmount() {
+    $.contextMenu('destroy','.' + this.randomClass)
+  }
   render() {
     return (<SplitPane
       className="pane-group"

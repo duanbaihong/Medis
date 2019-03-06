@@ -130,10 +130,10 @@ class ZSetContent extends BaseContent {
         ReactDOM.findDOMNode(this.refs.table).focus()
       },
       items: {
-        copy: {name: 'Copy Score to Clipboard'},
+        copy: {name: '将分数复制到剪贴板',icon: 'add'},
         sep1: '---------',
-        edit: {name: 'Edit Score'},
-        delete: {name: 'Delete'}
+        edit: {name: '编辑分数'},
+        delete: {name: '删除',icon: 'delete'}
       }
     })
   }
@@ -146,7 +146,9 @@ class ZSetContent extends BaseContent {
       zIndex: 99999
     })
   }
-
+  componentWillUnmount() {
+    $.contextMenu('destroy','.' + this.randomClass)
+  }
   render() {
     return (<SplitPane
         minSize={80}

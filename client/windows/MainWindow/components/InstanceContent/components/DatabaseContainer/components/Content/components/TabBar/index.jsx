@@ -23,7 +23,7 @@ class Content extends React.PureComponent {
     return (<div className="TabBar">
       {
         this.tabs.filter(value=>{
-          if ( config.toJS().curmodel=='sentinel' && value[0]=='内容(Content)'){
+          if ( config.curmodel=='sentinel' && value[0]=='内容(Content)'){
             return false
           }
           return true;

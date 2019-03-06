@@ -122,10 +122,10 @@ class HashContent extends BaseContent {
         ReactDOM.findDOMNode(this.refs.table).focus()
       },
       items: {
-        copy: {name: '拷贝到粘贴板'},
+        copy: {name: '拷贝到粘贴板',icon: 'copy'},
         sep1: '---------',
-        rename: {name: '重命名键'},
-        delete: {name: '删除键'}
+        rename: {name: '重命名键',icon: 'rename'},
+        delete: {name: '删除键',icon: 'delete'}
       }
     })
   }
@@ -138,7 +138,9 @@ class HashContent extends BaseContent {
       zIndex: 99999
     })
   }
-
+  componentWillUnmount() {
+    $.contextMenu('destroy','.' + this.randomClass)
+  }
   render() {
     return (<SplitPane
         minSize={80}

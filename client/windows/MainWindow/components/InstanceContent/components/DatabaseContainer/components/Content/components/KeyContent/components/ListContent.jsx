@@ -129,12 +129,13 @@ class ListContent extends BaseContent {
         ReactDOM.findDOMNode(this.refs.table).focus()
       },
       items: {
-        delete: {name: '删除'}
+        delete: {name: '删除',icon: 'delete'}
       }
     })
   }
 
-  insert() {
+  componentWillUnmount() {
+    $.contextMenu('destroy','.' + this.randomClass)
   }
 
   showContextMenu(e, row) {

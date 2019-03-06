@@ -24,18 +24,18 @@ class Database extends React.PureComponent {
   }
   componentWillMount() {
     let {redis,config}=this.props;
-    if(config.toJS().curmodel!=redis.serverInfo.redis_mode){
+    if(config.curmodel!=redis.serverInfo.redis_mode){
       showModal({
         title: '连接警告?',
         button: ['是','否'],
-        content: `你选择连接模式${config.toJS().curmodel}与当前连接实例模式${redis.serverInfo.redis_mode}不一致！你是否要继续？`
+        content: `你选择连接模式${config.curmodel}与当前连接实例模式${redis.serverInfo.redis_mode}不一致！你是否要继续？`
       }).then(() => {
 
       }).catch((e)=>{
         redis.emit('end',false);
       })
     }
-    if (config.toJS().curmodel=='sentinel'){
+    if (config.curmodel=='sentinel'){
       this.setState({tab:"终端(Terminal)"})
     }
   }
@@ -94,7 +94,7 @@ class Database extends React.PureComponent {
         onSelectTab={this.handleTabChange.bind(this)}
         tab={this.state.tab}
         />)
-    return (config.toJS().curmodel!='sentinel' && this.props.redis.serverInfo.redis_mode!='sentinel')?(
+    return (config.curmodel!='sentinel' && this.props.redis.serverInfo.redis_mode!='sentinel')?(
       <SplitPane
       className="pane-group"
       split="vertical"

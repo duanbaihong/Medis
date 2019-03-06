@@ -32,10 +32,19 @@ export const favorites = handleActions(fromJS(Favorites.get()), {
     return fromJS(data)
   },
   [importFavorites](state, {data}) {
-
-    console.log(data)
-    console.log(state.mergeDeep(data))
-    return state.mergeDeep(data)
-    // state.merge(data)
+    let newData={}
+    let oldStateData={}
+    let newStateData=[]
+    data.forEach((item,index)=>{
+      newData[item.key]=item
+    })
+    state.toJS().forEach((item,index)=>{
+      oldStateData[item.key]=item
+    })
+    let tmp=fromJS(Object.assign(oldStateData,newData))
+    tmp.map((value)=>{
+      newStateData.push(value.toJS())
+    })
+    return fromJS(newStateData)
   }
 })

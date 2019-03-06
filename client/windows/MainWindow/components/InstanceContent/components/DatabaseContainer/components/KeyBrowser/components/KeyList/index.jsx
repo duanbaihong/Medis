@@ -243,72 +243,79 @@ class KeyList extends React.Component {
       zIndex: 99999,
       callback: (key, opt) => {
         setTimeout(() => {
-          if (key === 'delete') {
-            this.deleteSelectedKey()
-          } else if (key === 'rename') {
-            this.setState({editableKey: this.state.keys[this.index][0]})
-          } else if (key === 'copy') {
-            clipboard.writeText(this.state.keys[this.index][0])
-          } else if (key === 'ttl') {
-            this.props.redis.pttl(this.state.selectedKey).then(ttl => {
+          switch(key){
+            case 'delete':
+              this.deleteSelectedKey()
+              break;
+            case 'rename':
+              this.setState({editableKey: this.state.keys[this.index][0]})
+              break;
+            case 'copy':
+              clipboard.writeText(this.state.keys[this.index][0])
+              break;
+            case 'ttl':
+              this.props.redis.pttl(this.state.selectedKey).then(ttl => {
+                showModal({
+                  button: '设置失效时间',
+                  form: {
+                    type: 'object',
+                    properties: {
+                      '失效TTL (ms):': {
+                        type: 'number',
+                        minLength: 1,
+                        default: ttl
+                      }
+                    }
+                  }
+                }).then(res => {
+                  const ttl = Number(res['失效TTL (ms):'])
+                  if (ttl >= 0) {
+                    this.props.redis.pexpire(this.state.selectedKey, ttl).then(res => {
+                      if (res <= 0) {
+                        alert('更新失效时间失败！')
+                      }
+                      this.props.onKeyMetaChange()
+                    })
+                  } else {
+                    this.props.redis.persist(this.state.selectedKey, () => {
+                      this.props.onKeyMetaChange()
+                    })
+                  }
+                })
+              })
+              break;
+            case 'reload':
+              this.handleSelect(this.index, true)
+              break;
+            case 'duplicate':
+              const sourceKey = this.state.keys[this.index][0]
+              let targetKey
               showModal({
-                button: '设置失效时间',
+                button: '复制键',
                 form: {
                   type: 'object',
                   properties: {
-                    '失效TTL (ms):': {
-                      type: 'number',
-                      minLength: 1,
-                      default: ttl
+                    '目标键:': {
+                      type: 'string',
+                      minLength: 1
+                    },
+                    '保持 TTL:': {
+                      type: 'boolean'
                     }
                   }
                 }
               }).then(res => {
-                const ttl = Number(res['失效TTL (ms):'])
-                if (ttl >= 0) {
-                  this.props.redis.pexpire(this.state.selectedKey, ttl).then(res => {
-                    if (res <= 0) {
-                      alert('更新失效时间失败！')
-                    }
-                    this.props.onKeyMetaChange()
-                  })
-                } else {
-                  this.props.redis.persist(this.state.selectedKey, () => {
-                    this.props.onKeyMetaChange()
-                  })
+                targetKey = res['目标键:']
+                const duplicateTTL = res['保持 TTL:']
+                this.props.redis.duplicateKey(sourceKey, targetKey, duplicateTTL ? 'TTL' : 'NOTTL')
+              }).then(() => {
+                this.props.onCreateKey(targetKey)
+              }).catch(err => {
+                if (err && err.message) {
+                  alert(err.message)
                 }
               })
-            })
-          } else if (key === 'reload') {
-            this.handleSelect(this.index, true)
-          } else if (key === 'duplicate') {
-            const sourceKey = this.state.keys[this.index][0]
-            let targetKey
-            showModal({
-              button: '复制键',
-              form: {
-                type: 'object',
-                properties: {
-                  '目标键:': {
-                    type: 'string',
-                    minLength: 1
-                  },
-                  '保持 TTL:': {
-                    type: 'boolean'
-                  }
-                }
-              }
-            }).then(res => {
-              targetKey = res['目标键:']
-              const duplicateTTL = res['保持 TTL:']
-              this.props.redis.duplicateKey(sourceKey, targetKey, duplicateTTL ? 'TTL' : 'NOTTL')
-            }).then(() => {
-              this.props.onCreateKey(targetKey)
-            }).catch(err => {
-              if (err && err.message) {
-                alert(err.message)
-              }
-            })
+              break;
           }
         }, 0)
         ReactDOM.findDOMNode(this).focus()
@@ -325,7 +332,9 @@ class KeyList extends React.Component {
       }
     })
   }
-
+  componentWillUnmount() {
+    $.contextMenu('destroy','.' + this.randomClass)
+  }
   createKey(key, type) {
     const redis = this.props.redis
     switch (type) {
