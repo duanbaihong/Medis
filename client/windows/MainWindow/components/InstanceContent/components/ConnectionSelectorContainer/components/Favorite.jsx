@@ -58,22 +58,24 @@ class Favorite extends React.PureComponent {
       build: ($triggerElement, e)=>{
         return {
           callback: (key, opt) => {
-            switch(key){
-              case 'import':
-                this.importFavorite()
-                break;
-              case 'export':
-                this.exportFavorite()
-                break;
-              case 'delete':
-                this.delFavoriteItem()
-                break;
-              case 'copy':
-                this.onDuplicate();
-                break;
-              default:
-                console.log(key)
-            }
+            setTimeout(() => {
+              switch(key){
+                case 'import':
+                  this.importFavorite()
+                  break;
+                case 'export':
+                  this.exportFavorite()
+                  break;
+                case 'delete':
+                  this.delFavoriteItem()
+                  break;
+                case 'copy':
+                  this.onDuplicate();
+                  break;
+                default:
+                  console.log(key)
+              }
+            }, 0);
           },
           items: {
             copy: {name: '复制收藏',icon: 'add',
