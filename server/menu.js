@@ -227,4 +227,4 @@ windowManager.on('focus', function () {
   menu.items[baseIndex + 0].submenu.items[4].enabled = true;
 });
 
-module.exports = {menu: menu,dockMenu: dockMenu};
+module.exports = {menu, dockMenu};

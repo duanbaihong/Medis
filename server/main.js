@@ -5,10 +5,7 @@ const {app, Menu, ipcMain, remote,Tray } = require('electron')
 const windowManager = require('./windowManager')
 const {menu,dockMenu} = require('./menu')
 const path =require('path')
-// require('electron-reload')(path.join(__dirname,'..','dist'))
-// console.log(path.join(__dirname,'..','dist'))
 
-app.disableHardwareAcceleration()
 ipcMain.on('create patternManager', function (event, arg) {
   windowManager.create('patternManager', arg);
 });
