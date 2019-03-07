@@ -22,12 +22,12 @@ class WindowManager extends EventEmitter {
       type = 'main';
     }
     const option = {
-      backgroundColor: '#ececec',
       icon: '../../icns/Icon1024.png',
       show: false,
       autoHideMenuBar: true,
       webPreferences: {
-        nodeIntegration: true
+        nodeIntegration: true,
+        nodeIntegrationInWorker: true
       }
     };
     if (type === 'main') {

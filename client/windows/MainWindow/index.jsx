@@ -58,7 +58,7 @@ class MainWindow extends PureComponent {
       selectInstance, delInstance, moveInstance} = this.props
 
     return (<DocumentTitle title={this.getTitle()}>
-      <div className="window" style={{minWidth: "895px"}}>
+      <div className="window" style={{ minWidth: "895px"}}>
         <InstanceTabs
           instances={instances}
           onCreateInstance={createInstance}

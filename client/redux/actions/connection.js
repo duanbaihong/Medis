@@ -121,7 +121,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       Notification.requestPermission(function(permission) {
         var redisNotification=new Notification('Medis连接成功',{
           body: '连接到['+config.host+':'+config.port+']的REDIS成功!',
-          icon: '../../icns/Icon1024.png',
+          icon: '../../icns/medis.png',
           silent: true
         })
       }); 
@@ -210,13 +210,13 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
         if(redisErrorMessage){
           var redisNotification=new Notification('Medis连接失败提示',{
             body: `连接[${config.host}:${config.port}]失败！失败原因：\n${redisErrorMessage}!`,
-            icon: '../../icns/Icon1024.png',
+            icon: '../../icns/medis.png',
             silent: true
           })
         }else{
             var redisNotification=new Notification('Medis退出连接提示',{
             body: `已经退出连接[${config.host}:${config.port}]!`,
-            icon: '../../icns/Icon1024.png',
+            icon: '../../icns/medis.png',
             silent: true
           })
         }

@@ -5,7 +5,7 @@ const flat = require('electron-osx-sign').flat
 const shell = require('child_process')
 var iconName="medis128.ico"
 if(process.platform==="darwin"){
-  iconName="Medis.icns"
+  iconName="medis.icns"
 }
 packager({
   dir: path.join(__dirname, '..'),

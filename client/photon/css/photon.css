@@ -8,6 +8,9 @@
  * =====================================================
  */
 
+button {
+  -webkit-app-region: no-drag;
+}
 audio, canvas, progress, sub, sup, video {
     vertical-align: baseline
 }

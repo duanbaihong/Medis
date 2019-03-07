@@ -10,7 +10,7 @@
   "scripts": {
     "build": "webpack --progress --color ",
     "watch": "yarn build -- --watch",
-    "electron": "electron --inspect=5858 . ",
+    "electron": "electron --enable-transparent-visuals --disable-gpu --inspect=5858 . ",
     "debug": "electron --debug=5858 .",
     "lint": "xo client/**/*.{js,jsx}",
     "pack": "yarn build  -p --config webpack.production.config.js && node bin/pack.js",

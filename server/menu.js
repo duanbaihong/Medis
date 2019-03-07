@@ -13,7 +13,7 @@ const menuTemplate = [{
       windowManager.create();
     }
   }, {
-    label: '新建连接在标签',
+    label: '新建标签连接',
     accelerator: 'CmdOrCtrl+T',
     click() {
       windowManager.current.webContents.send('action', 'createInstance');
@@ -91,7 +91,6 @@ const menuTemplate = [{
     accelerator: 'CmdOrCtrl+R',
     click(item, focusedWindow) {
       if (focusedWindow) {
-      // console.info(readyCreatePattern)
         focusedWindow.reload();
       }
     }
@@ -188,13 +187,30 @@ if (process.platform == 'darwin') {
     }]
   });
 }
-const contextMenu = Menu.buildFromTemplate([
-    { label: '新建连接',click: () => { mainWindow.destroy(); app.quit(); } },
-    { label: 'Item2', type: 'radio' },
-    { label: 'Item3', type: 'radio', checked: true },
-    { label: 'Item4', type: 'radio' }
-  ])
 const menu = Menu.buildFromTemplate(menuTemplate);
+const dockMenu = Menu.buildFromTemplate([
+  {
+    label: '新建窗口', 
+    accelerator: 'CmdOrCtrl+N',
+    click() {
+      windowManager.create();
+    }
+  }, {
+    label: '新建标签连接',
+    accelerator: 'CmdOrCtrl+T',
+    click() {
+      windowManager.current.webContents.send('action', 'createInstance');
+    }
+  }, {
+    type: 'separator'
+  },
+  { label: '参数设置',
+    accelerator: 'CmdOrCtrl+,',
+    click() {
+      
+    }
+  }
+])
 
 // if (process.env.NODE_ENV !== 'debug') {
 //   menu.items[baseIndex + 2].submenu.items[0].visible = false;
@@ -211,4 +227,4 @@ windowManager.on('focus', function () {
   menu.items[baseIndex + 0].submenu.items[4].enabled = true;
 });
 
-module.exports = {menu: menu,contextMenu: contextMenu};
+module.exports = {menu: menu,dockMenu: dockMenu};
