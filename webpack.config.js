@@ -9,7 +9,8 @@ module.exports = {
   target: 'electron-renderer',
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
-    patternManager: './client/windows/PatternManagerWindow/entry.jsx'
+    patternManager: './client/windows/PatternManagerWindow/entry.jsx',
+    SettingWindow: './client/windows/SettingWindow/entry.jsx'
   },
   node: {
     Buffer: false,

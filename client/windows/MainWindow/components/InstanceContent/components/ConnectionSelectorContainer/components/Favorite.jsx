@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import Immutable from 'immutable'
 import Sortable from 'sortablejs'
 
-import {remote} from 'electron';
+import { remote, ipcRenderer} from 'electron';
 // import {fromJS} from 'immutable'
 import fs from 'fs'
 
@@ -71,6 +71,10 @@ class Favorite extends React.PureComponent {
                   break;
                 case 'copy':
                   this.onDuplicate();
+                  break;
+                  break;
+                case 'setting':
+                  this.globalSetting();
                   break;
                 default:
                   console.log(key)
@@ -222,6 +226,9 @@ class Favorite extends React.PureComponent {
       'left':btnMenu.offset().left-menu.width()+btnMenu.width()
     })
   }
+  globalSetting(){
+    ipcRenderer.send('create SettingWindow');
+  }
   render() {
     return (<div className='favorite'>
       <nav className="nav-group">
@@ -290,7 +297,7 @@ class Favorite extends React.PureComponent {
               </li>
               <li><hr/></li>
               <li>
-                <a onClick={()=>{}}>
+                <a onClick={this.globalSetting.bind(this)}>
                   <span className="icon icon-cog"></span>
                   参数设置
                 </a>

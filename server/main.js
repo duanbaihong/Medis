@@ -10,6 +10,10 @@ ipcMain.on('create patternManager', function (event, arg) {
   windowManager.create('patternManager', arg);
 });
 
+ipcMain.on('create SettingWindow', function (event) {
+  windowManager.create('SettingWindow');
+});
+
 ipcMain.on('dispatch', function (event, action, arg) {
   windowManager.dispatch(action, arg);
 });
