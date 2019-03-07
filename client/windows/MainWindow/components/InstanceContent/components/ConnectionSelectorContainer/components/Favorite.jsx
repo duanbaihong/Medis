@@ -49,14 +49,10 @@ class Favorite extends React.PureComponent {
       selector:'.'+this.props.instance.get('key')+' .favorite .favorite_item',
       appendTo: '.'+this.props.instance.get('key'),
       zIndex: 9999,
-      position: function(opt, x, y){
-        opt.$menu.css({
-          top: y-3-($("#instancesId").css('display')=='none'?0:$("#instancesId").height()),
-          left: x-2
-        });
-      }, 
       build: ($triggerElement, e)=>{
         return {
+          x: e.pageX,
+          y: e.pageY,
           callback: (key, opt) => {
             setTimeout(() => {
               switch(key){
