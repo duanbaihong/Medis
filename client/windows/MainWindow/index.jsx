@@ -5,9 +5,11 @@ import {createSelector} from 'reselect'
 import {Provider, connect} from 'react-redux'
 import InstanceTabs from './components/InstanceTabs'
 import InstanceContent from './components/InstanceContent'
-import DocumentTitle from 'react-document-title'
 import {createInstance, selectInstance, delInstance, moveInstance} from 'Redux/actions'
 import store from 'Redux/store'
+
+import { Window, TitleBar } from 'react-desktop/macOs';
+import { ipcRenderer } from 'electron';
 
 class MainWindow extends PureComponent {
   componentDidMount() {
@@ -52,28 +54,53 @@ class MainWindow extends PureComponent {
 
     return version + activeInstance.get('title')
   }
-
+  windowAction(type){
+    switch (type) {
+      case 'min':
+        ipcRenderer.send('app-min');
+        break;
+      case 'max':
+        console.log('max')
+        ipcRenderer.send('app-max');
+        break;
+      case 'close':
+        ipcRenderer.send('app-close');
+        break;
+    }
+  }
   render() {
     const {instances, activeInstance, createInstance,
       selectInstance, delInstance, moveInstance} = this.props
 
-    return (<DocumentTitle title={this.getTitle()}>
-      <div className="window" style={{ minWidth: "895px"}}>
-        <InstanceTabs
-          instances={instances}
-          onCreateInstance={createInstance}
-          onSelectInstance={selectInstance}
-          onDelInstance={delInstance}
-          onMoveInstance={moveInstance}
-          activeInstanceKey={activeInstance.get('key')}
+    return (
+      <Window >
+        <TitleBar
+          controls inset
+          height="28"
+          style={{ 'zIndex': 1000 }}
+          title={this.getTitle()}
+          onCloseClick={this.windowAction.bind(this, 'close')}
+          onMinimizeClick={this.windowAction.bind(this, 'min')}
+          onMaximizeClick={this.windowAction.bind(this, 'max')}
+          onResizeClick={this.windowAction.bind(this, 'max')}
+        />
+        <div className="window" style={{ minWidth: "895px" }}>
+          <InstanceTabs
+            instances={instances}
+            onCreateInstance={createInstance}
+            onSelectInstance={selectInstance}
+            onDelInstance={delInstance}
+            onMoveInstance={moveInstance}
+            activeInstanceKey={activeInstance.get('key')}
           />
-        <InstanceContent
-          instances={instances}
-          onDelInstance={delInstance}
-          activeInstanceKey={activeInstance.get('key')}
+          <InstanceContent
+            instances={instances}
+            onDelInstance={delInstance}
+            activeInstanceKey={activeInstance.get('key')}
           />
-      </div>
-    </DocumentTitle>)
+        </div>
+      </Window>
+    )
   }
 }
 

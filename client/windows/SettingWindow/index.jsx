@@ -1,72 +1,56 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {connect} from 'react-redux'
-import {createPattern, reloadPatterns, updatePattern, removePattern} from 'Redux/actions'
-import {List} from 'immutable'
-
-require('./app.scss')
-
-class App extends React.Component {
-  constructor(props, context) {
-    super(props, context)
-    this.state = {index: 0}
+import React, { Component } from 'react';
+import { Window, TitleBar, SegmentedControl, SegmentedControlItem, Text} from 'react-desktop/macOs';
+import { ipcRenderer } from 'electron';
+export default class extends Component {
+  constructor(){
+    super()
+    this.state={
+      selected: 1
+    }
+  }
+  windowAction(type){
+    switch (type) {
+      case 'close':
+        ipcRenderer.send('app-close');
+        break;
+    }
+  }
+  renderItems() {
+    return [
+      this.renderItem(1, 'Tab 1', <Text>Content 1</Text>),
+      this.renderItem(2, 'Tab 2', <Text>Content 2</Text>),
+      this.renderItem(3, 'Tab 3', <Text>Content 3</Text>)
+    ];
   }
 
-  handleChange(property, e) {
-    this.setState({[property]: e.target.value})
+  renderItem(key, title, content) {
+    return (
+      <SegmentedControlItem
+        key={key}
+        title={title}
+        selected={this.state.selected === key}
+        onSelect={() => this.setState({ selected: key })}
+      >
+        {content}
+      </SegmentedControlItem>
+    );
   }
-
   render() {
     return (
-      <div className="window" style={{"-webkitAppRegion": "drag"}}>
-        <div class="window-content">
-          <div class="pane-group">
-            <div class="pane pane-sm sidebar">
-              <nav class="nav-group">
-                <h5 class="nav-group-title">Favorites</h5>
-                <a class="nav-group-item active">
-                  <span class="icon icon-home"></span>
-                  connors
-                </a>
-                <span class="nav-group-item">
-                  <span class="icon icon-download"></span>
-                  Downloads
-                </span>
-                <span class="nav-group-item">
-                  <span class="icon icon-folder"></span>
-                  Documents
-                </span>
-                <span class="nav-group-item">
-                  <span class="icon icon-print"></span>
-                  Applications
-                </span>
-                <span class="nav-group-item">
-                  <span class="icon icon-cloud"></span>
-                  Desktop
-                </span>
-              </nav>
-              <nav class="nav-group">
-                <h5 class="nav-group-title">Devices</h5>
-                <span class="nav-group-item">
-                  <span class="icon icon-drive"></span>
-                  Backup disk
-                </span>
-                <span class="nav-group-item">
-                  <span class="icon icon-drive"></span>
-                  Backup disk
-                </span>
-                <span class="nav-group-item">
-                  <span class="icon icon-drive"></span>
-                  Backup disk
-                </span>
-              </nav>
-            </div>
-            <div class="pane"></div>
-          </div>
-        </div>
-      </div>
-      )
+      <Window >
+        <TitleBar
+          controls
+          height="26"
+          disableMinimize
+          disableResize
+          style={{ 'zIndex': 1000 }}
+          onCloseClick={this.windowAction.bind(this, 'close')}
+        >
+        </TitleBar>
+        <SegmentedControl box>
+          {this.renderItems()}
+        </SegmentedControl>
+      </Window>
+    );
   }
 }
-
-export default App

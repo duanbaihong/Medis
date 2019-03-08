@@ -25,6 +25,8 @@ class WindowManager extends EventEmitter {
       icon: '../../icns/Icon1024.png',
       show: false,
       autoHideMenuBar: true,
+      frame: false,
+      backgroundColor: '#ffffff0f',
       webPreferences: {
         nodeIntegration: true,
         nodeIntegrationInWorker: true
@@ -37,9 +39,9 @@ class WindowManager extends EventEmitter {
     } else {
       option.width = 585;
       if(process.platform === 'darwin'){
-        option.height = 290;
+        option.height = 310;
       }else{
-        option.height = 265;
+        option.height = 295;
       }
       option.alwaysOnTop = true;
       option.resizable = false;

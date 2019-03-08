@@ -17,6 +17,16 @@ ipcMain.on('create SettingWindow', function (event) {
 ipcMain.on('dispatch', function (event, action, arg) {
   windowManager.dispatch(action, arg);
 });
+ipcMain.on('app-min', e=> windowManager.current.minimize());
+ipcMain.on('app-max', e=> {
+    if (windowManager.current.isMaximized()) {
+        windowManager.current.unmaximize()
+    } else {
+        windowManager.current.maximize()
+    }
+});
+ipcMain.on('app-close', e=> windowManager.current.close());
+
 if(process.platform=='darwin'){
   app.dock.setMenu(dockMenu)
 }

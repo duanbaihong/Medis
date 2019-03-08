@@ -51,8 +51,16 @@ class Favorite extends React.PureComponent {
       zIndex: 9999,
       build: ($triggerElement, e)=>{
         return {
-          x: e.pageX,
-          y: e.pageY,
+          position: function (opt, x, y) {
+            let currentY,notMacHeight;
+            notMacHeight=$("#instancesId").css('display') == 'none' ? 30 : 30+$("#instancesId").height()
+            if ((e.pageY + opt.$menu.height()) > $(document).height()){
+              currentY = e.pageY - notMacHeight - opt.$menu.height()
+            }else{
+              currentY = e.pageY - notMacHeight
+            }
+            opt.$menu.css({ top: currentY,left: e.pageX});
+          },
           callback: (key, opt) => {
             setTimeout(() => {
               switch(key){
@@ -218,7 +226,7 @@ class Favorite extends React.PureComponent {
     var btnMenu=$(e.target).parent()
     var menu=$(ReactDOM.findDOMNode(this.refs.export))
     menu.css({
-      'top':btnMenu.offset().top-menu.height()-($("#instancesId").css('display')=='none'?0:$("#instancesId").height()),
+      'top':btnMenu.offset().top-menu.height()-29-($("#instancesId").css('display')=='none'?0:$("#instancesId").height()),
       'left':btnMenu.offset().left-menu.width()+btnMenu.width()
     })
   }

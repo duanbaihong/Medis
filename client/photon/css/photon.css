@@ -7,7 +7,6 @@
  * v0.1.0 designed by @connors.
  * =====================================================
  */
-
 button {
   -webkit-app-region: no-drag;
 }
@@ -398,8 +397,8 @@ h5 {
 .btn-group .active {
     color: #fff;
     border: 1px solid transparent;
-    background-color: #6d6c6d;
-    background-image: none
+    background: -webkit-linear-gradient(top, #6cb3fa 0%, #087eff 100%);
+    border-color: rgb(124, 163, 239) rgb(90, 165, 239) rgb(36, 110, 220);
 }
 .btn-group .active .icon {
     color: #fff
@@ -417,7 +416,7 @@ h5 {
 }
 .toolbar-footer {
     border-top: 1px solid #c2c0c2;
-    -webkit-app-region: drag;
+    -webkit-app-region: no-drag;
     line-height: 21px;
 }
 .toolbar-dark {
@@ -1631,6 +1630,9 @@ td:last-child, th:last-child {
     border-radius: 3px;
     margin: 0px;
     opacity: .7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .tab-item .icon-close-tab {
     position: absolute;
