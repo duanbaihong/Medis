@@ -391,7 +391,7 @@ class KeyList extends React.Component {
         }}
         width={this.props.width}
         height={this.props.height}
-        headerHeight={24}
+        headerHeight={25}
         >
         <Column
           header="类型"
