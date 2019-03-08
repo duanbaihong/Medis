@@ -12,6 +12,12 @@ import { Window, TitleBar } from 'react-desktop/macOs';
 import { ipcRenderer } from 'electron';
 
 class MainWindow extends PureComponent {
+  constructor(){
+    super()
+    this.state={
+      fullScreen: false
+    }
+  }
   componentDidMount() {
     $(window).on('keydown.redis', this.onHotKey.bind(this))
   }
@@ -63,6 +69,11 @@ class MainWindow extends PureComponent {
         console.log('max')
         ipcRenderer.send('app-max');
         break;
+        break;
+      case 'fullmax':
+        ipcRenderer.send('app-fullmax');
+        this.setState({fullScreen: !this.state.fullScreen})
+        break;
       case 'close':
         ipcRenderer.send('app-close');
         break;
@@ -75,14 +86,16 @@ class MainWindow extends PureComponent {
     return (
       <Window >
         <TitleBar
-          controls inset
+          controls
+          isFullscreen={this.state.fullScreen}
           height="28"
           style={{ 'zIndex': 1000 }}
           title={this.getTitle()}
+          disableMinimize={this.state.fullScreen}
           onCloseClick={this.windowAction.bind(this, 'close')}
           onMinimizeClick={this.windowAction.bind(this, 'min')}
           onMaximizeClick={this.windowAction.bind(this, 'max')}
-          onResizeClick={this.windowAction.bind(this, 'max')}
+          onResizeClick={this.windowAction.bind(this, 'fullmax')}
         />
         <div className="window" style={{ minWidth: "895px" }}>
           <InstanceTabs

@@ -1,7 +1,7 @@
 
 'use strict';
 
-const {app, Menu, ipcMain, remote,Tray } = require('electron')
+const { app, Menu, ipcMain, globalShortcut,Tray } = require('electron')
 const windowManager = require('./windowManager')
 const {menu,dockMenu} = require('./menu')
 const path =require('path')
@@ -25,6 +25,13 @@ ipcMain.on('app-max', e=> {
         windowManager.current.maximize()
     }
 });
+ipcMain.on('app-fullmax', e=> {
+    if (windowManager.current.isFullScreen()) {
+        windowManager.current.setFullScreen(false);
+    } else {
+        windowManager.current.setFullScreen(true);
+    }
+});
 ipcMain.on('app-close', e=> windowManager.current.close());
 
 if(process.platform=='darwin'){
@@ -36,15 +43,6 @@ app.on('window-all-closed', function () {
     app.quit();
   }
 });
-// app.on('before-quit', function(ev) {
-//   // body...
-//   // windowManager.current.webContents.send('action', 'exportFavorite');
-//   // var redisNotification=new Notification('Medis退出连接提示',{
-//   //           body: `已经退出连接[]!`,
-//   //           icon: '../../icns/Icon1024.png',
-//   //           silent: true
-//   //         })
-// })
 
 app.on('activate', function (e, hasVisibleWindows) {
   if (!hasVisibleWindows) {
@@ -56,8 +54,6 @@ app.on('ready', function () {
   let logo;
   switch (process.platform) {
     case 'darwin':
-      logo = path.join(__dirname, '..', 'icns', 'medis.icns')
-      break;
     case 'linux':
       logo = path.join(__dirname, '..', 'icns', 'medis.png')
       break;
@@ -65,6 +61,9 @@ app.on('ready', function () {
       logo = path.join(__dirname, '..', 'icns', 'medis64.ico')
       break;
   }
+  globalShortcut.register('ESC', () => {
+    windowManager.current.setFullScreen(false);
+  })
   let tray = new Tray(logo);
   tray.setToolTip('我的Medis')
   tray.setContextMenu(dockMenu)

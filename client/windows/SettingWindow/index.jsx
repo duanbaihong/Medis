@@ -43,7 +43,7 @@ export default class extends Component {
           height="26"
           disableMinimize
           disableResize
-          style={{ 'zIndex': 1000 }}
+          title="参数设置"
           onCloseClick={this.windowAction.bind(this, 'close')}
         >
         </TitleBar>

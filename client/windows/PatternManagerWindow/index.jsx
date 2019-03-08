@@ -37,7 +37,7 @@ class App extends React.Component {
           controls inset
           disableMinimize
           disableResize
-          style={{ 'zIndex': 1000 }}
+          title="正则管理"
           onCloseClick={this.windowAction.bind(this, 'close')}
         />
         <div className="patternList">

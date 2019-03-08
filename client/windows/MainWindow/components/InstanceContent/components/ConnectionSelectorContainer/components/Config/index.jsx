@@ -6,6 +6,7 @@ import {Map} from 'immutable'
 import {remote} from 'electron'
 import fs from 'fs'
 
+import { ProgressCircle } from 'react-desktop/macOs';
 require('./index.scss')
 
 class Config extends React.PureComponent {
@@ -316,7 +317,7 @@ class Config extends React.PureComponent {
           </div>
         </div>
       </div>
-      <div className="nt-button-group nt-button-group--pull-right" style={{width: 500, margin: '10px auto 0', paddingBottom: 10}}>
+      <div className="nt-button-group nt-button-group--pull-right" style={{width: 500, margin: '10px auto 0', paddingBottom: 10,position: 'relative'}}>
         <button
           className="nt-button" style={{float: 'left'}} onClick={this.duplicate.bind(this)}>
             { this.props.favorite ? '复制项目' : '添加到收藏' }
@@ -333,6 +334,17 @@ class Config extends React.PureComponent {
           onClick={this.connect.bind(this)}>
             {this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接')}
           </button>
+        <ProgressCircle 
+          color='#176aef'
+          hidden={!Boolean(this.props.connectStatus)}
+          style={{
+            position: 'absolute',
+            margin: "0 auto",
+            right: 0,
+            left: 0,
+            top: 1
+            }}
+          size={22} />
       </div>
     </div>)
   }
