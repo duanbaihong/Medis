@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Window, TitleBar, SegmentedControl, SegmentedControlItem, Text} from 'react-desktop/macOs';
+import { Window, TitleBar, Toolbar, ToolbarNav,ToolbarNavItem,SegmentedControl, SegmentedControlItem, Text} from 'react-desktop/macOs';
 import { ipcRenderer } from 'electron';
+
 export default class extends Component {
   constructor(){
     super()
@@ -8,6 +9,16 @@ export default class extends Component {
       selected: 1
     }
   }
+  // circle = ;
+
+  // const star = (
+  //   <span style={{ fontSize: "26px" }} className="icon icon-globe"></span>
+  // );
+
+  // const polygon = (
+  //   <span style={{ fontSize: "26px" }} className="icon icon-lifebuoy"></span>
+  // );
+
   windowAction(type){
     switch (type) {
       case 'close':
@@ -35,18 +46,52 @@ export default class extends Component {
       </SegmentedControlItem>
     );
   }
+  
   render() {
     return (
       <Window >
         <TitleBar
           controls
-          height="26"
           disableMinimize
           disableResize
-          title="参数设置"
           onCloseClick={this.windowAction.bind(this, 'close')}
         >
-        </TitleBar>
+            <Toolbar>
+              <ToolbarNav>
+                <ToolbarNavItem
+                  title="基本设置"
+                  style={{marginLeft: "-55px"}}
+                  icon={(
+                    <span style={{ 
+                      fontSize: "26px", 
+                      color: this.state.selected === 1?"blue":""  }} className="icon icon-tools"></span>
+                  )}
+                  selected={this.state.selected === 1}
+                  onClick={() => this.setState({ selected: 1 })}
+                />
+                <ToolbarNavItem
+                  title="高级设置"
+                  icon={(
+                    <span style={{ 
+                      fontSize: "26px",
+                      color: this.state.selected === 2 ? "blue" : "" }} className="icon icon-globe"></span>
+                    )}
+                  selected={this.state.selected === 2}
+                  onClick={() => this.setState({ selected: 2 })}
+                />
+                <ToolbarNavItem
+                  title="关于"
+                  icon={(
+                      <span style={{ 
+                        fontSize: "26px",
+                        color: this.state.selected === 3 ? "blue" : "" }} className="icon icon-lifebuoy"></span>
+                    )}
+                  selected={this.state.selected === 3}
+                  onClick={() => this.setState({ selected: 3 })}
+                />
+              </ToolbarNav>
+            </Toolbar>
+          </TitleBar>
         <SegmentedControl box>
           {this.renderItems()}
         </SegmentedControl>

@@ -34,7 +34,7 @@ class App extends React.Component {
       <Window >
         <TitleBar
           height="26"
-          controls inset
+          controls
           disableMinimize
           disableResize
           title="正则管理"
