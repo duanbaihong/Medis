@@ -8,10 +8,10 @@
         margin-bottom: -1px;
         cursor: pointer;
         &:hover{
-            background: -webkit-linear-gradient(top, #cccbcb 0%, #969696f0 100%)
+            background: -webkit-linear-gradient(top, #cccbcb 0%, #969696 100%)
         }
         &.active{
-            background: -webkit-linear-gradient(top, #cccbcb 0%, #969696f0 100%);
+            background: -webkit-linear-gradient(top, #cccbcb 0%, #969696 100%);
             .fontcolor{
                 color: blue;
             }
