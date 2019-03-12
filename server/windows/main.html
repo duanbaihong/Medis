@@ -13,13 +13,14 @@
     <div class="window" id="content" style="z-index: 1001"></div>
     <script>
       window.$ = window.jQuery = require('jquery');
-      window.Buffer = global.Buffer();
-      if(process.platform != 'darwin'){
-        $("#content").css({
-          borderRadius: 6,
-          border: '1px solid #afafaf',
-          overflow: 'hidden'})
-      }
+      window.Buffer = global.Buffer;
+      if (process.platform != 'darwin') {
+          $("#content").css({
+            borderRadius: 6,
+            border: '1px solid rgba(203, 203, 203, 0.93)',
+            overflow: 'hidden'
+          })
+        }
     </script>
     <script src="../../client/vendors/jquery.context-menu/jquery.ui.position.js"></script>
     <script src="../../client/vendors/jquery.context-menu/index.js"></script>

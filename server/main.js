@@ -62,11 +62,13 @@ app.on('ready', function () {
       break;
   }
   globalShortcut.register('ESC', () => {
-    windowManager.current.setFullScreen(false);
+    if (windowManager.current.isFullScreen()) {
+      windowManager.current.setFullScreen(false);
+    }
   })
   let tray = new Tray(logo);
   tray.setToolTip('我的Medis')
-  tray.setContextMenu(dockMenu)
+  tray.setContextMenu(menu)
   Menu.setApplicationMenu(menu);
   windowManager.create();
 });

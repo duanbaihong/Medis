@@ -1,0 +1,30 @@
+.setting_toolbar{
+    .items{
+        transition: all .3s ease-in-out;
+        padding: 4px 0px 2px 0px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom: transparent;
+        margin-bottom: -1px;
+        cursor: pointer;
+        &:hover{
+            background: -webkit-linear-gradient(top, #cccbcb 0%, #969696f0 100%)
+        }
+        &.active{
+            background: -webkit-linear-gradient(top, #cccbcb 0%, #969696f0 100%);
+            .fontcolor{
+                color: blue;
+            }
+            .active_icon{
+                color: blue;
+            }
+        }
+        .fontcolor{
+            cursor: pointer;
+        }
+        .iconsize {
+            font-size: 28px;
+            cursor: pointer;
+        }
+    }
+}
