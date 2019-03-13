@@ -49,7 +49,16 @@ app.on('activate', function (e, hasVisibleWindows) {
     windowManager.create();
   }
 });
-
+app.on('browser-window-blur',function() {
+  globalShortcut.unregister('ESC')
+})
+app.on('browser-window-focus',function() {
+    globalShortcut.register('ESC', () => {
+    if (windowManager.current.isFullScreen()) {
+      windowManager.current.setFullScreen(false);
+    }
+  })
+})
 app.on('ready', function () {
   let logo;
   switch (process.platform) {
@@ -61,11 +70,6 @@ app.on('ready', function () {
       logo = path.join(__dirname, '..', 'icns', 'medis64.ico')
       break;
   }
-  globalShortcut.register('ESC', () => {
-    if (windowManager.current.isFullScreen()) {
-      windowManager.current.setFullScreen(false);
-    }
-  })
   let tray = new Tray(logo);
   tray.setToolTip('我的Medis')
   tray.setContextMenu(menu)
