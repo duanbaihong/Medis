@@ -7,8 +7,12 @@
         border-bottom: transparent;
         margin-bottom: -1px;
         cursor: pointer;
+        transition: color .3s ease-in-out,background-color .3s ease-in-out;
         &:hover{
-            background: -webkit-linear-gradient(top, #cccbcb 0%, #969696 100%)
+            color: blue;
+            .fontcolor{
+                color: blue;
+            }
         }
         &.active{
             background: -webkit-linear-gradient(top, #cccbcb 0%, #969696 100%);
@@ -20,6 +24,7 @@
             }
         }
         .fontcolor{
+            transition: color .3s ease-in-out;
             cursor: pointer;
         }
         .iconsize {

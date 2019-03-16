@@ -60,7 +60,7 @@ export default class extends Component {
               <ToolbarNavItem 
                 className={this.state.selected === 1 ? "items active" : "items"}
                 title={(<span className="fontcolor">基本设置</span>)}
-                style={{ marginLeft: "-60px" }}
+                style={{ marginLeft: "-60px",marginRight:0 }}
                 icon={(
                   <span className={this.state.selected === 1 ? "icon icon-tools iconsize active_icon" :"icon icon-tools iconsize"}></span>
                 )}
@@ -70,6 +70,7 @@ export default class extends Component {
               <ToolbarNavItem
                 className={this.state.selected === 2 ? "items active" : "items"}
                 title={(<span className="fontcolor">高级设置</span>)}
+                style={{ marginLeft: 0,marginRight:0 }}
                 icon={(
                   <span className={this.state.selected === 2 ? "icon icon-globe iconsize active_icon" : "icon icon-globe iconsize"}></span>
                 )}
@@ -79,6 +80,7 @@ export default class extends Component {
               <ToolbarNavItem
                 className={this.state.selected === 3 ? "items active" : "items"}
                 title={(<span className="fontcolor">关于</span>)}
+                style={{ marginLeft: 0,marginRight:0 }}
                 icon={(
                   <span className={this.state.selected === 3 ? "icon icon-lifebuoy iconsize active_icon" : "icon icon-lifebuoy iconsize"}></span>
                 )}
