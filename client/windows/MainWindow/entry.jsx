@@ -17,13 +17,18 @@ require('../../styles/global.scss')
 // }
 
 
-ipcRenderer.on('action', (evt, action) => {
-  if ($('.Modal').length && action.indexOf('Instance') !== -1) {
+ipcRenderer.on('action', (evt, action, value,filepath) => {
+  if ($('.Modal').length && (action.indexOf("portFavorites") !== -1 
+    || action.indexOf('setFullScreen') === -1 
+    || action.indexOf('Instance') !== -1)) {
     return
   }
-
   store.skipPersist = true
-  store.dispatch(actions[action]())
+  if(value){
+  	store.dispatch(actions[action](value,filepath))
+  }else{
+	store.dispatch(actions[action]())
+  }
   store.skipPersist = false
 })
 

@@ -5,7 +5,11 @@ import {createSelector} from 'reselect'
 import {Provider, connect} from 'react-redux'
 import InstanceTabs from './components/InstanceTabs'
 import InstanceContent from './components/InstanceContent'
-import {createInstance, selectInstance, delInstance, moveInstance} from 'Redux/actions'
+import {createInstance, 
+  selectInstance, 
+  delInstance,
+  moveInstance,
+  setFullScreen} from 'Redux/actions'
 import store from 'Redux/store'
 
 import { Window, TitleBar } from 'react-desktop/macOs';
@@ -14,14 +18,10 @@ import { ipcRenderer } from 'electron';
 class MainWindow extends PureComponent {
   constructor(){
     super()
-    this.state={
-      fullScreen: false
-    }
   }
   componentDidMount() {
     $(window).on('keydown.redis', this.onHotKey.bind(this))
   }
-
   componentWillUnmount() {
     $(window).off('keydown.redis')
   }
@@ -66,13 +66,12 @@ class MainWindow extends PureComponent {
         ipcRenderer.send('app-min');
         break;
       case 'max':
-        console.log('max')
         ipcRenderer.send('app-max');
         break;
         break;
       case 'fullmax':
+        this.props.setFullScreen();
         ipcRenderer.send('app-fullmax');
-        this.setState({fullScreen: !this.state.fullScreen})
         break;
       case 'close':
         ipcRenderer.send('app-close');
@@ -87,11 +86,11 @@ class MainWindow extends PureComponent {
       <Window >
         <TitleBar
           controls
-          isFullscreen={this.state.fullScreen}
+          isFullscreen={this.props.fullscreen}
           height="28"
           style={{ 'zIndex': 1000 }}
           title={this.getTitle()}
-          disableMinimize={this.state.fullScreen}
+          disableMinimize={this.props.fullscreen}
           onCloseClick={this.windowAction.bind(this, 'close')}
           onMinimizeClick={this.windowAction.bind(this, 'min')}
           onMaximizeClick={this.windowAction.bind(this, 'max')}
@@ -120,10 +119,12 @@ class MainWindow extends PureComponent {
 const selector = createSelector(
   state => state.instances,
   state => state.activeInstanceKey,
-  (instances, activeInstanceKey) => {
+  state => state.windowAction.fullscreen,
+  (instances, activeInstanceKey, fullscreen) => {
     return {
       instances,
-      activeInstance: instances.find(instance => instance.get('key') === activeInstanceKey)
+      activeInstance: instances.find(instance => instance.get('key') === activeInstanceKey),
+      fullscreen
     }
   }
 )
@@ -132,7 +133,8 @@ const mapDispatchToProps = {
   createInstance,
   selectInstance,
   delInstance,
-  moveInstance
+  moveInstance,
+  setFullScreen
 }
 
 const MainWindowContainer = connect(selector, mapDispatchToProps)(MainWindow)

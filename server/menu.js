@@ -1,8 +1,10 @@
 'use strict';
 
-const {app, Menu} = require('electron');
+const {app, Menu, dialog,shell} = require('electron');
 // const path = require('path')
 const windowManager = require('./windowManager');
+
+const fs = require('fs');
 
 const menuTemplate = [{
   label: '文件',
@@ -16,6 +18,7 @@ const menuTemplate = [{
     label: '新建标签连接',
     accelerator: 'CmdOrCtrl+T',
     click() {
+
       windowManager.current.webContents.send('action', 'createInstance');
     }
   }, {
@@ -24,21 +27,21 @@ const menuTemplate = [{
     label: '导出收藏',
     accelerator: 'CmdOrCtrl+E',
     click() {
-      windowManager.current.webContents.send('action', 'exportFavorite');
+      exportFavorites();
     }
   },{
     label: '导入收藏',
     accelerator: 'CmdOrCtrl+I',
     click() {
-      windowManager.current.webContents.send('action', 'importFavorite');
+      importFavorites();
     }
   },{
     type: 'separator'
   },  {
     label: '参数设置',
-    accelerator: 'CmdOrCtrl+S',
+    accelerator: 'CmdOrCtrl+,',
     click() {
-      windowManager.current.webContents.send('action', 'sysSetting');
+      windowManager.create('SettingWindow');
     }
   },{
     type: 'separator'
@@ -139,12 +142,12 @@ const menuTemplate = [{
   submenu: [{
     label: '报告问题...',
     click() {
-      require('shell').openExternal('mailto:duanbaihong@qq.com');
+      shell.openExternal('mailto:duanbaihong@qq.com');
     }
   }, {
     label: '学习更多',
     click() {
-      require('shell').openExternal('http://getmedis.com');
+      shell.openExternal('http://getmedis.com');
     }
   }]
 }]
@@ -187,6 +190,43 @@ if (process.platform == 'darwin') {
     }]
   });
 }
+
+function importFavorites() {
+  const files = dialog.showOpenDialog({
+    properties: ['openFile'],
+    title: "导入收藏",
+    defaultPath: "~/Desktop/",
+    filters:[{name: 'JSON Files', extensions: ['json']}]
+  })
+  if (files && files.length) {
+    const file = files[0]
+    try{
+      const content = fs.readFileSync(file, 'utf8')
+      let objData=JSON.parse(content)
+      windowManager.current.webContents.send('action', 'importFavorites',objData,file);
+    }catch(e){
+      console.log(e)
+      return false
+    }
+  }
+}
+
+function exportFavorites() {
+  const files = dialog.showSaveDialog({
+    title: "导出收藏",
+    defaultPath: "~/Desktop/",
+    filters:[{name: 'JSON Files', extensions: ['json']}]
+  })
+  if (files && files.length) {
+    try{
+      windowManager.current.webContents.send('action', 'exportFavorites',{},files);
+    }catch(e){
+      console.log(e)
+      return false
+    }
+  }
+}
+
 const menu = Menu.buildFromTemplate(menuTemplate);
 const dockMenu = Menu.buildFromTemplate([
   {
@@ -195,21 +235,43 @@ const dockMenu = Menu.buildFromTemplate([
     click() {
       windowManager.create();
     }
-  }, {
+  },{
     label: '新建标签连接',
     accelerator: 'CmdOrCtrl+T',
     click() {
-      windowManager.current.webContents.send('action', 'createInstance');
+      console.log(windowManager.windows)
+      windowManager.webContents.send('action', 'createInstance');
     }
-  }, {
+  },{
     type: 'separator'
-  },
-  { label: '参数设置',
+  },{
+    label: '导出收藏',
+    accelerator: 'CmdOrCtrl+E',
+    click() {
+      exportFavorites();
+    }
+  },{
+    label: '导入收藏',
+    accelerator: 'CmdOrCtrl+I',
+    click() {
+     importFavorites()
+    }
+  },{
+      type: 'separator'
+  },{ label: '参数设置',
     accelerator: 'CmdOrCtrl+,',
     click() {
-      
+      windowManager.create('SettingWindow');
     }
-  }
+  },{
+      type: 'separator'
+  },{
+      label: '退出',
+      accelerator: 'Command+Q',
+      click() {
+        app.quit();
+      }
+    }
 ])
 
 // if (process.env.NODE_ENV !== 'debug') {

@@ -5,7 +5,6 @@ const { app, Menu, ipcMain, globalShortcut,Tray } = require('electron')
 const windowManager = require('./windowManager')
 const {menu,dockMenu} = require('./menu')
 const path =require('path')
-
 ipcMain.on('create patternManager', function (event, arg) {
   windowManager.create('patternManager', arg);
 });
@@ -42,6 +41,7 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+  globalShortcut.unregister('ESC');
 });
 
 app.on('activate', function (e, hasVisibleWindows) {
@@ -55,6 +55,7 @@ app.on('browser-window-blur',function() {
 app.on('browser-window-focus',function() {
     globalShortcut.register('ESC', () => {
     if (windowManager.current.isFullScreen()) {
+      windowManager.current.webContents.send('action', 'setFullScreen');
       windowManager.current.setFullScreen(false);
     }
   })
@@ -64,7 +65,7 @@ app.on('ready', function () {
   switch (process.platform) {
     case 'darwin':
     case 'linux':
-      logo = path.join(__dirname, '..', 'icns', 'medis.png')
+      logo = path.join(__dirname, '..', 'icns', 'medis2.png')
       break;
     default:
       logo = path.join(__dirname, '..', 'icns', 'medis64.ico')
@@ -72,7 +73,8 @@ app.on('ready', function () {
   }
   let tray = new Tray(logo);
   tray.setToolTip('我的Medis')
-  tray.setContextMenu(menu)
+  tray.setContextMenu(dockMenu)
   Menu.setApplicationMenu(menu);
+  console.log("tray")
   windowManager.create();
 });

@@ -36,6 +36,8 @@ class WindowManager extends EventEmitter {
       option.width = 1020;
       option.height = 600;
       option.minWidth = 940;
+      // 
+      
     } else {
       option.width = 585;
       if(process.platform === 'darwin'){

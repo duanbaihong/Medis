@@ -5,10 +5,12 @@ import {
   updateFavorite,
   reorderFavorites,
   importFavorites,
+  exportFavorites,
   reloadFavorites
 } from 'Redux/actions'
 import {Favorites} from '../../storage'
 import {Map, fromJS} from 'immutable'
+import fs from 'fs'
 
 function FavoriteFactory(data) {
   return Map(Object.assign({name: '快速连接'}, data))
@@ -31,7 +33,22 @@ export const favorites = handleActions(fromJS(Favorites.get()), {
   [reloadFavorites](state, data) {
     return fromJS(data)
   },
-  [importFavorites](state, {data}) {
+  [exportFavorites](state,{data,filepath}){
+    let favoriteData=JSON.stringify(state.toJS(),null,'\t')
+    try{
+      fs.writeFileSync(filepath, favoriteData)
+      Notification.requestPermission(function (permission) {
+        var redisNotification=new Notification('导出收藏成功！',{
+          body: '导出收藏成功！导出文件为:'+filepath,
+          silent: true
+        })
+      })
+    } catch(e){
+      console.log(e)
+      alert("导出收藏失败！"+e)
+    }
+  },
+  [importFavorites](state,{data,filepath}) {
     let newData={}
     let oldStateData={}
     let newStateData=[]
@@ -44,6 +61,12 @@ export const favorites = handleActions(fromJS(Favorites.get()), {
     let tmp=fromJS(Object.assign(oldStateData,newData))
     tmp.map((value)=>{
       newStateData.push(value.toJS())
+    })
+    Notification.requestPermission(function (permission) {
+      var redisNotification=new Notification('导入收藏成功！',{
+          body: '成功从文件['+filepath+']导入收藏！',
+          silent: true
+        })
     })
     return fromJS(newStateData)
   }

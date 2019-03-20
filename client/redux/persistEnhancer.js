@@ -19,7 +19,6 @@ export default function (store) {
         Storage[storage].set(value)
       }
     })
-
     lastState = state
   })
 }

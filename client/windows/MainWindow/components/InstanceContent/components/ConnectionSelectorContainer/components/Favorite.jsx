@@ -176,22 +176,7 @@ class Favorite extends React.PureComponent {
       defaultPath: "~/Desktop/",
       filters:[{name: 'JSON Files', extensions: ['json']}]
     })
-    let favoriteData=JSON.stringify(this.props.favorites.toJS(),null,'\t')
-    if (files && files.length) {
-      try{
-        fs.writeFileSync(files, favoriteData)
-        Notification.requestPermission(function (permission) {
-          var redisNotification=new Notification('导出收藏成功！',{
-            body: '导出收藏成功！导出文件为:'+files,
-            icon: '../../icns/Icon1024.png',
-            silent: true
-          })
-        })
-      } catch(e){
-        console.log(e)
-        alert("导出收藏失败！"+e)
-      }
-    }
+    this.props.exportFavorites("",files)
   }
   importFavorite(){
     const win = remote.getCurrentWindow()
@@ -206,19 +191,11 @@ class Favorite extends React.PureComponent {
       try{
         const content = fs.readFileSync(file, 'utf8')
         let objData=JSON.parse(content)
-        this.props.importFavorites(objData)
+        this.props.importFavorites(objData,file);
       }catch(e){
         console.log(e)
-        alert("导入数据失败，请检查文件是否准确！")
         return false
       }
-      Notification.requestPermission(function (permission) {
-        var redisNotification=new Notification('导入收藏成功！',{
-            body: '从文件['+file+']导入收藏成功！',
-            icon: '../../icns/Icon1024.png',
-            silent: true
-          })
-      })
     }
   }
   bottomMenu(e){

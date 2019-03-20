@@ -42,16 +42,15 @@
   top: 22px;
   width: 62px;
   height: 57px;
-  background: transparent url(./warning.png) left top no-repeat;
+  background: transparent url(./icon.png) left top no-repeat;
   background-size: 62px 57px;
-
   span {
     position: absolute;
     bottom: -6px;
     right: -6px;
     width: 34px;
     height: 34px;
-    background: transparent url(./icon.png) left top no-repeat;
+    background: transparent url(./warning.png) left top no-repeat;
     background-size: 34px 34px;
   }
 }
