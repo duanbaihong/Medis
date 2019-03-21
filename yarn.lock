@@ -3331,6 +3331,7 @@ findup-sync@^2.0.0:
 fixed-data-table-contextmenu@^1.7.2:
   version "1.7.2"
   resolved "http://registry.npm.taobao.org/fixed-data-table-contextmenu/download/fixed-data-table-contextmenu-1.7.2.tgz#7079c75d5ae0b21756c8fa86eeda9e01177d3a68"
+  integrity sha1-cHnHXVrgshdWyPqG7tqeARd9Omg=
   dependencies:
     create-react-class "^15.6.2"
     prop-types "^15.5.0"

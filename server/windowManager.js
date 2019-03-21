@@ -36,8 +36,6 @@ class WindowManager extends EventEmitter {
       option.width = 1020;
       option.height = 600;
       option.minWidth = 940;
-      // 
-      
     } else {
       option.width = 585;
       if(process.platform === 'darwin'){
@@ -53,9 +51,6 @@ class WindowManager extends EventEmitter {
       option.minimizable = false;
       option.maximizable = false;
     }
-    if(this.windows.size>1){
-      return false
-    }
     const newWindow = new BrowserWindow(option);
     var loadurl=url.format({
         pathname: path.join(__dirname, `/windows/${type}.html`),
@@ -69,9 +64,8 @@ class WindowManager extends EventEmitter {
     if (!option.show) {
       newWindow.once('ready-to-show', () => {
         newWindow.show()
-      })
+      });
     }
-
     return newWindow;
   }
   _register(win) {
@@ -85,10 +79,12 @@ class WindowManager extends EventEmitter {
     this.emit('focus');
   }
 
-  dispatch(action, args) {
+  dispatch(action, args,filepath) {
     this.windows.forEach(win => {
       if (win && win.webContents) {
-        win.webContents.send('action', action, args);
+        if(win.isFocused()){
+          win.webContents.send('action', action, args,filepath);
+        }
       }
     });
   }

@@ -18,8 +18,7 @@ const menuTemplate = [{
     label: '新建标签连接',
     accelerator: 'CmdOrCtrl+T',
     click() {
-
-      windowManager.current.webContents.send('action', 'createInstance');
+      windowManager.dispatch('createInstance');
     }
   }, {
     type: 'separator'
@@ -55,7 +54,7 @@ const menuTemplate = [{
     label: '关闭标签',
     accelerator: 'CmdOrCtrl+W',
     click() {
-      windowManager.current.webContents.send('action', 'delInstance');
+      windowManager.dispatch('delInstance');
     }
   }]
 }, {
@@ -203,7 +202,7 @@ function importFavorites() {
     try{
       const content = fs.readFileSync(file, 'utf8')
       let objData=JSON.parse(content)
-      windowManager.current.webContents.send('action', 'importFavorites',objData,file);
+      windowManager.dispatch('importFavorites',objData,file);
     }catch(e){
       console.log(e)
       return false
@@ -219,7 +218,7 @@ function exportFavorites() {
   })
   if (files && files.length) {
     try{
-      windowManager.current.webContents.send('action', 'exportFavorites',{},files);
+      windowManager.dispatch('exportFavorites',{},files);
     }catch(e){
       console.log(e)
       return false
@@ -239,8 +238,7 @@ const dockMenu = Menu.buildFromTemplate([
     label: '新建标签连接',
     accelerator: 'CmdOrCtrl+T',
     click() {
-      console.log(windowManager.windows)
-      windowManager.webContents.send('action', 'createInstance');
+      windowManager.dispatch('createInstance');
     }
   },{
     type: 'separator'
@@ -282,11 +280,13 @@ const dockMenu = Menu.buildFromTemplate([
 windowManager.on('blur', function () {
   menu.items[baseIndex + 0].submenu.items[3].enabled = false;
   menu.items[baseIndex + 0].submenu.items[4].enabled = false;
+  dockMenu.items[1].enabled=false;
 });
 
 windowManager.on('focus', function () {
   menu.items[baseIndex + 0].submenu.items[3].enabled = true;
   menu.items[baseIndex + 0].submenu.items[4].enabled = true;
+  dockMenu.items[1].enabled=true;
 });
 
 module.exports = {menu, dockMenu};

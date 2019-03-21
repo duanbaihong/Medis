@@ -28,7 +28,6 @@ class Favorite extends React.PureComponent {
 
   _bindSortable() {
     const {reorderFavorites} = this.props
-
     this.sortable = Sortable.create(this.refs.sortable, {
       animation: 200,
       onStart: evt => {
@@ -44,6 +43,11 @@ class Favorite extends React.PureComponent {
     })
   }
   componentDidMount() {
+    if(this.props.favorites.size>0) {
+      ipcRenderer.send('disable exportFavorites',true);
+    }else{
+      ipcRenderer.send('disable exportFavorites',false);
+    }
     this._bindSortable()
     $.contextMenu({
       selector:'.'+this.props.instance.get('key')+' .favorite .favorite_item',
@@ -118,7 +122,13 @@ class Favorite extends React.PureComponent {
       }
     })
   }
-
+  componentWillReceiveProps(nextProp){
+    if(nextProp.favorites.size>0) {
+      ipcRenderer.send('disable exportFavorites',true);
+    }else{
+      ipcRenderer.send('disable exportFavorites',false);
+    }
+  }
   componentDidUpdate() {
     this._bindSortable()
   }
