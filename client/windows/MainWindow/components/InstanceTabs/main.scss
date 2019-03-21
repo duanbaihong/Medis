@@ -1,0 +1,69 @@
+.instance-tabs {
+  z-index: 1000;
+  -webkit-user-select: none;
+  .tab-group {
+    transition: all .25s  cubic-bezier(.84,.03,.21,.96);
+    height: 0px;
+    transform: scale(1,0);
+    transform-origin: 50% top;
+    &.displaytabs{
+      height: 25px;
+      transform: scale(1,1);
+    }
+    .tab_transtion-appear{
+       opacity: 0;
+       transform: scale(0,0);
+    }
+    .tab_transtion-appear.tab_transtion-appear-active{
+      opacity: 1;
+      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
+      transform-origin: 50% top;
+      transform: scale(1,1);
+    }
+    .tab_transtion-enter{
+      opacity: 0;
+      transform: scale(0,0);
+    }
+    .tab_transtion-enter.tab_transtion-enter-active{
+      opacity: 1;
+      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
+      transform-origin: 50% top;
+      transform: scale(1,1);
+    }
+    .tab_transtion-leave{
+       opacity: 0;
+       transform: scale(0,0);
+    }
+    .tab_transtion-leave.tab_transtion-leave-active{
+      opacity: 1;
+      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
+      transform-origin: 50% top;
+      transform: scale(1,1);
+    }
+  }
+}
+
+.instance-tabs__add {
+  flex-grow: 0 !important;
+  flex-basis: 24px;
+  &:hover {
+    background: #bebebe !important;
+    color: #424242 !important;
+  }
+}
+
+.rdTabCloseIcon {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  display: none;
+  border-radius: 2px;
+  line-height: 1em;
+  width: 14px;
+  height: 14px;
+
+  &:hover {
+    color: #5b5b5b;
+    background: #a2a2a2;
+  }
+}
