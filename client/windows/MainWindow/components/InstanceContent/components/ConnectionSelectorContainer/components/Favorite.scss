@@ -4,15 +4,22 @@
   width:110px;
   background-color:#f2f2f2;
   border:1px solid #BFBFBF;
-  display:none;
-  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.21);
   pointer-events: none;
   opacity: 0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 3px;
+  right: 1px;
+  bottom: 25px;
+  overflow: hidden;
+  box-shadow: rgba(189, 185, 185, 0.54) 2px 1px 3px 3px;
+  transition: all .25s  cubic-bezier(.84,.03,.21,.96);
+  transform: scale(0);
+  transform-origin: right bottom;
   &.is-active {
     pointer-events: initial;
     opacity: 1;
     transform: scale(1, 1);
-    display: block;
   }
   ul {
     height: 100%;

@@ -60,7 +60,14 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1":
+"@babel/runtime@^7.1.2":
+  version "7.4.0"
+  resolved "http://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.4.0.tgz?cache=0&other_urls=http%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.4.0.tgz#d523416573f19aa12784639e631257c7fc58c0aa"
+  integrity sha1-1SNBZXPxmqEnhGOeYxJXx/xYwKo=
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
+"@babel/runtime@^7.3.1":
   version "7.3.4"
   resolved "http://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.3.4.tgz#73d12ba819e365fcf7fd152aed56d6df97d21c83"
   dependencies:
@@ -1677,6 +1684,7 @@ chai@^3.5.0:
 chain-function@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/chain-function/download/chain-function-1.0.1.tgz#c63045e5b4b663fb86f1c6e186adaf1de402a1cc"
+  integrity sha1-xjBF5bS2Y/uG8cbhhq2vHeQCocw=
 
 chalk@^1.1.1, chalk@^1.1.3:
   version "1.1.3"
@@ -2491,6 +2499,7 @@ doctrine@^3.0.0:
 dom-helpers@^3.2.0:
   version "3.4.0"
   resolved "http://registry.npm.taobao.org/dom-helpers/download/dom-helpers-3.4.0.tgz#e9b369700f959f62ecde5a6babde4bccd9169af8"
+  integrity sha1-6bNpcA+Vn2Ls3lprq95LzNkWmvg=
   dependencies:
     "@babel/runtime" "^7.1.2"
 
@@ -6167,9 +6176,10 @@ rcedit@^1.0.0:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/rcedit/download/rcedit-1.1.1.tgz#79321893357e74f79546617d792c572b38d2f7f0"
 
-react-addons-css-transition-group@^15.5.2:
+react-addons-css-transition-group@^15.6.2:
   version "15.6.2"
   resolved "http://registry.npm.taobao.org/react-addons-css-transition-group/download/react-addons-css-transition-group-15.6.2.tgz#9e4376bcf40b5217d14ec68553081cee4b08a6d6"
+  integrity sha1-nkN2vPQLUhfRTsaFUwgc7ksIptY=
   dependencies:
     react-transition-group "^1.2.0"
 
@@ -6211,6 +6221,7 @@ react-dom@^16.8.4:
 react-draggable@^3.2.1:
   version "3.2.1"
   resolved "http://registry.npm.taobao.org/react-draggable/download/react-draggable-3.2.1.tgz#45d09a9a227988dc85674b23ab3c75b6e820dae5"
+  integrity sha1-RdCamiJ5iNyFZ0sjqzx1tugg2uU=
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.6.0"
@@ -6257,6 +6268,7 @@ react-style-proptype@^3.0.0:
 react-transition-group@^1.2.0:
   version "1.2.1"
   resolved "http://registry.npm.taobao.org/react-transition-group/download/react-transition-group-1.2.1.tgz#e11f72b257f921b213229a774df46612346c7ca6"
+  integrity sha1-4R9yslf5IbITIpp3TfRmEjRsfKY=
   dependencies:
     chain-function "^1.0.0"
     dom-helpers "^3.2.0"
@@ -6444,6 +6456,11 @@ regenerator-runtime@^0.11.0:
 regenerator-runtime@^0.12.0:
   version "0.12.1"
   resolved "http://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
+
+regenerator-runtime@^0.13.2:
+  version "0.13.2"
+  resolved "http://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.13.2.tgz#32e59c9a6fb9b1a4aff09b4930ca2d4477343447"
+  integrity sha1-MuWcmm+5saSv8JtJMMotRHc0NEc=
 
 regenerator-transform@^0.10.0:
   version "0.10.1"
@@ -7710,6 +7727,7 @@ vm-browserify@0.0.4:
 warning@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/warning/download/warning-3.0.0.tgz#32e5377cb572de4ab04753bdf8821c01ed605b7c"
+  integrity sha1-MuU3fLVy3kqwR1O9+IIcAe1gW3w=
   dependencies:
     loose-envify "^1.0.0"
 

@@ -5,11 +5,17 @@ const { app,Menu,Tray, ipcMain, globalShortcut } = require('electron')
 const windowManager = require('./windowManager')
 const { menu,dockMenu } = require('./menu')
 const path =require('path')
+
+let tray,baseIndex=0
+if (process.platform == 'darwin') {
+    baseIndex=1
+  }
 ipcMain.on('create patternManager', function (event, arg) {
   windowManager.create('patternManager', arg);
 });
 ipcMain.on('disable exportFavorites', function (event,arg) {
   dockMenu.items[3].enabled=Boolean(arg)
+  menu.items[baseIndex].submenu.items[3].enabled = Boolean(arg);
 });
 ipcMain.on('create SettingWindow', function (event) {
   windowManager.create('SettingWindow');
@@ -60,8 +66,10 @@ app.on('browser-window-focus',function() {
   })
 })
 app.on('ready',function(){
+  // 默认导出收藏不可用
+  menu.items[baseIndex].submenu.items[3].enabled = false;
   dockMenu.items[3].enabled=false
-  // if(type=='main'){
+  if(!tray){
     let logo;
     switch (process.platform) {
       case 'darwin':
@@ -72,11 +80,10 @@ app.on('ready',function(){
         logo = path.join(__dirname, '..', 'icns', 'medis64.ico')
         break;
     }
-    let tray = new Tray(logo);
+    tray = new Tray(logo);
     tray.setToolTip('我的Medis')
     tray.setContextMenu(dockMenu)
     Menu.setApplicationMenu(menu);
     let win=windowManager.create();
-    console.log(win.windows)
-  // }
+  }
 })

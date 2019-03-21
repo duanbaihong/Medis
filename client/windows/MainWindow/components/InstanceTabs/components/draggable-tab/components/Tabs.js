@@ -4,7 +4,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
-
+import ReactCSSTransitionGroup from 'react-transition-group'
 class Tabs extends React.Component {
   constructor(props) {
     super(props);
@@ -17,6 +17,7 @@ class Tabs extends React.Component {
     // Dom positons
     // do not save in state
     this.startPositions = [];
+    this.style='';
   }
 
 
@@ -52,7 +53,6 @@ class Tabs extends React.Component {
   componentDidUpdate() {
     this._saveStartPositions();
   }
-
   handleDrag(key, e) {
     const deltaX = (e.pageX || e.clientX);
     _.each(this.startPositions, (pos) => {
@@ -106,38 +106,43 @@ class Tabs extends React.Component {
 
   render() {
     const tabs = _.map(this.state.tabs, (tab) => {
-    const tabTitle = tab.title;
-    const tabStyle=tab.hasOwnProperty('config')?tab.config:"";
-    let  tabCss
-    if(tabStyle!= "" && typeof(tabStyle) === 'object' && tabStyle['tag'] != undefined){
-        tabCss=tabStyle.tag
-    }
-    return (
-      <Draggable
-        key={'draggable_tabs_' + tab.key }
-        axis='x'
-        cancel='.rdTabCloseIcon'
-        start={{ x: 0, y: 0 }}
-        moveOnStartChange={true}
-        zIndex={1000}
-        bounds='parent'
-        onDrag={this.handleDrag.bind(this, tab.key)}
-        onStop={this.handleDragStop.bind(this, tab.key)}>
-        <div
-            onClick={this.handleTabClick.bind(this, tab.key)}
-            className={'tab-item '+(this.state.selectedTab === tab.key ? 'active' : '') }
-            ref={tab.key}>
-            <div className={"instanceItem "+tabCss}>
-              {tabTitle}
+      const tabTitle = tab.title;
+      const tabStyle=tab.hasOwnProperty('config')?tab.config:"";
+      let  tabCss=""
+      if(tabStyle!= "" && typeof(tabStyle) === 'object' && tabStyle['tag'] != undefined){
+          tabCss=tabStyle.tag
+      }
+      return (
+        <Draggable
+          key={'draggable_tabs_' + tab.key }
+          axis='x'
+          cancel='.rdTabCloseIcon'
+          start={{ x: 0, y: 0 }}
+          moveOnStartChange={true}
+          zIndex={1000}
+          bounds='parent'
+          onDrag={this.handleDrag.bind(this, tab.key)}
+          onStop={this.handleDragStop.bind(this, tab.key)}>
+            <div onClick={this.handleTabClick.bind(this, tab.key)}
+                 className={'tab-item '+(this.state.selectedTab === tab.key ? 'active' : '') }
+                 ref={tab.key}>
+                 <div className={"instanceItem "+tabCss}>
+                   {tabTitle}
+                 </div>
+              <span className="icon icon-cancel icon-close-tab"
+                onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
             </div>
-          <span className="icon icon-cancel icon-close-tab"
-            onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
-        </div>
-      </Draggable>
-    );
-  });
+        </Draggable>
+      );
+    });
 
-  return <div className="tab-group">
+  const style = tabs.length === 1 ? '' : 'displaytabs'
+  console.log(tabs.length)
+  if (this.style !== style) {
+    this.style = style
+    setTimeout(() => $(window).trigger('resize'), 0)
+  }
+  return <div className={"tab-group "+this.style}>
     {tabs}
     <div className='tab-item tab-item-btn' style={{padding:"0px"}} onClick={this.handleAddButtonClick.bind(this)}>
       {this.props.tabAddButton}

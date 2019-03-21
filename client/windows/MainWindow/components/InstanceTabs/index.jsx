@@ -3,22 +3,18 @@
 import React from 'react'
 import {Tabs} from './components/draggable-tab'
 
+require('./main.scss')
+
 class InstanceTabs extends React.Component {
   constructor() {
     super()
-    this.style = 'block'
   }
 
   render() {
     const {instances, activeInstanceKey, onCreateInstance, onSelectInstance,
       onDelInstance, onMoveInstance} = this.props
 
-    const style = instances.count() === 1 ? 'none' : 'block'
-    if (this.style !== style) {
-      this.style = style
-      setTimeout(() => $(window).trigger('resize'), 0)
-    }
-    return (<div id='instancesId' style={{display: this.style, zIndex: '1000'}}>
+    return (<div id="instancesId" className={"instance-tabs"}>
       <Tabs
         onTabAddButtonClick={() => {
           if (!$('.Modal').length) {

@@ -186,7 +186,9 @@ class Favorite extends React.PureComponent {
       defaultPath: "~/Desktop/",
       filters:[{name: 'JSON Files', extensions: ['json']}]
     })
-    this.props.exportFavorites("",files)
+    if (files && files.length) {
+      this.props.exportFavorites("",files)
+    }
   }
   importFavorite(){
     const win = remote.getCurrentWindow()
@@ -210,12 +212,6 @@ class Favorite extends React.PureComponent {
   }
   bottomMenu(e){
     this.setState({exportKeyUp: !this.state.exportKeyUp})
-    var btnMenu=$(e.target).parent()
-    var menu=$(ReactDOM.findDOMNode(this.refs.export))
-    menu.css({
-      'top':btnMenu.offset().top-menu.height()-29-($("#instancesId").css('display')=='none'?0:$("#instancesId").height()),
-      'left':btnMenu.offset().left-menu.width()+btnMenu.width()
-    })
   }
   globalSetting(){
     ipcRenderer.send('create SettingWindow');
@@ -274,7 +270,7 @@ class Favorite extends React.PureComponent {
             <ul>
               <li>
                 <a className={this.props.favorites.size>0?'':'disabled'} 
-                   onClick={this.props.favorites.size>0?this.exportFavorite.bind(this):''}>
+                   onClick={this.props.favorites.size>0?this.exportFavorite.bind(this):()=>{}}>
                   <span className="icon icon-export"></span>
                   导出收藏
                 </a>

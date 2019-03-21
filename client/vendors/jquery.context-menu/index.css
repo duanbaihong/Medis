@@ -22,8 +22,20 @@
     font-style: normal
 }
 
-.context-menu-icon-add:before, .context-menu-icon-copy:before, .context-menu-icon-cut:before, .context-menu-icon-delete:before, .context-menu-icon-edit:before, .context-menu-icon-paste:before, .context-menu-icon-quit:before, .context-menu-icon-export:before,
- .context-menu-icon-import:before, .context-menu-icon-setting:before , .context-menu-icon-reload:before, .context-menu-icon-clipboard:before, .context-menu-icon-rename:before {
+.context-menu-icon-add:before, 
+.context-menu-icon-copy:before, 
+.context-menu-icon-cut:before, 
+.context-menu-icon-delete:before, 
+.context-menu-icon-edit:before, 
+.context-menu-icon-paste:before, 
+.context-menu-icon-quit:before, 
+.context-menu-icon-export:before,
+.context-menu-icon-import:before, 
+.context-menu-icon-setting:before , 
+.context-menu-icon-reload:before, 
+.context-menu-icon-clipboard:before, 
+.context-menu-icon-failtime:before, 
+.context-menu-icon-rename:before {
   position: absolute;
   top: 49%;
   left: 2px;
@@ -129,6 +141,13 @@
 }
 
 .context-menu-icon-setting.context-menu-hover:before {
+  color: #fff;
+}
+.context-menu-icon-failtime:before {
+  content: '\e8aa';
+}
+
+.context-menu-icon-failtime.context-menu-hover:before {
   color: #fff;
 }
 

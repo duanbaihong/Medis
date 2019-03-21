@@ -324,7 +324,7 @@ class KeyList extends React.Component {
         copy: {name: '拷贝到粘贴板',icon: 'clipboard'},
         reload: {name: '重载',icon: 'reload'},
         sep1: '---------',
-        ttl: {name: '设置失效时间...'},
+        ttl: {name: '设置失效时间...',icon: 'failtime'},
         rename: {name: '重命名键...',icon: 'rename'},
         duplicate: {name: '复制键...',icon: 'copy'},
         sep2: '---------',
