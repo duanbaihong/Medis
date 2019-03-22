@@ -1840,9 +1840,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/code-point-at/download/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror@^5.18.2, codemirror@^5.25.2:
-  version "5.44.0"
-  resolved "http://registry.npm.taobao.org/codemirror/download/codemirror-5.44.0.tgz#80dc2a231eeb7aab25ec2405cdca37e693ccf9cc"
+codemirror@^5.45.0:
+  version "5.45.0"
+  resolved "http://registry.npm.taobao.org/codemirror/download/codemirror-5.45.0.tgz#db5ebbb3bf44028c684053f3954d011efcec27ad"
+  integrity sha1-2167s79EAoxoQFPzlU0BHvzsJ60=
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -2139,7 +2140,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.1, create-react-class@^15.6.2:
+create-react-class@^15.6.2:
   version "15.6.3"
   resolved "http://registry.npm.taobao.org/create-react-class/download/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   dependencies:
@@ -2611,9 +2612,10 @@ electron-packager@^13.1.1:
     semver "^5.3.0"
     yargs-parser "^13.0.0"
 
-electron-reload@^1.2.5:
+electron-reload@^1.4.0:
   version "1.4.0"
   resolved "http://registry.npm.taobao.org/electron-reload/download/electron-reload-1.4.0.tgz#00154268c936fa17b496fdb1728434c747e1d29a"
+  integrity sha1-ABVCaMk2+he0lv2xcoQ0x0fh0po=
   dependencies:
     chokidar "^2.0.4"
 
@@ -4557,9 +4559,10 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonlint@^1.6.2:
+jsonlint@^1.6.3:
   version "1.6.3"
   resolved "http://registry.npm.taobao.org/jsonlint/download/jsonlint-1.6.3.tgz#cb5e31efc0b78291d0d862fbef05900adf212988"
+  integrity sha1-y14x78C3gpHQ2GL77wWQCt8hKYg=
   dependencies:
     JSV "^4.0.x"
     nomnom "^1.5.x"
@@ -4763,10 +4766,6 @@ lodash.camelcase@^4.1.1:
 lodash.clonedeep@^4.3.2:
   version "4.5.0"
   resolved "http://registry.npm.taobao.org/lodash.clonedeep/download/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
-
-lodash.debounce@^4.0.8:
-  version "4.0.8"
-  resolved "http://registry.npm.taobao.org/lodash.debounce/download/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
 lodash.defaults@^4.2.0:
   version "4.2.0"
@@ -6183,16 +6182,10 @@ react-addons-css-transition-group@^15.6.2:
   dependencies:
     react-transition-group "^1.2.0"
 
-react-codemirror@^1.0.0:
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/react-codemirror/download/react-codemirror-1.0.0.tgz#91467b53b1f5d80d916a2fd0b4c7adb85a9001ba"
-  dependencies:
-    classnames "^2.2.5"
-    codemirror "^5.18.2"
-    create-react-class "^15.5.1"
-    lodash.debounce "^4.0.8"
-    lodash.isequal "^4.5.0"
-    prop-types "^15.5.4"
+react-codemirror2@^5.1.0:
+  version "5.1.0"
+  resolved "http://registry.npm.taobao.org/react-codemirror2/download/react-codemirror2-5.1.0.tgz#62de4460178adea40eb52eabf7491669bf3794b8"
+  integrity sha1-Yt5EYBeK3qQOtS6r90kWab83lLg=
 
 react-desktop@^0.3.9:
   version "0.3.9"

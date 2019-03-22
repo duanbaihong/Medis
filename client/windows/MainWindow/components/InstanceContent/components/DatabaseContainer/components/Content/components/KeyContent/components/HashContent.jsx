@@ -143,7 +143,8 @@ class HashContent extends BaseContent {
   }
   render() {
     return (<SplitPane
-        minSize={80}
+        minSize={200}
+        maxSize={400}
         split="vertical"
         ref="node"
         defaultSize={this.props.contentBarWidth}

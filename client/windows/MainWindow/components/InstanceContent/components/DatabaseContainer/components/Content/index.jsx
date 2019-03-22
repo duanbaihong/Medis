@@ -92,7 +92,7 @@ class Content extends React.PureComponent {
           onDatabaseChange={this.props.onDatabaseChange}
           />)
         break;
-      case "系统配置(Config)":
+      case "参数配置(Config)":
         contentValue=(<Config
           key="contentconfig"
           redis={this.props.redis}

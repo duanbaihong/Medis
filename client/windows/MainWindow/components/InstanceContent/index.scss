@@ -4,7 +4,7 @@
 }
 .loginContainer-appear.loginContainer-appear-active {
     opacity: 1;
-    transition: opacity .5s ease-in-out;
+    transition: opacity .5s cubic-bezier(.84,.03,.21,.96);
 }
 .loginContainer-enter {
     /*transform: translateX(-100%);*/
@@ -14,5 +14,5 @@
 .loginContainer-enter.loginContainer-enter-active {
     /*transform: translateX(0);*/
     opacity: 1;
-    transition: opacity 500ms ease-in-out;
+    transition: opacity .5s cubic-bezier(.84,.03,.21,.96);
 }

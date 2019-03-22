@@ -4,7 +4,6 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
-import ReactCSSTransitionGroup from 'react-transition-group'
 class Tabs extends React.Component {
   constructor(props) {
     super(props);
@@ -137,7 +136,6 @@ class Tabs extends React.Component {
     });
 
   const style = tabs.length === 1 ? '' : 'displaytabs'
-  console.log(tabs.length)
   if (this.style !== style) {
     this.style = style
     setTimeout(() => $(window).trigger('resize'), 0)
@@ -167,7 +165,6 @@ Tabs.propTypes = {
   onTabClose: PropTypes.func,
   onTabAddButtonClick: PropTypes.func,
   onTabPositionChange: PropTypes.func
-
 };
 
 export default Tabs;

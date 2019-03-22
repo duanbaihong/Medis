@@ -1,11 +1,17 @@
 'use strict'
-
+ 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Codemirror from 'react-codemirror'
+import {UnControlled as CodeMirror} from 'react-codemirror2'
+import jsonlint from 'jsonlint'
+
+require('codemirror/addon/dialog/dialog.css')
+require('codemirror/lib/codemirror.css')
+require('codemirror/addon/lint/lint.css')
+
 require('codemirror/mode/javascript/javascript')
-require('codemirror/addon/lint/json-lint')
 require('codemirror/addon/lint/lint')
+require('codemirror/addon/lint/json-lint')
 require('codemirror/addon/selection/active-line')
 require('codemirror/addon/edit/closebrackets')
 require('codemirror/addon/edit/matchbrackets')
@@ -13,11 +19,8 @@ require('codemirror/addon/search/search')
 require('codemirror/addon/search/searchcursor')
 require('codemirror/addon/search/jump-to-line')
 require('codemirror/addon/dialog/dialog')
-require('codemirror/addon/dialog/dialog.css')
-import jsonlint from 'jsonlint'
+
 window.jsonlint = jsonlint.parser
-require('codemirror/lib/codemirror.css')
-require('codemirror/addon/lint/lint.css')
 const msgpack = require('msgpack5')()
 
 require('./index.scss')
@@ -29,6 +32,7 @@ class Editor extends React.PureComponent {
       currentMode: '',
       wrapping: true,
       changed: false,
+      changeValue:"",
       modes: {
         raw: false,
         json: false,
@@ -37,26 +41,9 @@ class Editor extends React.PureComponent {
     }
   }
 
-  updateLayout() {
-    const $this = $(ReactDOM.findDOMNode(this))
-    if ($this.width() < 372) {
-      $(ReactDOM.findDOMNode(this.refs.wrapSelector)).hide()
-    } else {
-      $(ReactDOM.findDOMNode(this.refs.wrapSelector)).show()
-    }
-    this.refs.codemirror.getCodeMirror().refresh()
-  }
-
   componentDidMount() {
-    this.updateLayoutBinded = this.updateLayout.bind(this)
-    $(window).on('resize', this.updateLayoutBinded)
     this.init(this.props.buffer)
   }
-
-  componentWillUnmount() {
-    $(window).off('resize', this.updateLayoutBinded)
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.buffer !== this.props.buffer) {
       this.init(nextProps.buffer)
@@ -79,21 +66,19 @@ class Editor extends React.PureComponent {
     } else if (modes.json) {
       currentMode = 'json'
     }
-    this.setState({modes, currentMode, changed: false}, () => {
-      this.updateLayout()
-    })
+    this.setState({modes, currentMode, changed: false})
   }
 
   save() {
-    let content = this.state.modes.raw
+    let content = this.state.changeValue
     if (this.state.currentMode === 'json') {
-      content = tryFormatJSON(this.state.modes.json)
+      content = tryFormatJSON(this.state.changeValue)
       if (!content) {
         alert('The json is invalid. Please check again.')
         return
       }
     } else if (this.state.currentMode === 'messagepack') {
-      content = tryFormatMessagepack(this.state.modes.messagepack)
+      content = tryFormatMessagepack(this.state.changeValue)
       if (!content) {
         alert('The json is invalid. Please check again.')
         return
@@ -110,9 +95,21 @@ class Editor extends React.PureComponent {
   }
 
   updateContent(mode, content) {
-    if (this.state.modes[mode] !== content) {
-      this.state.modes[mode] = content
-      this.setState({modes: this.state.modes, changed: true})
+    let content1,content2
+    if(this.state.currentMode==='json'){
+      content1=tryFormatJSON(content)
+      content2=tryFormatJSON(this.state.modes[mode])
+    }
+    if(this.state.currentMode==='messagepack'){
+      content1=tryFormatMessagepack(content)
+      content2=tryFormatMessagepack(this.state.modes[mode])
+    }
+    if(this.state.currentMode==='raw'){
+      content1=content
+      content2=this.state.modes[mode]
+    }
+    if (content1 !== content2) {
+      this.setState({changed: true,changeValue: content})
     }
   }
 
@@ -140,77 +137,43 @@ class Editor extends React.PureComponent {
   }
 
   render() {
-    let viewer
-    if (this.state.currentMode === 'raw') {
-      viewer = (<Codemirror
-        ref="codemirror"
-        key="raw"
-        value={this.state.modes.raw}
-        onChange={this.updateContent.bind(this, 'raw')}
-        options={{
+    let options={
           mode: 'none',
+          tabSize: 2,
           styleActiveLine: true,
+          autoCloseBrackets: true,
+          indentWithTabs: true,
+          matchTags: true,
           lineWrapping: this.state.wrapping,
           gutters: ['CodeMirror-lint-markers'],
           lineNumbers: true
-        }}
-        />)
-    } else if (this.state.currentMode === 'json') {
-      viewer = (<Codemirror
-        ref="codemirror"
-        key="json"
-        value={this.state.modes.json}
-        onChange={this.updateContent.bind(this, 'json')}
-        options={{
-          mode: {
-            name: 'javascript',
-            json: true
-          },
-          tabSize: 2,
-          indentWithTabs: true,
-          styleActiveLine: true,
-          lineNumbers: true,
-          lineWrapping: this.state.wrapping,
-          gutters: ['CodeMirror-lint-markers'],
-          autoCloseBrackets: true,
-          matchTags: true,
-          lint: Boolean(this.state.modes.raw)
-        }}
-        />)
+        }
+    if (this.state.currentMode === 'json') {
+      options=Object.assign(options,{
+        mode: {
+          name: 'javascript',
+          json: true
+        },
+        lint: Boolean(this.state.modes.json)
+      })
     } else if (this.state.currentMode === 'messagepack') {
-      viewer = (<Codemirror
-        ref="codemirror"
-        key="messagepack"
-        value={this.state.modes.messagepack}
-        onChange={this.updateContent.bind(this, 'messagepack')}
-        options={{
-          mode: {
-            name: 'javascript',
-            json: true
-          },
-          tabSize: 2,
-          indentWithTabs: true,
-          styleActiveLine: true,
-          lineNumbers: true,
-          lineWrapping: this.state.wrapping,
-          gutters: ['CodeMirror-lint-markers'],
-          autoCloseBrackets: true,
-          matchTags: true,
-          lint: Boolean(this.state.modes.raw)
-        }}
-        />)
-    } else {
-      viewer = <div/>
+      options=Object.assign(options,{
+        mode: {
+          name: 'javascript',
+          json: true
+        },
+        lint: Boolean(this.state.modes.messagepack)
+      })
     }
-    return (<div
-      style={{flex: 1, display: 'flex',width:1}}
-      className="Editor"
-      onKeyDown={this.handleKeyDown.bind(this)}
-      >
-      { viewer }
-      <div
-        className="operation-pannel"
-        >
+    return (<div className="Editor" onKeyDown={this.handleKeyDown.bind(this)} >
+      <CodeMirror
+        className="RactCodeMirror"
+        value={this.state.modes[this.state.currentMode]}
+        options={options}
+        // editorDidMount={editor => { this.editor = editor }}
+        onChange={(editor, data, value)=>this.updateContent(this.state.currentMode,value)} />
+
+      <div className="operation-pannel" >
         <label className="wrap-selector" ref="wrapSelector">
           <input
             type="checkbox"

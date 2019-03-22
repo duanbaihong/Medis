@@ -6,6 +6,7 @@ const windowManager = require('./windowManager')
 const { menu,dockMenu } = require('./menu')
 const path =require('path')
 
+
 let tray,baseIndex=0
 if (process.platform == 'darwin') {
     baseIndex=1

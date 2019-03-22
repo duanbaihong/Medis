@@ -11,32 +11,32 @@
       transform: scale(1,1);
     }
     .tab_transtion-appear{
-       opacity: 0;
-       transform: scale(0,0);
+      opacity: 0;
+      transform: scale(0,0);
+      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
     }
     .tab_transtion-appear.tab_transtion-appear-active{
       opacity: 1;
-      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
       transform-origin: 50% top;
       transform: scale(1,1);
     }
     .tab_transtion-enter{
       opacity: 0;
       transform: scale(0,0);
+      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
     }
     .tab_transtion-enter.tab_transtion-enter-active{
       opacity: 1;
-      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
       transform-origin: 50% top;
       transform: scale(1,1);
     }
     .tab_transtion-leave{
-       opacity: 0;
-       transform: scale(0,0);
+      opacity: 0;
+      transform: scale(0,0);
+      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
     }
     .tab_transtion-leave.tab_transtion-leave-active{
       opacity: 1;
-      transition: all .35s  cubic-bezier(.84,.03,.21,.96);
       transform-origin: 50% top;
       transform: scale(1,1);
     }
