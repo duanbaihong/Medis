@@ -621,34 +621,42 @@ textarea {
 }
 .favorite-red{
     background-color: #fc605b;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-orage{
     background-color: #fdbc40;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-green{
     background-color: #34c84a;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-blue{
     background-color: #57acf5;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-violet{
     background-color: #4390C5;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-gray{
     background-color: #B4AFD0;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-pink{
     background-color: #FF6FCF;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-purple{
     background-color: #F819D3;
+    font-weight: bold;
     color:#FFFFFF;
 }
 .favorite-circle{
@@ -1629,7 +1637,7 @@ td:last-child, th:last-child {
 .instanceItem{
     border-radius: 3px;
     margin: 0px;
-    opacity: .7;
+    transition: all .5s ease-out;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

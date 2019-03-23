@@ -28,11 +28,12 @@ require('./index.scss')
 class Editor extends React.PureComponent {
   constructor() {
     super()
+    this.randomClass = 'menu-value-' + (Math.random() * 100000 | 0)
+    this.editor=null
     this.state = {
       currentMode: '',
       wrapping: true,
       changed: false,
-      changeValue:"",
       modes: {
         raw: false,
         json: false,
@@ -43,6 +44,57 @@ class Editor extends React.PureComponent {
 
   componentDidMount() {
     this.init(this.props.buffer)
+    $(this.editor).contextMenu({
+      context: ReactDOM.findDOMNode(this),
+      selector: '.' + this.randomClass,
+      trigger: 'none',
+      zIndex: 99999,
+      callback: (key, opt) => {
+        setTimeout(() => {
+          switch(key){
+            case 'delete':
+              
+              break;
+            case 'rename':
+              
+              break;
+            case 'copy':
+              
+              break;
+            case 'ttl':
+              
+              break;
+            case 'reload':
+              
+              break;
+            case 'turn':
+             
+              break;
+          }
+        }, 0)
+        ReactDOM.findDOMNode(this).focus()
+      },
+      items: {
+        copy: {name: '复制',icon: 'copy'},
+        reload: {name: '粘贴',icon: 'reload'},
+        sep1: '---------',
+        allchoise: {name: '全选',icon: 'failtime'},
+        turn: {name: '转换',icon: 'copy'},
+        sep2: '---------',
+        delete: {name: '清空',icon:'delete'}
+      }
+    })
+  }
+  showContextMenu(v,e) {
+    $(this.editor).contextMenu({
+      x: e.pageX,
+      y: e.pageY+1,
+      zIndex: 99999
+    })
+  }
+  componentWillUnmount() {
+    this.editor=null
+    $.contextMenu('destroy','.' + this.randomClass)
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.buffer !== this.props.buffer) {
@@ -70,15 +122,15 @@ class Editor extends React.PureComponent {
   }
 
   save() {
-    let content = this.state.changeValue
+    let content = this.editor.getValue()
     if (this.state.currentMode === 'json') {
-      content = tryFormatJSON(this.state.changeValue)
+      content = tryFormatJSON(this.editor.getValue())
       if (!content) {
         alert('The json is invalid. Please check again.')
         return
       }
     } else if (this.state.currentMode === 'messagepack') {
-      content = tryFormatMessagepack(this.state.changeValue)
+      content = tryFormatMessagepack(this.editor.getValue())
       if (!content) {
         alert('The json is invalid. Please check again.')
         return
@@ -109,7 +161,7 @@ class Editor extends React.PureComponent {
       content2=this.state.modes[mode]
     }
     if (content1 !== content2) {
-      this.setState({changed: true,changeValue: content})
+      this.setState({changed: true})
     }
   }
 
@@ -169,8 +221,9 @@ class Editor extends React.PureComponent {
       <CodeMirror
         className="RactCodeMirror"
         value={this.state.modes[this.state.currentMode]}
+        onContextMenu={this.showContextMenu.bind(this)}
         options={options}
-        // editorDidMount={editor => { this.editor = editor }}
+        editorDidMount={editor => { this.editor = editor }}
         onChange={(editor, data, value)=>this.updateContent(this.state.currentMode,value)} />
 
       <div className="operation-pannel" >
