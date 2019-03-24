@@ -14,7 +14,7 @@ class InstanceTabs extends React.Component {
     const {instances, activeInstanceKey, onCreateInstance, onSelectInstance,
       onDelInstance, onMoveInstance} = this.props
 
-    return (<div id="instancesId" className={"instance-tabs"}>
+    return (<div id="instancesId" className={"instance-tabs"} style={{height: instances.toJS().length>1?"auto":0}}>
       <Tabs
         onTabAddButtonClick={() => {
           if (!$('.Modal').length) {

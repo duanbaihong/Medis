@@ -20,6 +20,10 @@ require('codemirror/addon/search/searchcursor')
 require('codemirror/addon/search/jump-to-line')
 require('codemirror/addon/dialog/dialog')
 
+// xml
+import XMLParser from 'react-xml-parser'
+
+
 window.jsonlint = jsonlint.parser
 const msgpack = require('msgpack5')()
 
@@ -37,6 +41,7 @@ class Editor extends React.PureComponent {
       modes: {
         raw: false,
         json: false,
+        xml: false,
         messagepack: false
       }
     }
@@ -44,10 +49,9 @@ class Editor extends React.PureComponent {
 
   componentDidMount() {
     this.init(this.props.buffer)
-    $(this.editor).contextMenu({
+    $.contextMenu({
       context: ReactDOM.findDOMNode(this),
       selector: '.' + this.randomClass,
-      trigger: 'none',
       zIndex: 99999,
       callback: (key, opt) => {
         setTimeout(() => {
@@ -72,7 +76,7 @@ class Editor extends React.PureComponent {
               break;
           }
         }, 0)
-        ReactDOM.findDOMNode(this).focus()
+        this.editor.focus()
       },
       items: {
         copy: {name: '复制',icon: 'copy'},
@@ -86,7 +90,9 @@ class Editor extends React.PureComponent {
     })
   }
   showContextMenu(v,e) {
-    $(this.editor).contextMenu({
+    console.log(v)
+    console.log(e)
+    $(ReactDOM.findDOMNode(this)).contextMenu({
       x: e.pageX,
       y: e.pageY+1,
       zIndex: 99999
@@ -112,13 +118,16 @@ class Editor extends React.PureComponent {
     modes.raw = content
     modes.json = tryFormatJSON(content, true)
     modes.messagepack = modes.json ? false : tryFormatMessagepack(buffer, true)
+    modes.xml=(modes.json || modes.messagepack)?false:tryFormatXML(content,true)
     let currentMode = 'raw'
     if (modes.messagepack) {
       currentMode = 'messagepack'
     } else if (modes.json) {
       currentMode = 'json'
+    } else if (modes.xml) {
+      currentMode='xml'
     }
-    this.setState({modes, currentMode, changed: false})
+    this.setState({modes: Object.assign(this.state.modes,modes), currentMode, changed: false})
   }
 
   save() {
@@ -126,13 +135,29 @@ class Editor extends React.PureComponent {
     if (this.state.currentMode === 'json') {
       content = tryFormatJSON(this.editor.getValue())
       if (!content) {
-        alert('The json is invalid. Please check again.')
+        showModal({
+          title: '检查提示！',
+          button: ['是'],
+          content: `这JSON数据无效，请检查格式是否正确！`
+        }).then(() => {
+
+        }).catch((e)=>{
+          
+        })
         return
       }
     } else if (this.state.currentMode === 'messagepack') {
       content = tryFormatMessagepack(this.editor.getValue())
       if (!content) {
-        alert('The json is invalid. Please check again.')
+        showModal({
+          title: '检查提示！',
+          button: ['是'],
+          content: `这Messagepack数据无效，请检查格式是否正确！`
+        }).then(() => {
+
+        }).catch((e)=>{
+          
+        })
         return
       }
       content = msgpack.encode(JSON.parse(content))
@@ -202,10 +227,7 @@ class Editor extends React.PureComponent {
         }
     if (this.state.currentMode === 'json') {
       options=Object.assign(options,{
-        mode: {
-          name: 'javascript',
-          json: true
-        },
+        mode: 'application/json',
         lint: Boolean(this.state.modes.json)
       })
     } else if (this.state.currentMode === 'messagepack') {
@@ -223,7 +245,10 @@ class Editor extends React.PureComponent {
         value={this.state.modes[this.state.currentMode]}
         onContextMenu={this.showContextMenu.bind(this)}
         options={options}
-        editorDidMount={editor => { this.editor = editor }}
+        editorDidMount={editor => { 
+            this.editor = editor
+            editor.focus(); 
+          }}
         onChange={(editor, data, value)=>this.updateContent(this.state.currentMode,value)} />
 
       <div className="operation-pannel" >
@@ -241,6 +266,7 @@ class Editor extends React.PureComponent {
           onChange={this.updateMode.bind(this)}
           >
           <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
+          <option value="XML" disabled={typeof this.state.modes.json !== 'string'}>XML</option>
           <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
           <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
         </select>
@@ -255,7 +281,19 @@ class Editor extends React.PureComponent {
 }
 
 export default Editor
-
+function tryFormatXML(xmlString,beautify) {
+  // body...
+  try {
+    const o = new XMLParser().parseFromString(xmlString)
+    if (o && typeof o === 'object' && o !== null) {
+      if (beautify) {
+        return XMLParser().toString(o)
+      }
+      return XMLParser().toString(o)
+    }
+  } catch (e) { /**/ }
+  return false
+}
 function tryFormatJSON(jsonString, beautify) {
   try {
     const o = JSON.parse(jsonString)
