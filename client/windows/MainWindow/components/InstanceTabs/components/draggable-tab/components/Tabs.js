@@ -134,13 +134,7 @@ class Tabs extends React.Component {
         </Draggable>
       );
     });
-
-  const style = tabs.length === 1 ? '' : 'displaytabs'
-  if (this.style !== style) {
-    this.style = style
-    setTimeout(() => $(window).trigger('resize'), 0)
-  }
-  return <div className={"tab-group "+this.style}>
+  return <div className={"tab-group"}>
     {tabs}
     <div className='tab-item tab-item-btn' style={{padding:"0px"}} onClick={this.handleAddButtonClick.bind(this)}>
       {this.props.tabAddButton}
