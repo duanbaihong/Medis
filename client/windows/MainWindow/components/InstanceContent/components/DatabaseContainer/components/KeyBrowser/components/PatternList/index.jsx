@@ -10,7 +10,7 @@ class PatternList extends React.Component {
     super()
     this.state = {
       patternDropdown: false,
-      pattern: props.pattern
+      patterns: props.patterns
     }
   }
 
@@ -18,12 +18,12 @@ class PatternList extends React.Component {
     if (nextProps.db !== this.props.db) {
       this.updatePattern('')
     }
-    if (nextProps.pattern !== this.props.pattern) {
-      this.setState({pattern: nextProps.pattern})
+    if (nextProps.pattern !== this.props.patterns) {
+      this.setState({patterns: nextProps.patterns})
     }
   }
   updatePattern(value) {
-    this.setState({pattern: value})
+    this.setState({patterns: value})
     this.props.onChange(value)
   }
 

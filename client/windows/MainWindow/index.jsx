@@ -11,8 +11,8 @@ import {createInstance,
   moveInstance,
   setFullScreen} from 'Redux/actions'
 import store from 'Redux/store'
-
-import { Window, TitleBar } from 'react-desktop/macOs';
+import DocumentTitle from 'react-document-title'
+// import { Window, TitleBar } from 'react-desktop/macOs';
 import { ipcRenderer } from 'electron';
 
 class MainWindow extends PureComponent {
@@ -83,19 +83,7 @@ class MainWindow extends PureComponent {
       selectInstance, delInstance, moveInstance} = this.props
 
     return (
-      <Window >
-        <TitleBar
-          controls
-          isFullscreen={this.props.fullscreen}
-          height="28"
-          style={{ 'zIndex': 1000 }}
-          title={this.getTitle()}
-          disableMinimize={this.props.fullscreen}
-          onCloseClick={this.windowAction.bind(this, 'close')}
-          onMinimizeClick={this.windowAction.bind(this, 'min')}
-          onMaximizeClick={this.windowAction.bind(this, 'max')}
-          onResizeClick={this.windowAction.bind(this, 'fullmax')}
-        />
+      <DocumentTitle title={this.getTitle()}>
         <div className="window" style={{ minWidth: "895px" }}>
           <InstanceTabs
             instances={instances}
@@ -111,7 +99,7 @@ class MainWindow extends PureComponent {
             activeInstanceKey={activeInstance.get('key')}
           />
         </div>
-      </Window>
+      </DocumentTitle>
     )
   }
 }

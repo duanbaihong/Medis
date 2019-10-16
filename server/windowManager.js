@@ -25,8 +25,8 @@ class WindowManager extends EventEmitter {
       icon: '../../icns/Icon1024.png',
       show: false,
       autoHideMenuBar: true,
-      frame: false,
-      backgroundColor: '#ffffff0f',
+      frame: true,
+      backgroundColor: '#ffffff',
       webPreferences: {
         nodeIntegration: true,
         nodeIntegrationInWorker: true
@@ -82,7 +82,9 @@ class WindowManager extends EventEmitter {
   dispatch(action, args,filepath) {
     this.windows.forEach(win => {
       if (win && win.webContents) {
-        if(win.isFocused()){
+        if(action === 'reloadPatterns' || action === 'reloadFavorites'){
+          win.webContents.send('action', action, args,filepath);
+        }else if(win.isFocused()){
           win.webContents.send('action', action, args,filepath);
         }
       }

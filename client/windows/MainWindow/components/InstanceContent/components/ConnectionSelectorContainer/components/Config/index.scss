@@ -68,8 +68,8 @@
 }
 .connectModel{
   position: relative;
-  width: 235px;
-  height: 25px;
+  width: 240px;
+  height: 27px;
   margin: 0px auto;
   top: -13px;
   .btn-group{
@@ -81,8 +81,8 @@
       cursor: pointer;
       transition: background .2s ease-in-out,color .2s ease-in-out;
     }
-    .btn+.btn.active {
-      padding-left: 14px;
+    .btn.active {
+      font-weight: bold;
     }
   }
 }

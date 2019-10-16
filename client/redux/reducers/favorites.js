@@ -44,8 +44,7 @@ export const favorites = handleActions(fromJS(Favorites.get()), {
         })
       })
     } catch(e){
-      console.log(e)
-      alert("导出收藏失败！"+e)
+      alert(`导出收藏失败！${e}`)
     }
   },
   [importFavorites](state,{data,filepath}) {

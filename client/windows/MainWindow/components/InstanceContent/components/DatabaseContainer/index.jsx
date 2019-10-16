@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import SplitPane from 'react-split-pane'
 import KeyBrowser from './components/KeyBrowser'
 import Content from './components/Content'
+import {List} from 'immutable'
 require('./index.scss')
 
 class Database extends React.PureComponent {
@@ -19,7 +20,7 @@ class Database extends React.PureComponent {
       metaVersion: 0,
       pattern: '',
       tab: '内容(Content)',
-      clientHeight: this.$window.height() - $('.tab-group').height()-94
+      clientHeight: this.$window.height() - $('.tab-group').height()-64
     }
   }
   componentWillMount() {
@@ -51,12 +52,11 @@ class Database extends React.PureComponent {
 
   updateLayout() {
     this.setState({
-      clientHeight: this.$window.height() - $('.tab-group').height()-94
+      clientHeight: this.$window.height() - $('.tab-group').height()-64
     })
   }
 
   handleTabChange(tab) {
-    // this.props.onSelectTab(tab)
     this.setState(tab)
   }
 
@@ -65,15 +65,16 @@ class Database extends React.PureComponent {
   }
 
   render() {
-    let {redis,config}=this.props
+    let {redis,config,connectionKey}=this.props
+    console.log("1a:",this.props.patterns)
     const content=(<Content
         height={this.state.clientHeight}
         keyName={this.state.key}
         version={this.state.version}
         metaVersion={this.state.metaVersion}
-        connectionKey={this.props.connectionKey}
-        redis={this.props.redis}
-        config={this.props.config}
+        connectionKey={connectionKey}
+        redis={redis}
+        config={config}
         db={this.state.db}
         onDatabaseChange={db => this.setState({db})}
         onSelectTab={this.handleTabChange.bind(this)}
@@ -116,7 +117,7 @@ class Database extends React.PureComponent {
 
 function mapStateToProps(state, {instance}) {
   return {
-    patterns: state.patterns,
+    patterns: state.patterns.get(`${instance.get('connectionKey')}|0`, List()),
     redis: instance.get('redis'),
     config: instance.get('config'),
     connectionKey: instance.get('connectionKey')

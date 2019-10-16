@@ -110,7 +110,7 @@ html {
 body {
     padding: 0;
     margin: 0;
-    font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+    font-family: PingFangSC,helvetica neue,hiragino sans gb,arial,microsoft yahei ui,simsun,sans-serif, Helvetica, "Segoe UI"!important;
     font-size: 13px;
     line-height: 1.6;
     color: #333;
@@ -516,7 +516,6 @@ textarea {
     position: relative
 }
 .pane {
-    overflow-y: auto;
     flex: 1;
     border-left: 1px solid #ddd
 }
@@ -662,22 +661,17 @@ textarea {
 .favorite-circle{
     height: 18px;
     width: 18px;
-    transition: all .4s ease-out;
+    transition: box-shadow .3s ease-out;
     border-radius: 17px;
     display: inline-block;
     margin-right: 5px;
-    /*box-shadow: 0 0 0 0px #fff;*/
 }
 .favorite-circle:hover{
-    /*border: 1px solid #9A9C9E;*/
-    /*box-shadow: 0 0 4px #E6E9E9 inset;*/
     cursor: pointer; 
     box-shadow: 0 0 3px 1px #fff;
     transform: scale(1.15,1.15);
-    transform: rotate(360deg);
 }
 .favorite-circle-choise{
-    /*box-shadow: 0 0 4px #E6E9E9 inset;*/
     cursor: pointer; 
     box-shadow: 0 0 3px 2px #fff;
     transform: scale(1.15,1.15);

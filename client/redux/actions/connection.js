@@ -181,7 +181,6 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
     });
     redis.once('error', function (error) {
       redisErrorMessage += error;
-      console.log("1->",error)
       if(error=="ReplyError: ERR invalid password"){
         showModal({
           title: 'Redis连接失败',

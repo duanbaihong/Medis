@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import {createPattern, reloadPatterns, updatePattern, removePattern} from 'Redux/actions'
 import {List} from 'immutable'
 
-import { Window, TitleBar } from 'react-desktop/macOs';
 import { ipcRenderer } from 'electron';
 
 require('./app.scss')
@@ -30,16 +29,7 @@ class App extends React.Component {
   render() {
     const {patterns, createPattern, removePattern,updatePattern,reloadPatterns} = this.props
     const activePattern = patterns.get(this.state.index)
-    return (
-      <Window >
-        <TitleBar
-          height="26"
-          controls
-          disableMinimize
-          disableResize
-          title="正则管理"
-          onCloseClick={this.windowAction.bind(this, 'close')}
-        />
+    return (<div>
         <div className="patternList">
           <div style={{height:"100%","overflow":"hidden","overflow-y":"auto"}}>{
             patterns.map((pattern, index) => {
@@ -116,7 +106,7 @@ class App extends React.Component {
               >保存规则</button>
           </div>
         </div>
-      </Window >
+      </div>
     )
   }
 }
