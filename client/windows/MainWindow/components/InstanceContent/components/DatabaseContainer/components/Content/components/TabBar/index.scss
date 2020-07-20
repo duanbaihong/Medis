@@ -4,6 +4,8 @@
   .item {
     display: inline-block;
     padding: 12px;
+    font-weight: bold;
+    color: #151414;
     transition: all .3s ease-in-out;
     .icon {
       margin-right: 5px;
@@ -20,6 +22,8 @@
   .exitredis {
     display: inline-block;
     padding: 12px;
+    color: #151414;
+    font-weight: bold;
     transition: all .3s ease-in-out;
     .icon {
       margin-right: 5px;
