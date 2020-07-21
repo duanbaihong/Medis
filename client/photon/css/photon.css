@@ -391,7 +391,7 @@ h5 {
     border-left: 1px solid #c2c0c2
 }
 .btn-group .btn+.btn.active {
-    border-left: 0
+    border-left: 1px solid transparent;
 }
 .btn-group .active {
     color: #fff;
@@ -1601,7 +1601,7 @@ td:last-child, th:last-child {
 }
 .tab-item {
     flex: 1;
-    padding: 2px;
+    padding: 1px;
     font-size: 12px;
     text-align: center;
     border-left: 1px solid #989698;

@@ -68,14 +68,15 @@
 }
 .connectModel{
   position: relative;
-  width: 240px;
+  width: 250px;
   height: 27px;
   margin: 0px auto;
-  top: -13px;
+  top: -14px;
   .btn-group{
     display: flex;
     .btn-large{
-      font-size: 13px;
+      font-size: 14px;
+      line-height: 20px;
       flex: 1 1 0%;
       padding: 3px 13px;
       cursor: pointer;
