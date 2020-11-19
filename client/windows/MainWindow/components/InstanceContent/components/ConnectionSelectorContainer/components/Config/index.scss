@@ -113,15 +113,15 @@
   height: 173px;
  }
 .connect_name_hidden{
-  height: 1px;
+  height: 14px;
   opacity: 0;
   overflow: hidden;
   transition: all .4s ease-in-out;
-  }
+}
 .connect_name_shown{
   opacity: 1;
   height: 66px;
- } 
+} 
 
 .connect_address_hidden{
   height: 0px;
