@@ -66,7 +66,6 @@ class Database extends React.PureComponent {
 
   render() {
     let {redis,config,connectionKey}=this.props
-    console.log("1a:",this.props.patterns)
     const content=(<Content
         height={this.state.clientHeight}
         keyName={this.state.key}

@@ -1720,8 +1720,8 @@ input[type='checkbox']:after {
     border-width: 0 0 2px 2px;
     transform: scale(0) rotate(-45deg);
     -webkit-transform: scale(0) rotate(-45deg);
-    -webkit-transition: transform .25s cubic-bezier(.84, .03, .21, .96);
-    transition: transform .25s cubic-bezier(.84, .03, .21, .96);
+    -webkit-transition: .25s cubic-bezier(0.65, 1.92, 0.79, 1.34) all;
+    transition: .25s cubic-bezier(0.65, 1.92, 0.79, 1.34) all;
     position: absolute;
     top: 2px;
     left: 1px
@@ -1776,8 +1776,8 @@ input[type='radio']:before {
     width: 10px;
     transform: scale(0);
     -webkit-transform: scale(0);
-    -webkit-transition: transform .25s cubic-bezier(.84, .03, .21, .96);
-    transition: transform .25s cubic-bezier(.84, .03, .21, .96);
+    -webkit-transition: .25s cubic-bezier(0.65, 1.92, 0.79, 1.34) transform;
+    transition: .25s cubic-bezier(0.65, 1.92, 0.79, 1.34) transform;
     border-radius: 50%;
     margin: 2px 0 0 2px
 }

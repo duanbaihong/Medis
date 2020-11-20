@@ -16,6 +16,9 @@ class Terminal extends React.PureComponent {
     const {redis,config} = this.props
     let cmdName=(redis.serverInfo.redis_mode=='standalone'?'redis':redis.serverInfo.redis_mode)
     cmdName=cmdName.substring(0,1).toUpperCase()+cmdName.substring(1)
+    if(redis.serverInfo.redis_mode!=='sentinel'){
+      cmdName=cmdName+":"+(redis.condition.select||0)
+    }
     redis.on('select', this.onSelectBinded)
     const terminal = this.terminal = $(this.refs.terminal).terminal((command, term) => {
       if (!command) {
