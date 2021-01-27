@@ -72,6 +72,9 @@ class Terminal extends React.PureComponent {
           }
         }
         if (e.ctrlKey) {
+          if(e.keyCode==118){
+            alert()
+          }
           if (e.keyCode === 67) {
             if (terminal.level() > 1) {
               terminal.pop()
@@ -93,6 +96,7 @@ class Terminal extends React.PureComponent {
   execute(term, args) {
     term.pause()
     const redis = this.props.redis
+    console.log(args)
     if (args.length === 1 && args[0].toUpperCase() === 'MONITOR') {
       redis.monitor((_, monitor) => {
         term.echo('[[;#aac6e3;]Enter monitor mode. Press Ctrl+C to exit. ]')
